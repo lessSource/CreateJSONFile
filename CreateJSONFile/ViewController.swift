@@ -19,6 +19,8 @@ class ViewController: NSViewController {
         
     fileprivate var annotationArr = [String]()
     
+    fileprivate var contentArray = [[String: Any]()]
+        
     @IBOutlet weak var fileNameTextField: NSTextField!
     
     @IBOutlet weak var authorTextField: NSTextField!
@@ -52,12 +54,10 @@ class ViewController: NSViewController {
         selectButton.removeAllItems()
         selectButton.addItems(withTitles: ["HandyJSON","NSObject"])
         selectButton.selectItem(at: 0)
-        
-
-        
     }
     
     @IBAction func generateButtonClick(_ sender: NSButton) {
+        contentArray.removeAll()
         let fileName = fileNameTextField.stringValue.pregReplace(pattern: "[. ]", with: "")
         let authorName = authorTextField.stringValue.pregReplace(pattern: "[. ]", with: "")
         let projectName = projectNameTextField.stringValue.pregReplace(pattern: "[. ]", with: "")
@@ -72,8 +72,8 @@ class ViewController: NSViewController {
                 alertError("请输入正确的JSON数据")
                 return
             }
-            print(dict)
             jsonContentTextView.string = JSON(parseJSON: jsonContentTextView.string).description
+            contentArray.append(dict)
             createFileSiwft(fileName)
         }else {
             if fileName.isEmpty {
@@ -87,6 +87,7 @@ class ViewController: NSViewController {
     }
     
     @IBAction func selectButtonClick(_ sender: NSPopUpButton) {
+        
     }
     
     
@@ -115,11 +116,20 @@ class ViewController: NSViewController {
         if manager.fileExists(atPath: fileUrl.path) {
             // 添加数据
             print("新增数据")
+            let fileHandle = FileHandle(forUpdatingAtPath: fileUrl.path)
+            fileHandle?.seekToEndOfFile()
+            
+            // 新增结构体
+            addStructModel(fileHandle, name: name)
+            
+            fileHandle?.closeFile()
             return
         }
         if manager.createFile(atPath: fileUrl.path, contents: nil, attributes: nil) {
             let fileHandle = FileHandle(forUpdatingAtPath: fileUrl.path)
             fileHandle?.seekToEndOfFile()
+            
+            // 头部
             annotationArr.forEach {
                 fileHandle?.write($0.wirteData)
                 fileHandle?.write(Data.newlineData())
@@ -133,24 +143,9 @@ class ViewController: NSViewController {
                 fileHandle?.write(Data.newlineData())
             }
             
-            // 结构体开头
-            fileHandle?.write(Data.newlineData())
-            var structStart: String = ""
-            if selectButton.title == appKeyword.handy {
-                structStart = "\(appKeyword.uct) \(name.components(separatedBy: ".").first.noneNull)\(appKeyword.colon) \(appKeyword.handy) \(appKeyword.lPar)"
-            }else {
-                structStart = "\(appKeyword.uct) \(name.components(separatedBy: ".").first.noneNull) \(appKeyword.lPar)"
-            }
-            fileHandle?.write(structStart.wirteData)
+            // 添加结构体
+            addStructModel(fileHandle, name: name)
             
-            // 结构体内容
-            addStructConent(fileHandle, key: "app")
-            addStructConent(fileHandle, key: "appName", annotationStr: "appName")
-            addStructConent(fileHandle, key: "appState", annotationStr: "状态", dataType: .bool)
-            
-            // 结构体结束
-            fileHandle?.write(Data.newlineData())
-            fileHandle?.write("\(appKeyword.rPar)".wirteData)
             // 关闭文件
             fileHandle?.closeFile()
             print("Succes to create file")
@@ -159,14 +154,61 @@ class ViewController: NSViewController {
         }
     }
     
-    // 添加struct
-    fileprivate func addStructConent(_ fileHandle :FileHandle?,key: String, annotationStr: String = "", dataType: DataType = .str) {
+    // 添加结构体
+    fileprivate func addStructModel(_ fileHandle :FileHandle?, name: String) {
+        // 结构体开头
+        fileHandle?.write(Data.newlineData())
+        var structStart: String = ""
+        if selectButton.title == appKeyword.handy {
+            structStart = "\(appKeyword.uct) \(name.components(separatedBy: ".").first.noneNull)\(appKeyword.colon) \(appKeyword.handy) \(appKeyword.lPar)"
+        }else {
+            structStart = "\(appKeyword.uct) \(name.components(separatedBy: ".").first.noneNull) \(appKeyword.lPar)"
+        }
+        fileHandle?.write(structStart.wirteData)
+        
+        // 结构体内容
+        if contentArray.count > 0 {
+            traverseContent(fileHandle, dict: contentArray[0])
+        }
+        
+        // 结构体结束
+        fileHandle?.write(Data.newlineData())
+        fileHandle?.write("\(appKeyword.rPar)".wirteData)
+        fileHandle?.write(Data.newlineData())
+        
+        contentArray.removeFirst()
+        if contentArray.count != 0 {
+            addStructModel(fileHandle, name: "APPNameModel")
+        }
+        
+    }
+    
+    // 添加属性
+    fileprivate func addStructConent(_ fileHandle :FileHandle?, key: String, annotationStr: String = "", dataType: DataType = .str) {
         if !annotationStr.isEmpty {
             fileHandle?.write(Data.newlineData())
             fileHandle?.write(annotationStr.annotationData)
         }
         fileHandle?.write(Data.newlineData())
         fileHandle?.write(key.getKeyContent(dataType))
+    }
+    
+    // 遍历content
+    fileprivate func traverseContent(_ fileHandle :FileHandle?, dict: [String: Any]?) {
+        for (key, value) in dict ?? [String: Any]() {
+            if let valueStr = value as? String {
+                print(valueStr)
+                addStructConent(fileHandle, key: key)
+            }else if let valueArr = value as? Array<Any> {
+                print(valueArr)
+            }else if let valueDic = value as? Dictionary<String, Any> {
+                addStructConent(fileHandle, key: key, annotationStr: key, dataType: .model(key))
+                contentArray.append(valueDic)
+                print(valueDic)
+            }else {
+                addStructConent(fileHandle, key: key)
+            }
+        }
     }
     
     // 错误提示
@@ -176,65 +218,6 @@ class ViewController: NSViewController {
         alert.informativeText = errorStr
         alert.addButton(withTitle: "确认")
         alert.beginSheetModal(for: view.window ?? NSWindow(), completionHandler: nil)
-    }
-    
-    func stringToJSON(strJson: String) -> String {
-        // 计数tab的个数
-        var tabNum: Int = 0
-        var jsonFormat: String = ""
-
-        var last = "";
-        for i in strJson.indices {
-            let c = strJson[i]
-            if (c == "{") {
-                tabNum += 1
-                jsonFormat.append("\(c) \n")
-                jsonFormat.append(getSpaceOrTab(tabNum: tabNum))
-            }
-            else if (c == "}") {
-                tabNum -= 1
-                jsonFormat.append("\n")
-                jsonFormat.append(getSpaceOrTab(tabNum: tabNum))
-                jsonFormat.append(c)
-            }
-            else if (c == ",") {
-                jsonFormat.append("\n")
-                jsonFormat.append(getSpaceOrTab(tabNum: tabNum))
-            }
-            else if (c == ":") {
-                jsonFormat.append("\(c) ")
-            }
-            else if (c == "[") {
-                tabNum += 1
-                let next = strJson[strJson.index(i, offsetBy: 1)]
-                if (next == "]") {
-                    jsonFormat.append("\(c)")
-                } else {
-                    jsonFormat.append("\(c) \n")
-                    jsonFormat.append(getSpaceOrTab(tabNum: tabNum))
-                }
-            }
-            else if (c == "]") {
-                tabNum -= 1
-                if (last == "[") {
-                    jsonFormat.append("\(c)")
-                } else {
-                    jsonFormat.append("\(getSpaceOrTab(tabNum: tabNum))\n \(c)")
-                }
-            }
-            else {
-                jsonFormat.append("\(c)")
-            }
-            last = "\(c)"
-        }
-        return jsonFormat;
-    }
-    func getSpaceOrTab(tabNum: Int) -> String {
-        var sbTab = ""
-        for _ in 0..<tabNum {
-            sbTab.append("\t")
-        }
-        return sbTab
     }
     
 }
