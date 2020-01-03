@@ -100,7 +100,7 @@ extension String {
     // 获取内容
     public func getKeyContent(_ dataType: DataType) -> Data {
         let keyword = APPKeyword()
-        return "\(keyword.space4)\(keyword.variable)\(self)\(keyword.colon)\(dataType.rawValue)\(keyword.equal)\(dataType.defaultStr)".wirteData
+        return "\(keyword.space4)\(keyword.variable)\(self)\(keyword.colon)\(dataType.valueStr)\(keyword.equal)\(dataType.defaultStr)".wirteData
     }
 }
 
@@ -165,15 +165,17 @@ struct APPKeyword {
     let space1 = " "
 }
 
-public enum DataType: String {
+public enum DataType {
     /** Bool */
-    case bool = " Bool"
+    case bool
     /** Array */
-    case arr = " Array"
+    case arr
     /** String */
-    case str = " String"
+    case str
     /** Int */
-    case int = " Int"
+    case int
+    /** model */
+    case model(String)
     
     var defaultStr: String {
         switch self {
@@ -185,6 +187,23 @@ public enum DataType: String {
             return "\"\""
         case .int:
             return "0"
+        case .model(let name):
+            return "\(name)Model()"
+        }
+    }
+    
+    var valueStr: String {
+        switch self {
+        case .bool:
+            return " Bool"
+        case .arr:
+            return " Array"
+        case .str:
+            return " String"
+        case .int:
+            return " Int"
+        case .model(let name):
+            return " \(name)Model"
         }
     }
     
