@@ -52,6 +52,7 @@ class ViewController: NSViewController {
         selectButton.removeAllItems()
         selectButton.addItems(withTitles: ["HandyJSON","NSObject"])
         selectButton.selectItem(at: 0)
+        
     }
     
     @IBAction func generateButtonClick(_ sender: NSButton) {
@@ -59,6 +60,7 @@ class ViewController: NSViewController {
         let fileName = fileNameTextField.stringValue.pregReplace(pattern: "[. ]", with: "")
         let authorName = authorTextField.stringValue.pregReplace(pattern: "[. ]", with: "")
         let projectName = projectNameTextField.stringValue.pregReplace(pattern: "[. ]", with: "")
+
         
         if !projectName.isEmpty {
             annotationArr[2] = "\(appKeyword.annotationStr)\(projectName)"
@@ -67,7 +69,7 @@ class ViewController: NSViewController {
             annotationArr[1] = "\(appKeyword.annotationStr)\(fileName).swift"
             annotationArr[4] = "\(appKeyword.annotationStr)Created by \(authorName) on \(Date().formattingDate(Date.dateFormatSlashDay))."
             guard let dict = JSON(parseJSON: jsonContentTextView.string).dictionaryObject else {
-                alertError("请输入正确的JSON数据")
+                view.alertError("请输入正确的JSON数据")
                 return
             }
             jsonContentTextView.string = JSON(parseJSON: jsonContentTextView.string).description
@@ -75,11 +77,11 @@ class ViewController: NSViewController {
             createFileSiwft(fileName)
         }else {
             if fileName.isEmpty {
-               alertError("请输入文件名称")
+               view.alertError("请输入文件名称")
             }else if authorName.isEmpty {
-                alertError("请输入作者名称")
+                view.alertError("请输入作者名称")
             }else if jsonContentTextView.string.isEmpty {
-                alertError("请输入JSON数据")
+                view.alertError("请输入JSON数据")
             }
         }
     }
@@ -163,7 +165,6 @@ class ViewController: NSViewController {
             structStart = "\(appKeyword.uct) \(name.components(separatedBy: ".").first.noneNull) \(appKeyword.lPar)"
         }
         fileHandle?.write(structStart.wirteData)
-        
         // 结构体内容
         if contentArray.count > 0 {
             traverseContent(fileHandle, dict: contentArray[0])
@@ -209,13 +210,7 @@ class ViewController: NSViewController {
         }
     }
     
-    // 错误提示
-    fileprivate func alertError(_ errorStr: String) {
-        let alert = NSAlert()
-        alert.messageText = "错误提示"
-        alert.informativeText = errorStr
-        alert.addButton(withTitle: "确认")
-        alert.beginSheetModal(for: view.window ?? NSWindow(), completionHandler: nil)
-    }
+
 }
+
 

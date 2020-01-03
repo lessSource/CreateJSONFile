@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15702"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -680,49 +680,29 @@
             </objects>
             <point key="canvasLocation" x="75" y="0.0"/>
         </scene>
-        <!--Window Controller-->
-        <scene sceneID="R2V-B0-nI4">
-            <objects>
-                <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="196" y="240" width="480" height="270"/>
-                        <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
-                        <connections>
-                            <outlet property="delegate" destination="B8D-0N-5wS" id="98r-iN-zZc"/>
-                        </connections>
-                    </window>
-                    <connections>
-                        <segue destination="XfG-lQ-9wD" kind="relationship" relationship="window.shadowedContentViewController" id="cq2-FE-JQM"/>
-                    </connections>
-                </windowController>
-                <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="75" y="250"/>
-        </scene>
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
+                <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="CreateJSONFile" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="614" height="308"/>
+                        <rect key="frame" x="0.0" y="0.0" width="614" height="507"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mRh-Iw-SH3">
-                                <rect key="frame" x="10" y="277" width="120" height="21"/>
+                                <rect key="frame" x="10" y="476" width="120" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="GUX-cs-cjF"/>
                                     <constraint firstAttribute="height" constant="21" id="bnw-0R-a3r"/>
                                 </constraints>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" alignment="left" placeholderString="请输入文件名称" drawsBackground="YES" id="JLM-ow-a0H">
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="left" placeholderString="请输入文件名称" bezelStyle="round" id="JLM-ow-a0H">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" red="0.98823529409999999" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oQd-lA-Biw">
-                                <rect key="frame" x="474" y="277" width="60" height="21"/>
+                                <rect key="frame" x="474" y="476" width="60" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="VAz-Mc-IAV"/>
                                     <constraint firstAttribute="height" constant="21" id="ZMd-V4-9SA"/>
@@ -734,7 +714,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="34s-wo-deY">
-                                <rect key="frame" x="543" y="270" width="67" height="32"/>
+                                <rect key="frame" x="543" y="469" width="67" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="3rJ-DA-bDr"/>
                                 </constraints>
@@ -748,13 +728,13 @@
                                 </connections>
                             </button>
                             <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oJX-Ms-VE2">
-                                <rect key="frame" x="10" y="10" width="594" height="17"/>
+                                <rect key="frame" x="10" y="10" width="594" height="216"/>
                                 <clipView key="contentView" id="IP4-sb-6Ui">
-                                    <rect key="frame" x="1" y="1" width="592" height="15"/>
+                                    <rect key="frame" x="1" y="1" width="592" height="214"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <collectionView id="D5p-71-JGp">
-                                            <rect key="frame" x="0.0" y="0.0" width="592" height="15"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="592" height="214"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                             <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="nHX-zo-xXg">
                                                 <size key="itemSize" width="50" height="50"/>
@@ -773,15 +753,15 @@
                                 </scroller>
                             </scrollView>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9OY-04-Jgb">
-                                <rect key="frame" x="138" y="274" width="111" height="25"/>
-                                <popUpButtonCell key="cell" type="push" title="HandyJSON" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="pKC-Ai-VEj" id="9VF-HE-S7W">
+                                <rect key="frame" x="138" y="473" width="111" height="25"/>
+                                <popUpButtonCell key="cell" type="push" title="NSObject" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="pKC-Ai-VEj" id="9VF-HE-S7W">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                     <menu key="menu" id="Vnx-NQ-nQq">
                                         <items>
                                             <menuItem title="HandyJSON" id="LTw-CZ-wx7"/>
-                                            <menuItem title="NSObject" id="pKC-Ai-VEj"/>
-                                            <menuItem state="on" id="fbL-9j-u3l"/>
+                                            <menuItem title="NSObject" state="on" id="pKC-Ai-VEj"/>
+                                            <menuItem id="fbL-9j-u3l"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
@@ -790,7 +770,7 @@
                                 </connections>
                             </popUpButton>
                             <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n9p-Om-dZd">
-                                <rect key="frame" x="10" y="37" width="594" height="230"/>
+                                <rect key="frame" x="10" y="236" width="594" height="230"/>
                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="fnU-nX-3ui">
                                     <rect key="frame" x="0.0" y="0.0" width="594" height="230"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -816,7 +796,7 @@
                                 </scroller>
                             </scrollView>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="x57-dc-fXp">
-                                <rect key="frame" x="374" y="277" width="90" height="21"/>
+                                <rect key="frame" x="374" y="476" width="90" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="ReT-AH-gAH"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="90" id="bIC-0p-S3A"/>
@@ -827,6 +807,14 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v7t-2a-Lqf">
+                                <rect key="frame" x="277" y="474" width="22" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="SxR-ai-f6m">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="n9p-Om-dZd" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="10" id="1DZ-mE-Qss"/>
@@ -861,9 +849,8 @@
                         <outlet property="selectButton" destination="9OY-04-Jgb" id="TD6-aV-IPW"/>
                     </connections>
                 </viewController>
-                <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="142" y="674"/>
+            <point key="canvasLocation" x="142" y="773.5"/>
         </scene>
     </scenes>
 </document>
