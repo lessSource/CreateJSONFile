@@ -159,6 +159,8 @@ struct APPKeyword {
     let eAnnotation = " */"
     /** : */
     let colon = ":"
+    /** //  */
+    let annotationStr = "//  "
     let space4 = "    "
     let space1 = " "
 }

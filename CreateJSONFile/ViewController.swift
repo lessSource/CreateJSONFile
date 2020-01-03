@@ -14,9 +14,7 @@ import SwiftyJSON
 class ViewController: NSViewController {
     // 关键字
     fileprivate let appKeyword = APPKeyword()
-    
-    fileprivate let annotationStr = "//  "
-        
+            
     fileprivate var annotationArr = [String]()
     
     @IBOutlet weak var fileNameTextField: NSTextField!
@@ -38,7 +36,7 @@ class ViewController: NSViewController {
         super.viewDidLoad()
         view.window?.title = App.appName
         
-        annotationArr = [annotationStr, "","\(annotationStr)\(App.appName)", annotationStr, "", "\(annotationStr)\(App.copyright)", annotationStr]
+        annotationArr = [appKeyword.annotationStr, "","\(appKeyword.annotationStr)\(App.appName)", appKeyword.annotationStr, "", "\(appKeyword.annotationStr)\(App.copyright)", appKeyword.annotationStr]
         initView()
     }
     
@@ -63,11 +61,11 @@ class ViewController: NSViewController {
         let projectName = projectNameTextField.stringValue.pregReplace(pattern: "[. ]", with: "")
         
         if !projectName.isEmpty {
-            annotationArr[2] = "\(annotationStr)\(projectName)"
+            annotationArr[2] = "\(appKeyword.annotationStr)\(projectName)"
         }
         if !fileName.isEmpty && !authorName.isEmpty && !jsonContentTextView.string.isEmpty {
-            annotationArr[1] = "\(annotationStr)\(fileName).swift"
-            annotationArr[4] = "\(annotationStr)Created by \(authorName) on \(Date().formattingDate(Date.dateFormatSlashDay))."
+            annotationArr[1] = "\(appKeyword.annotationStr)\(fileName).swift"
+            annotationArr[4] = "\(appKeyword.annotationStr)Created by \(authorName) on \(Date().formattingDate(Date.dateFormatSlashDay))."
             guard let dict = JSON(parseJSON: jsonContentTextView.string).dictionaryObject else {
                 alertError("请输入正确的JSON数据")
                 return
@@ -177,65 +175,5 @@ class ViewController: NSViewController {
         alert.addButton(withTitle: "确认")
         alert.beginSheetModal(for: view.window ?? NSWindow(), completionHandler: nil)
     }
-    
-    func stringToJSON(strJson: String) -> String {
-        // 计数tab的个数
-        var tabNum: Int = 0
-        var jsonFormat: String = ""
-
-        var last = "";
-        for i in strJson.indices {
-            let c = strJson[i]
-            if (c == "{") {
-                tabNum += 1
-                jsonFormat.append("\(c) \n")
-                jsonFormat.append(getSpaceOrTab(tabNum: tabNum))
-            }
-            else if (c == "}") {
-                tabNum -= 1
-                jsonFormat.append("\n")
-                jsonFormat.append(getSpaceOrTab(tabNum: tabNum))
-                jsonFormat.append(c)
-            }
-            else if (c == ",") {
-                jsonFormat.append("\n")
-                jsonFormat.append(getSpaceOrTab(tabNum: tabNum))
-            }
-            else if (c == ":") {
-                jsonFormat.append("\(c) ")
-            }
-            else if (c == "[") {
-                tabNum += 1
-                let next = strJson[strJson.index(i, offsetBy: 1)]
-                if (next == "]") {
-                    jsonFormat.append("\(c)")
-                } else {
-                    jsonFormat.append("\(c) \n")
-                    jsonFormat.append(getSpaceOrTab(tabNum: tabNum))
-                }
-            }
-            else if (c == "]") {
-                tabNum -= 1
-                if (last == "[") {
-                    jsonFormat.append("\(c)")
-                } else {
-                    jsonFormat.append("\(getSpaceOrTab(tabNum: tabNum))\n \(c)")
-                }
-            }
-            else {
-                jsonFormat.append("\(c)")
-            }
-            last = "\(c)"
-        }
-        return jsonFormat;
-    }
-    func getSpaceOrTab(tabNum: Int) -> String {
-        var sbTab = ""
-        for _ in 0..<tabNum {
-            sbTab.append("\t")
-        }
-        return sbTab
-    }
-    
 }
 
