@@ -56,7 +56,7 @@ class HomeTopView: NSView {
         return button
     }()
     
-    fileprivate lazy var checkButton: NSPopUpButton = {
+    public lazy var checkButton: NSPopUpButton = {
         let button = NSPopUpButton()
         return button
     }()

@@ -155,6 +155,7 @@ extension HomeViewController: HomeTopViewDelegate {
     func homeTopSelect(_ view: HomeTopView, type: HomeTopButtomType) {
         switch type {
         case .generate:
+            homeData.inheritanceStr = view.checkButton.stringValue
             let fileName = view.fileNameTextField.stringValue.pregReplace(pattern: "[. ]", with: "")
             let authorName = view.authorTextField.stringValue.pregReplace(pattern: "[. ]", with: "")
             let projectName = view.projectNameTextField.stringValue.pregReplace(pattern: "[. ]", with: "")

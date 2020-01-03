@@ -9,8 +9,12 @@
 import Cocoa
 
 struct HomeDataSource {
-    // 文件头
+    /** 头部注释 */
     var fileHeaderArr: Array = [String]()
+    /** 继承 */
+    var inheritanceStr: String = ""
+    /** 内容 */
+    var contentArr: Array = [HomeContentModel]()
     
     init() {
         let keyword = APPKeyword()
@@ -24,6 +28,36 @@ struct HomeDataSource {
         fileHeaderArr.append(keyword.annotationStr)
     }
     
+}
+
+struct HomeContentModel {
+    /** key */
+    var key: String
+    /** value */
+    var value: String
+    /** 是否忽略 */
+    var isIgnore: Bool
+    /** 输出类型 */
+    var outputType: String
+    /** 是否有默认值 */
+    var isDefault: Bool
+    /** 默认值 */
+    var defaultStr: String
+    /** 注释 */
+    var annotation: String
+    /** 是否可选 */
+    var isOptional: Bool
+    
+    init(_ key: String, value: String = "", isIgnore: Bool = false, outputType: String = "String", isDefault: Bool = true, defaultStr: String = "", annotation: String = "", isOptional: Bool = false) {
+        self.key = key
+        self.value = value
+        self.isIgnore = isIgnore
+        self.outputType = outputType
+        self.isDefault = isDefault
+        self.defaultStr = defaultStr
+        self.annotation = annotation
+        self.isOptional = isOptional
+    }
 }
 
 
