@@ -15,139 +15,221 @@ class HomeViewController: NSViewController {
     
     fileprivate var homeData: HomeDataSource = HomeDataSource()
     
-    fileprivate lazy var scrollView: NSScrollView = NSScrollView()
-    
-    fileprivate lazy var conetntScrollView: NSScrollView = NSScrollView()
-    
-    fileprivate lazy var tableView: NSTableView = {
-        let tableView = NSTableView()
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.focusRingType = .none
-        tableView.selectionHighlightStyle = .none
-        tableView.rowHeight = 44
-        
-        return tableView
-    }()
-    
-    fileprivate lazy var textView: NSTextView = {
-        let textView = NSTextView()
-        textView.autoresizingMask = .height
-        textView.isEditable = true
-        textView.textColor = NSColor.white
-        textView.insertionPointColor = NSColor.white
-        return textView
-    }()
     
     fileprivate lazy var topView: HomeTopView = {
-        let view = HomeTopView()
+        let view = HomeTopView(frame: NSRect(x: 10, y: 10, width: self.view.width - 20, height: 50))
+        view.autoresizingMask = [.width]
         view.delegate = self
         return view
     }()
     
+    fileprivate lazy var conetntScrollView: NSScrollView = {
+        let scroll = NSScrollView(frame: .zero)
+        scroll.autoresizingMask = .none
+        return scroll
+    }()
+    
+    fileprivate lazy var textView: NSTextView = {
+        let textView = NSTextView(frame: self.conetntScrollView.bounds)
+        textView.autoresizingMask = [.width]
+        textView.isEditable = true
+        textView.textColor = NSColor.white
+        textView.insertionPointColor = NSColor.white
+        textView.textContainer?.widthTracksTextView = true
+        textView.textContainer?.containerSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+        
+        return textView
+    }()
+    
+    
+    fileprivate lazy var scrollView: NSScrollView = {
+        let scroll = NSScrollView(frame: .zero)
+        scroll.autoresizingMask = .none
+        return scroll
+    }()
+    
+    
+    fileprivate lazy var outlineView: NSOutlineView = {
+        let outlineView = NSOutlineView()
+        outlineView.delegate = self
+        outlineView.dataSource = self
+        outlineView.focusRingType = .none
+        outlineView.selectionHighlightStyle = .none
+        outlineView.rowHeight = 38
+        outlineView.usesAlternatingRowBackgroundColors = true
+        return outlineView
+    }()
+    
+    
     override func loadView() {
         let frame = NSApplication.shared.mainWindow?.frame
-        self.view = NSView(frame: frame ?? NSRect.zero)
+        self.view = ContentView(frame: frame ?? NSRect.zero)
     }
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
         initView()
+        
+        
     }
     
     // MARK:- initView
     fileprivate func initView() {
         view.addSubview(topView)
-        topView.snp.makeConstraints {
-            $0.left.top.equalTo(10)
-            $0.right.equalTo(-10)
-            $0.height.equalTo(50)
-        }
+        conetntScrollView.documentView = textView
+        scrollView.documentView = outlineView
+        
+        let splitView = NSSplitView(frame: NSRect(x: 10, y: topView.frame.maxY, width: view.width - 20, height: view.height - topView.frame.maxY))
+        splitView.autoresizingMask = [.width, .height]
+        splitView.dividerStyle = .thin
+        splitView.autoresizesSubviews = true
+        
+        splitView.addSubview(conetntScrollView)
+        splitView.addSubview(scrollView)
+        
+        view.addSubview(splitView)
+        
         
         let keyColumn = NSTableColumn(identifier: "keyColumn".identifire)
         keyColumn.title = "key"
         keyColumn.width = 100
         keyColumn.minWidth = 100
-        tableView.addTableColumn(keyColumn)
+        outlineView.addTableColumn(keyColumn)
         
         let stateColumn = NSTableColumn(identifier: "stateColumn".identifire)
         stateColumn.title = "忽略"
         stateColumn.width = 44
         stateColumn.minWidth = 44
-        tableView.addTableColumn(stateColumn)
+        outlineView.addTableColumn(stateColumn)
         
         let outputTypeColumn = NSTableColumn(identifier: "outputTypeColumn".identifire)
         outputTypeColumn.title = "输出类型"
         outputTypeColumn.width = 120
         outputTypeColumn.minWidth = 120
-        tableView.addTableColumn(outputTypeColumn)
+        outlineView.addTableColumn(outputTypeColumn)
         
         let defaultColumn = NSTableColumn(identifier: "defaultColumn".identifire)
         defaultColumn.title = "默认值"
         defaultColumn.width = 100
         defaultColumn.minWidth = 100
-        tableView.addTableColumn(defaultColumn)
-
+        outlineView.addTableColumn(defaultColumn)
+        
         let annotationColumn = NSTableColumn(identifier: "annotationColumn".identifire)
         annotationColumn.title = "注释"
-        annotationColumn.width = 100
+        annotationColumn.width = view.width - 388
         annotationColumn.minWidth = 100
-        tableView.addTableColumn(annotationColumn)
-        
-        scrollView.documentView = tableView
-        view.addSubview(scrollView)
-        scrollView.snp.makeConstraints {
-            $0.edges.equalTo(NSEdgeInsets(top: 350, left: 10, bottom: 10, right: 10))
-        }
-        
-        conetntScrollView.documentView = textView
-        view.addSubview(conetntScrollView)
-        conetntScrollView.snp.makeConstraints {
-            $0.top.equalTo(topView.snp.bottom)
-            $0.left.equalTo(10)
-            $0.right.equalTo(-10)
-            $0.bottom.equalTo(scrollView.snp.top)
-        }
-        textView.snp.makeConstraints {
-            $0.edges.equalTo(conetntScrollView)
-        }
+        outlineView.addTableColumn(annotationColumn)
     }
     
 }
 
-extension HomeViewController: NSTableViewDelegate, NSTableViewDataSource {
-    
-    func numberOfRows(in tableView: NSTableView) -> Int {
-        return 50
+extension HomeViewController: NSOutlineViewDelegate, NSOutlineViewDataSource {
+    // 每一层级节点包含的下一级节点的数量。
+    func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
+        if let model = item as? HomeContentModel {
+            return model.childArr.count
+        }else {
+            return homeData.contentArr.count
+        }
     }
     
-    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+    // 每一层级节点的模型对象为item时,根据item获取子节点模型。item为nil空时表示获取顶级节点模型。
+    func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
+        if let model = item as? HomeContentModel {
+            return model.childArr[index]
+        }else {
+            return homeData.contentArr[index]
+        }
+    }
+    
+    // 节点是否可以打开
+    func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
+        if let model = item as? HomeContentModel {
+            return model.childArr.count > 0
+        }else {
+            return homeData.contentArr.count > 0
+        }
+    }
+    
+    func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
+        guard let model = item as? HomeContentModel else { return nil }
+        
         if tableColumn?.identifier == "stateColumn".identifire {
-            var cell = tableView.makeView(withIdentifier: HomeIgnoreTableViewCell.identifire, owner: self) as? HomeIgnoreTableViewCell
+            var cell = outlineView.makeView(withIdentifier: HomeIgnoreTableViewCell.identifire, owner: self) as? HomeIgnoreTableViewCell
             if cell == nil {
                 cell = HomeIgnoreTableViewCell()
                 cell?.identifier = HomeIgnoreTableViewCell.identifire
             }
+            cell?.checkButton.state = model.isIgnore ? .on : .off
+            
+            cell?.didSelectClosure = { [weak self] in
+                
+                self?.test(outlineView, item: item)
+//                // 当前层级序号
+//                let childIndex = outlineView.childIndex(forItem: item)
+//                let row = outlineView.row(forItem: item)
+//                // 当前层级
+//                let item = outlineView.level(forItem: item)
+//                let level = outlineView.level(forRow: row)
+//
+////                outlineView.item(atRow: <#T##Int#>)
+//                print([childIndex, item, row, level])
+            }
+            
+//            let row = outlineView.selectedRow
+//            let row1 = outlineView.row(forItem: <#T##Any?#>)
+            
             return cell
         }
         if tableColumn?.identifier == "outputTypeColumn".identifire {
-            var cell = tableView.makeView(withIdentifier: HomeTypeTableCellView.identifire, owner: self) as? HomeTypeTableCellView
+            var cell = outlineView.makeView(withIdentifier: HomeTypeTableCellView.identifire, owner: self) as? HomeTypeTableCellView
             if cell == nil {
                 cell = HomeTypeTableCellView()
                 cell?.identifier = HomeTypeTableCellView.identifire
             }
+            cell?.checkButton.selectItem(withTitle: model.outputType.valueStr)
+            cell?.checkButton.isEnabled = !(model.outputType == .array || model.outputType == .dictionary)
             return cell
         }
-        
-        var cell = tableView.makeView(withIdentifier: HomeTableViewCell.identifire, owner: self) as? HomeTableViewCell
+        var cell = outlineView.makeView(withIdentifier: HomeTableViewCell.identifire, owner: self) as? HomeTableViewCell
         if cell == nil {
             cell = HomeTableViewCell()
             cell?.identifier = HomeTableViewCell.identifire
         }
+        if tableColumn?.identifier == "keyColumn".identifire {
+            cell?.nameTextField.isEditable = false
+            cell?.nameTextField.stringValue = model.key
+        }else if tableColumn?.identifier == "defaultColumn".identifire {
+            cell?.nameTextField.isEditable = true
+            cell?.nameTextField.stringValue = model.defaultStr
+            cell?.nameTextField.placeholderString = "默认值"
+        }else {
+            cell?.nameTextField.isEditable = true
+            cell?.nameTextField.stringValue = model.annotation
+            cell?.nameTextField.placeholderString = "注释"
+        }
         return cell
     }
-  
+    
+    fileprivate func test(_ outlineView: NSOutlineView, item: Any) {
+        var array : Array = [Int]()
+//        let childIndex = outlineView.childIndex(forItem: item)
+        
+        var any: Any? = item
+        while any != nil {
+            let index = outlineView.childIndex(forItem: any!)
+            array.append(index)
+            any = outlineView.parent(forItem: any)
+        }
+        
+        print(array)
+    }
+    
+    
+    
 }
 
 
@@ -155,7 +237,6 @@ extension HomeViewController: HomeTopViewDelegate {
     func homeTopSelect(_ view: HomeTopView, type: HomeTopButtomType) {
         switch type {
         case .generate:
-            homeData.inheritanceStr = view.checkButton.stringValue
             let fileName = view.fileNameTextField.stringValue.pregReplace(pattern: "[. ]", with: "")
             let authorName = view.authorTextField.stringValue.pregReplace(pattern: "[. ]", with: "")
             let projectName = view.projectNameTextField.stringValue.pregReplace(pattern: "[. ]", with: "")
@@ -167,14 +248,17 @@ extension HomeViewController: HomeTopViewDelegate {
                     view.alertError("请输入正确的JSON数据")
                     return
                 }
-                print(dict)
                 textView.string = JSON(parseJSON: textView.string).description
+                homeData.jsonDic = dict
+                homeData.contentArr = HomeDataModel.formattingJSON(dict)
+                homeData.inheritanceStr = view.checkButton.selectedItem?.title ?? ""
+                homeData.structName = fileName
                 HomeDataModel.createFileSwift(fileName, homeData: homeData) { (success) in
                     if !success { view.alertError("创建文件失败") }
                 }
             }else {
                 if fileName.isEmpty {
-                   view.alertError("请输入文件名称")
+                    view.alertError("请输入文件名称")
                 }else if authorName.isEmpty {
                     view.alertError("请输入作者名称")
                 }else if textView.string.isEmpty {
@@ -186,12 +270,20 @@ extension HomeViewController: HomeTopViewDelegate {
                 view.alertError("请输入正确的JSON数据")
                 return
             }
-            print(dict)
-            
+            textView.string = JSON(parseJSON: textView.string).description
+            homeData.contentArr = HomeDataModel.formattingJSON(dict)
+            outlineView.reloadData()
         case .check: break
             
         }
     }
     
     
+}
+
+class ContentView: NSView {
+    
+    override var isFlipped: Bool {
+        return true
+    }
 }

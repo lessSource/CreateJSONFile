@@ -10,7 +10,9 @@ import Cocoa
 
 class HomeIgnoreTableViewCell: NSTableCellView {
 
-    fileprivate lazy var checkButton: NSButton = {
+    public var didSelectClosure = { }
+    
+    public lazy var checkButton: NSButton = {
         let button = NSButton(checkboxWithTitle: "", target: self, action: #selector(checkButtonClick))
         button.setButtonType(.switch)
         return button
@@ -42,7 +44,7 @@ class HomeIgnoreTableViewCell: NSTableCellView {
     
     // MARK:- objc
     @objc fileprivate func checkButtonClick() {
-        
+        didSelectClosure()
     }
     
 }

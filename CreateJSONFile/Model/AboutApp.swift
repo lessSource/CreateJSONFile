@@ -83,11 +83,13 @@ public enum DataType {
     /** Bool */
     case bool
     /** Array */
-    case arr
+    case array
     /** String */
-    case str
+    case string
     /** Int */
     case int
+    /** Dictionary */
+    case dictionary
     /** model */
     case model(String)
     
@@ -95,9 +97,11 @@ public enum DataType {
         switch self {
         case .bool:
             return "false"
-        case .arr:
+        case .array:
             return "[]"
-        case .str:
+        case .dictionary:
+            return "[]"
+        case .string:
             return "\"\""
         case .int:
             return "0"
@@ -109,16 +113,36 @@ public enum DataType {
     var valueStr: String {
         switch self {
         case .bool:
-            return " Bool"
-        case .arr:
-            return " Array"
-        case .str:
-            return " String"
+            return "Bool"
+        case .array:
+            return "Array"
+        case .string:
+            return "String"
+        case .dictionary:
+            return "Dictionary"
         case .int:
-            return " Int"
+            return "Int"
         case .model(let name):
-            return " \(name)Model"
+            return "\(name)Model"
         }
     }
     
 }
+
+
+extension DataType: Equatable {
+    static public func ==(lhs: DataType, rhs: DataType) -> Bool {
+        switch (lhs, rhs) {
+        case (.bool, .bool): return true
+        case (.array, .array): return true
+        case (.string, .string): return true
+        case (.dictionary, .dictionary): return true
+        case (.int, .int): return true
+        case (.model(let str1), .model(let str2)) where str1 == str2 : return true
+        case _: return false
+        }
+    }
+
+}
+
+

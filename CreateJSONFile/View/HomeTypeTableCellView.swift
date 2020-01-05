@@ -10,7 +10,7 @@ import Cocoa
 
 class HomeTypeTableCellView: NSTableCellView {
     
-    fileprivate lazy var checkButton: NSPopUpButton = {
+    public lazy var checkButton: NSPopUpButton = {
         let button = NSPopUpButton()
         return button
     }()
@@ -34,7 +34,7 @@ class HomeTypeTableCellView: NSTableCellView {
     // MARK:- initView
     fileprivate func initView() {
         checkButton.removeAllItems()
-        checkButton.addItems(withTitles: ["Array","Int","Dictionary","Bool"])
+        checkButton.addItems(withTitles: ["Array","Int","String","Dictionary","Bool"])
         checkButton.selectItem(at: 0)
         
         addSubview(checkButton)

@@ -21,13 +21,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window?.title = "JSONModel"
         window?.minSize = NSSize(width: 700, height: 500)
         
-        
+//        window.is
         window?.makeKeyAndOrderFront(nil)
         window?.center()
         window?.contentViewController = HomeViewController()
       
     }
-
+    
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
     }

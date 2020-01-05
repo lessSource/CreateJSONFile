@@ -58,7 +58,7 @@ extension String {
     // 获取内容
     public func getKeyContent(_ dataType: DataType) -> Data {
         let keyword = APPKeyword()
-        return "\(keyword.space4)\(keyword.variable)\(self)\(keyword.colon)\(dataType.valueStr)\(keyword.equal)\(dataType.defaultStr)".wirteData
+        return "\(keyword.space4)\(keyword.variable)\(self)\(keyword.colon) \(dataType.valueStr)\(keyword.equal)\(dataType.defaultStr)".wirteData
     }
     
 
@@ -132,4 +132,97 @@ extension NSView {
         alert.addButton(withTitle: "确认")
         alert.beginSheetModal(for: self.window ?? NSWindow(), completionHandler: nil)
     }
+}
+
+extension NSView {
+    var width: CGFloat {
+        get { return self.frame.size.width }
+        set {
+            var frame = self.frame
+            frame.size.width = newValue
+            self.frame = frame
+        }
+    }
+    
+    var height: CGFloat {
+        get { return self.frame.size.height }
+        set {
+            var frame = self.frame
+            frame.size.height = newValue
+            self.frame = frame
+        }
+    }
+    
+    var size: CGSize {
+        get { return self.frame.size }
+        set {
+            var frame = self.frame
+            frame.size = newValue
+            self.frame = frame
+        }
+    }
+    
+    var origin: CGPoint {
+        get { return self.frame.origin }
+        set {
+            var frame = self.frame
+            frame.origin = newValue
+            self.frame = frame
+        }
+    }
+    
+    var x: CGFloat {
+        get { return self.frame.origin.x }
+        set {
+            var frame = self.frame
+            frame.origin.x = newValue
+            self.frame = frame
+        }
+    }
+    
+    var y: CGFloat {
+        get { return self.frame.origin.y }
+        set {
+            var frame = self.frame
+            frame.origin.y = newValue
+            self.frame = frame
+        }
+    }
+    
+    var top: CGFloat {
+        get { return self.frame.origin.y }
+        set {
+            var frame = self.frame
+            frame.origin.y = newValue
+            self.frame = frame
+        }
+    }
+    
+    var bottom: CGFloat {
+        get { return frame.origin.y + frame.size.height }
+        set {
+            var frame = self.frame
+            frame.origin.y = newValue - self.frame.size.height
+            self.frame = frame
+        }
+    }
+    
+    var right: CGFloat {
+        get { return self.frame.origin.x + self.frame.size.width }
+        set {
+            var frame = self.frame
+            frame.origin.x = newValue - self.frame.size.width
+            self.frame = frame
+        }
+    }
+    
+    var left: CGFloat {
+        get { return self.frame.origin.x }
+        set {
+            var frame = self.frame
+            frame.origin.x = newValue
+            self.frame = frame
+        }
+    }
+    
 }

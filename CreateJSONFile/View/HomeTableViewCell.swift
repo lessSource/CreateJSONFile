@@ -7,15 +7,16 @@
 //
 
 import Cocoa
+import SnapKit
 
 class HomeTableViewCell: NSTableCellView {
     
-    fileprivate lazy var nameTextField: NSTextField = {
+    public lazy var nameTextField: NSTextField = {
         let textField = NSTextField(frame: .zero)
-        textField.isEditable = false
         textField.isBordered = false
         textField.font = NSFont.systemFont(ofSize: 16)
         textField.backgroundColor = NSColor.clear
+        textField.cell = BaseTextFieldCell()
         return textField
     }()
     
@@ -39,12 +40,29 @@ class HomeTableViewCell: NSTableCellView {
     // MARK:- initView
     fileprivate func initView() {
         addSubview(nameTextField)
-        nameTextField.stringValue = "1231792"
         nameTextField.snp.makeConstraints({
-            $0.edges.equalTo(NSEdgeInsets(top: 5, left: 0, bottom: 0, right: 0))
+            $0.height.equalTo(25)
+            $0.left.equalTo(5)
+            $0.center.equalToSuperview()
         })
     }
-    
+}
 
+class BaseTextFieldCell: NSTextFieldCell {
+    fileprivate func adjustedFrameToVerticallyCenterText(frame: NSRect) -> NSRect {
+        let offset = NSHeight(frame)/2 - ((font?.ascender ?? 0) + (font?.descender ?? 0))
+        return NSInsetRect(frame, 0.0, offset)
+    }
     
+    override func edit(withFrame rect: NSRect, in controlView: NSView, editor textObj: NSText, delegate: Any?, event: NSEvent?) {
+        super.edit(withFrame: adjustedFrameToVerticallyCenterText(frame: rect), in: controlView, editor: textObj, delegate: delegate, event: event)
+    }
+    
+    override func select(withFrame rect: NSRect, in controlView: NSView, editor textObj: NSText, delegate: Any?, start selStart: Int, length selLength: Int) {
+        super.select(withFrame: adjustedFrameToVerticallyCenterText(frame: rect), in: controlView, editor: textObj, delegate: delegate, start: selStart, length: selLength)
+    }
+    
+    override func drawInterior(withFrame cellFrame: NSRect, in controlView: NSView) {
+        super.drawInterior(withFrame: adjustedFrameToVerticallyCenterText(frame: cellFrame), in: controlView)
+    }
 }
