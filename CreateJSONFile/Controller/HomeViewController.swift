@@ -241,6 +241,12 @@ extension HomeViewController: NSOutlineViewDelegate, NSOutlineViewDataSource {
 
 
 extension HomeViewController: HomeTopViewDelegate {
+    func homeTopView(_ view: HomeTopView, json: JSON) {
+        textView.string = json.description
+//        homeData.contentArr = HomeDataModel.formattingJSON(json.dictionaryObject)
+        outlineView.reloadData()
+    }
+    
     func homeTopSelect(_ view: HomeTopView, type: HomeTopButtomType) {
         switch type {
         case .generate:
@@ -295,8 +301,7 @@ extension HomeViewController: HomeTopViewDelegate {
                 let cell = view.checkButton.bounds
                 pop.show(relativeTo: cell, of: view.checkButton, preferredEdge: NSRectEdge.maxX)
             }
-            
-            
+        case .obtain: break
         }
     }
     

@@ -7,24 +7,27 @@
 //
 
 import Cocoa
-//import Alamofire
+import Alamofire
 import SwiftyJSON
 
 enum HomeTopButtomType {
     case generate // 生成
     case validation // 验证
     case check // 切换
-
+    case obtain // 获取数据
+    
 }
 
 protocol HomeTopViewDelegate: class {
     func homeTopSelect(_ view: HomeTopView, type: HomeTopButtomType)
+    
+    func homeTopView(_ view: HomeTopView, json: JSON)
 }
 
 class HomeTopView: NSView {
     
     public weak var delegate: HomeTopViewDelegate?
-
+    
     public lazy var fileNameTextField: NSTextField = {
         let textField = NSTextField()
         textField.placeholderString = "请输入文件名称"
@@ -91,10 +94,10 @@ class HomeTopView: NSView {
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
-
+        
         // Drawing code here.
     }
-
+    
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         initView()
@@ -115,7 +118,7 @@ class HomeTopView: NSView {
         addSubview(dataButton)
         addSubview(addButton)
         addSubview(urlTextField)
-
+        
         fileNameTextField.snp.makeConstraints {
             $0.left.equalToSuperview()
             $0.height.equalTo(25)
@@ -144,7 +147,7 @@ class HomeTopView: NSView {
             $0.width.equalTo(67)
             $0.right.equalTo(generateButton.snp.left).offset(-10)
         }
-
+        
         authorTextField.snp.makeConstraints {
             $0.centerY.equalTo(fileNameTextField)
             $0.height.equalTo(25)
@@ -190,26 +193,44 @@ class HomeTopView: NSView {
     }
     
     @objc fileprivate func dataButtonClick() {
-        //        Request Body: {"size":"10","param":{},"page":1}
         var params: Dictionary<String, Any> = [:]
-        params.updateValue("1", forKey: "page")
-        params.updateValue("10", forKey: "size")
-        params.updateValue("{}", forKey: "param")
-        
-        let headers = ["Content-type": "multipart/form-data","token": "8ed436330a9a4cf8acfe4e286c0cc8eb"]
-        
-//        Alamofire.request("http://gateway.test.cef0e73c879624990a12fcf7c3cd3ea9d.cn-shanghai.alicontainer.com/salesman/storage/stock/info/ecs/list", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).responseData(completionHandler: { (daye) in
-//            print(try? JSON(data: daye.data!))
-//            
-//        })
+        params.updateValue(1, forKey: "page")
+        params.updateValue(10, forKey: "size")
+        let param: Dictionary = [String: Any]()
+        params.updateValue(param, forKey: "param")
+        let headers = ["Content-type": "application/json","token": "8ed436330a9a4cf8acfe4e286c0cc8eb"]
+        Alamofire.request("http://gateway.test.cef0e73c879624990a12fcf7c3cd3ea9d.cn-shanghai.alicontainer.com/salesman/storage/stock/info/ecs/list", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).responseJSON { (response) in
+            if let json = try? JSON(data: response.data ?? Data()) {
+                self.delegate?.homeTopView(self, json: json)
+            }
+        }
+    }
+    
+    // json转data
+    private func jsonToData(json: Any) -> Data? {
+        if !JSONSerialization.isValidJSONObject(json) {
+            print("is not a valid json object")
+            return nil
+        }
+        //利用自带的json库转换成Data
+        //如果设置options为JSONSerialization.WritingOptions.prettyPrinted，则打印格式更好阅读
+        guard let data = try? JSONSerialization.data(withJSONObject: json, options: JSONSerialization.WritingOptions.prettyPrinted) else {
+            print("is not a valid json object")
+            return nil
+        }
+        // Data转换成String打印输出
+        let str = String(data: data , encoding: String.Encoding.utf8)
+        // 输出json字符串
+        print("Json Str:\(str ?? "")")
+        return data
     }
     
     @objc fileprivate func addButtonClick(_ sender: NSButton) {
         if popover.isShown {
-               popover.performClose(sender)
-           }else {
-               popover.show(relativeTo: sender.bounds, of: sender, preferredEdge: NSRectEdge.maxX)
-           }
+            popover.performClose(sender)
+        }else {
+            popover.show(relativeTo: sender.bounds, of: sender, preferredEdge: NSRectEdge.maxX)
+        }
     }
     
     

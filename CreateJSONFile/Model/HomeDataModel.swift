@@ -164,7 +164,7 @@ struct HomeDataModel {
         for item in homeData.contentArr {
             if item.childArr.count > 0 {
                 var source = HomeDataSource()
-                source.structName = "\(item.key.localizedCapitalized)Model"
+                source.structName = item.defaultStr
                 source.contentArr = item.childArr
                 source.inheritanceStr = homeData.inheritanceStr
                 array += flatStructModel(source)
