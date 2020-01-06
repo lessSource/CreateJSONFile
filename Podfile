@@ -7,6 +7,7 @@ target 'CreateJSONFile' do
 
   pod 'SnapKit'
   pod 'SwiftyJSON'
+#  pod 'Alamofire'
   # Pods for CreateJSONFile
 
   target 'CreateJSONFileTests' do

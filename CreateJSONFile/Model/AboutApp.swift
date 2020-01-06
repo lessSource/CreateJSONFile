@@ -77,53 +77,67 @@ struct APPKeyword {
     let annotationStr = "//  "
     let space4 = "    "
     let space1 = " "
+    
 }
 
 public enum DataType {
     /** Bool */
     case bool
-    /** Array */
-    case array
     /** String */
     case string
     /** Int */
     case int
+    /** Array */
+    case array(String)
     /** Dictionary */
-    case dictionary
-    /** model */
-    case model(String)
+    case dictionary(String)
     
     var defaultStr: String {
         switch self {
         case .bool:
             return "false"
-        case .array:
-            return "[]"
-        case .dictionary:
-            return "[]"
         case .string:
             return "\"\""
         case .int:
             return "0"
-        case .model(let name):
-            return "\(name)Model()"
+        case .array(let name):
+            return name.isEmpty ? "[String]()" : "[\(name.localizedCapitalized)ArrModel]()"
+        case .dictionary(let name):
+            return "\(name.capitalized)DicModel()"
         }
+        
     }
     
-    var valueStr: String {
+    // 写入类型
+    var writeStr: String {
         switch self {
         case .bool:
             return "Bool"
-        case .array:
+        case .int:
+            return "Int"
+        case .string:
+            return "String"
+        case .array(let name):
+            return name.isEmpty ? "Array" : "\(name.localizedCapitalized)ArrModel"
+        case .dictionary(let name):
+            return name.isEmpty ? "Dictionary" : "\(name.localizedCapitalized)DicModel"
+
+        }
+    }
+    
+    // 输出类型
+    var outputStr: String {
+        switch self {
+        case .bool:
+            return "Bool"
+        case .array(_):
             return "Array"
         case .string:
             return "String"
-        case .dictionary:
+        case .dictionary(_):
             return "Dictionary"
         case .int:
             return "Int"
-        case .model(let name):
-            return "\(name)Model"
         }
     }
     
@@ -134,11 +148,10 @@ extension DataType: Equatable {
     static public func ==(lhs: DataType, rhs: DataType) -> Bool {
         switch (lhs, rhs) {
         case (.bool, .bool): return true
-        case (.array, .array): return true
         case (.string, .string): return true
-        case (.dictionary, .dictionary): return true
         case (.int, .int): return true
-        case (.model(let str1), .model(let str2)) where str1 == str2 : return true
+        case (.array(let str1), .array(let str2)) where str1 == str2 : return true
+        case (.dictionary(let str1), .dictionary(let str2)) where str1 == str2 : return true
         case _: return false
         }
     }

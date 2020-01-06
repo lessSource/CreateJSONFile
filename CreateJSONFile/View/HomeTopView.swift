@@ -7,6 +7,8 @@
 //
 
 import Cocoa
+//import Alamofire
+import SwiftyJSON
 
 enum HomeTopButtomType {
     case generate // 生成
@@ -46,6 +48,13 @@ class HomeTopView: NSView {
         return textField
     }()
     
+    public lazy var urlTextField: NSTextField = {
+        let textField = NSTextField()
+        textField.placeholderString = "请输入url地址获取数据"
+        textField.isBordered = true
+        return textField
+    }()
+    
     fileprivate lazy var generateButton: NSButton = {
         let button = NSButton(title: "生成", target: self, action: #selector(generateButtonClick))
         return button
@@ -54,6 +63,25 @@ class HomeTopView: NSView {
     fileprivate lazy var validationButton: NSButton = {
         let button = NSButton(title: "验证", target: self, action: #selector(validationButtonClick))
         return button
+    }()
+    
+    fileprivate lazy var dataButton: NSButton = {
+        let button = NSButton(title: "获取数据", target: self, action: #selector(dataButtonClick))
+        return button
+    }()
+    
+    fileprivate lazy var addButton: NSButton = {
+        let button = NSButton(title: "添加", target: self, action: #selector(addButtonClick(_ :)))
+        return button
+    }()
+    
+    fileprivate lazy var popover: NSPopover = {
+        let pop = NSPopover()
+        pop.contentSize = NSSize(width: 600, height: 300)
+        pop.contentViewController = HomePopViewController()
+        pop.animates = true
+        pop.appearance = NSAppearance(named: NSAppearance.Name.aqua)
+        return pop
     }()
     
     public lazy var checkButton: NSPopUpButton = {
@@ -84,12 +112,15 @@ class HomeTopView: NSView {
         addSubview(checkButton)
         addSubview(generateButton)
         addSubview(validationButton)
-        
+        addSubview(dataButton)
+        addSubview(addButton)
+        addSubview(urlTextField)
+
         fileNameTextField.snp.makeConstraints {
             $0.left.equalToSuperview()
             $0.height.equalTo(25)
             $0.width.equalTo(120)
-            $0.centerY.equalToSuperview()
+            $0.top.equalTo(15)
         }
         
         checkButton.removeAllItems()
@@ -97,34 +128,54 @@ class HomeTopView: NSView {
         checkButton.selectItem(at: 0)
         
         checkButton.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
+            $0.centerY.equalTo(fileNameTextField)
             $0.width.equalTo(110)
             $0.left.equalTo(fileNameTextField.snp.right).offset(10)
         }
         
         generateButton.snp.makeConstraints {
-            $0.centerY.right.equalToSuperview()
+            $0.right.equalToSuperview()
+            $0.centerY.equalTo(fileNameTextField)
             $0.width.equalTo(67)
         }
         
         validationButton.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
+            $0.centerY.equalTo(fileNameTextField)
             $0.width.equalTo(67)
             $0.right.equalTo(generateButton.snp.left).offset(-10)
         }
 
         authorTextField.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
+            $0.centerY.equalTo(fileNameTextField)
             $0.height.equalTo(25)
             $0.width.equalTo(80)
             $0.right.equalTo(validationButton.snp.left).offset(-10)
         }
         
         projectNameTextField.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
+            $0.centerY.equalTo(fileNameTextField)
             $0.height.equalTo(25)
             $0.width.equalTo(120)
             $0.right.equalTo(authorTextField.snp.left).offset(-10)
+        }
+        
+        dataButton.snp.makeConstraints {
+            $0.top.equalTo(validationButton.snp.bottom).offset(18)
+            $0.width.equalTo(80)
+            $0.right.equalToSuperview()
+        }
+        
+        addButton.snp.makeConstraints {
+            $0.centerY.equalTo(dataButton)
+            $0.width.equalTo(50)
+            $0.right.equalTo(dataButton.snp.left).offset(-5)
+        }
+        
+        urlTextField.snp.makeConstraints {
+            $0.right.equalTo(addButton.snp.left).offset(-5)
+            $0.centerY.equalTo(dataButton)
+            $0.left.equalToSuperview()
+            $0.height.equalTo(25)
         }
         
     }
@@ -137,5 +188,29 @@ class HomeTopView: NSView {
     @objc fileprivate func validationButtonClick() {
         delegate?.homeTopSelect(self, type: .validation)
     }
+    
+    @objc fileprivate func dataButtonClick() {
+        //        Request Body: {"size":"10","param":{},"page":1}
+        var params: Dictionary<String, Any> = [:]
+        params.updateValue("1", forKey: "page")
+        params.updateValue("10", forKey: "size")
+        params.updateValue("{}", forKey: "param")
+        
+        let headers = ["Content-type": "multipart/form-data","token": "8ed436330a9a4cf8acfe4e286c0cc8eb"]
+        
+//        Alamofire.request("http://gateway.test.cef0e73c879624990a12fcf7c3cd3ea9d.cn-shanghai.alicontainer.com/salesman/storage/stock/info/ecs/list", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).responseData(completionHandler: { (daye) in
+//            print(try? JSON(data: daye.data!))
+//            
+//        })
+    }
+    
+    @objc fileprivate func addButtonClick(_ sender: NSButton) {
+        if popover.isShown {
+               popover.performClose(sender)
+           }else {
+               popover.show(relativeTo: sender.bounds, of: sender, preferredEdge: NSRectEdge.maxX)
+           }
+    }
+    
     
 }

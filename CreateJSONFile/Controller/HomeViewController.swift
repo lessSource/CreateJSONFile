@@ -17,14 +17,14 @@ class HomeViewController: NSViewController {
     
     
     fileprivate lazy var topView: HomeTopView = {
-        let view = HomeTopView(frame: NSRect(x: 10, y: 10, width: self.view.width - 20, height: 50))
+        let view = HomeTopView(frame: NSRect(x: 10, y: 10, width: self.view.width - 20, height: 100))
         view.autoresizingMask = [.width]
         view.delegate = self
         return view
     }()
     
     fileprivate lazy var conetntScrollView: NSScrollView = {
-        let scroll = NSScrollView(frame: .zero)
+        let scroll = NSScrollView(frame: NSRect(x: 0, y: 0, width: self.view.width - 20, height: self.view.height/2))
         scroll.autoresizingMask = .none
         return scroll
     }()
@@ -58,6 +58,15 @@ class HomeViewController: NSViewController {
         outlineView.rowHeight = 38
         outlineView.usesAlternatingRowBackgroundColors = true
         return outlineView
+    }()
+    
+    fileprivate lazy var popover: NSPopover = {
+        let pop = NSPopover()
+        pop.contentSize = NSSize(width: 600, height: 300)
+        pop.contentViewController = HomePopViewController()
+        pop.animates = true
+        pop.appearance = NSAppearance(named: NSAppearance.Name.aqua)
+        return pop
     }()
     
     
@@ -166,22 +175,8 @@ extension HomeViewController: NSOutlineViewDelegate, NSOutlineViewDataSource {
             cell?.checkButton.state = model.isIgnore ? .on : .off
             
             cell?.didSelectClosure = { [weak self] in
-                
                 self?.test(outlineView, item: item)
-//                // 当前层级序号
-//                let childIndex = outlineView.childIndex(forItem: item)
-//                let row = outlineView.row(forItem: item)
-//                // 当前层级
-//                let item = outlineView.level(forItem: item)
-//                let level = outlineView.level(forRow: row)
-//
-////                outlineView.item(atRow: <#T##Int#>)
-//                print([childIndex, item, row, level])
             }
-            
-//            let row = outlineView.selectedRow
-//            let row1 = outlineView.row(forItem: <#T##Any?#>)
-            
             return cell
         }
         if tableColumn?.identifier == "outputTypeColumn".identifire {
@@ -190,8 +185,13 @@ extension HomeViewController: NSOutlineViewDelegate, NSOutlineViewDataSource {
                 cell = HomeTypeTableCellView()
                 cell?.identifier = HomeTypeTableCellView.identifire
             }
-            cell?.checkButton.selectItem(withTitle: model.outputType.valueStr)
-            cell?.checkButton.isEnabled = !(model.outputType == .array || model.outputType == .dictionary)
+            cell?.checkButton.selectItem(withTitle: model.outputType.outputStr)
+            switch model.outputType {
+            case .array(_), .dictionary(_):
+                cell?.checkButton.isEnabled = false
+            default:
+                cell?.checkButton.isEnabled = true
+            }
             return cell
         }
         var cell = outlineView.makeView(withIdentifier: HomeTableViewCell.identifire, owner: self) as? HomeTableViewCell
@@ -203,9 +203,16 @@ extension HomeViewController: NSOutlineViewDelegate, NSOutlineViewDataSource {
             cell?.nameTextField.isEditable = false
             cell?.nameTextField.stringValue = model.key
         }else if tableColumn?.identifier == "defaultColumn".identifire {
-            cell?.nameTextField.isEditable = true
-            cell?.nameTextField.stringValue = model.defaultStr
-            cell?.nameTextField.placeholderString = "默认值"
+            switch model.outputType {
+            case .array(_), .dictionary(_):
+                cell?.nameTextField.isEditable = false
+                cell?.nameTextField.stringValue = ""
+                cell?.nameTextField.placeholderString = model.defaultStr
+            default:
+                cell?.nameTextField.isEditable = true
+                cell?.nameTextField.stringValue = model.defaultStr
+                cell?.nameTextField.placeholderString = "默认值"
+            }
         }else {
             cell?.nameTextField.isEditable = true
             cell?.nameTextField.stringValue = model.annotation
@@ -216,19 +223,19 @@ extension HomeViewController: NSOutlineViewDelegate, NSOutlineViewDataSource {
     
     fileprivate func test(_ outlineView: NSOutlineView, item: Any) {
         var array : Array = [Int]()
-//        let childIndex = outlineView.childIndex(forItem: item)
-        
         var any: Any? = item
         while any != nil {
             let index = outlineView.childIndex(forItem: any!)
             array.append(index)
             any = outlineView.parent(forItem: any)
         }
-        
         print(array)
+        
+//        let ddd = NSPanel(contentViewController: self)
+        
     }
     
-    
+
     
 }
 
@@ -273,7 +280,22 @@ extension HomeViewController: HomeTopViewDelegate {
             textView.string = JSON(parseJSON: textView.string).description
             homeData.contentArr = HomeDataModel.formattingJSON(dict)
             outlineView.reloadData()
-        case .check: break
+        case .check:
+            let pop = NSPopover()
+            let homeVC = ViewController()
+            pop.contentSize = NSSize(width: 100, height: 200)
+            pop.contentViewController = homeVC
+            pop.animates = false
+            pop.appearance = NSAppearance(named: NSAppearance.Name.aqua)
+            
+            if pop.isShown {
+                pop.performClose(view.checkButton)
+
+            }else {
+                let cell = view.checkButton.bounds
+                pop.show(relativeTo: cell, of: view.checkButton, preferredEdge: NSRectEdge.maxX)
+            }
+            
             
         }
     }

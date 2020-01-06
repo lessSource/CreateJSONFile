@@ -51,10 +51,12 @@ struct HomeContentModel {
     var annotation: String
     /** 是否可选 */
     var isOptional: Bool
+    /** 子集名称 */
+    var childName: String
     /** 子集 */
     var childArr: Array<HomeContentModel>
     
-    init(_ key: String, value: Any? = nil, isIgnore: Bool = false, outputType: DataType = .string, isDefault: Bool = true, defaultStr: String = "", annotation: String = "", isOptional: Bool = false, childArr: Array<HomeContentModel> = [HomeContentModel]()) {
+    init(_ key: String, value: Any? = nil, isIgnore: Bool = false, outputType: DataType = .string, isDefault: Bool = true, defaultStr: String = "", annotation: String = "", isOptional: Bool = false,childName: String = "", childArr: Array<HomeContentModel> = [HomeContentModel]()) {
         self.key = key
         self.value = value
         self.isIgnore = isIgnore
@@ -63,6 +65,7 @@ struct HomeContentModel {
         self.defaultStr = defaultStr
         self.annotation = annotation
         self.isOptional = isOptional
+        self.childName = childName
         self.childArr = childArr
     }
 }
@@ -124,21 +127,25 @@ struct HomeDataModel {
             var model = HomeContentModel(key, value: value)
             if let _ = value as? String {
                 model.outputType = .string
-            }else if let _ = value as? Bool {
-                model.outputType = .bool
             }else if let _ = value as? Int {
                 model.outputType = .int
+            }else if let _ = value as? Bool {
+                model.outputType = .bool
             }else if let valueArr = value as? Array<Any> {
-                model.outputType = .array
+                model.outputType = .array("")
                 if let dic = valueArr.first as? Dictionary<String, Any> {
+                    model.outputType = .array(key)
+                    model.childName = "\(key.localizedCapitalized)ArrModel"
                     model.childArr = formattingJSON(dic)
                 }
             }else if let valueDic = value as? Dictionary<String, Any> {
-                model.outputType = .dictionary
+                model.outputType = .dictionary(key)
+                model.childName = "\(key.localizedCapitalized)DicModel"
                 model.childArr = formattingJSON(valueDic)
             }else {
                 print(key, value)
             }
+            model.defaultStr = model.outputType.defaultStr
             array.append(model)
         }
         return array
@@ -151,17 +158,18 @@ struct HomeDataModel {
         var dataSource = HomeDataSource()
         dataSource.structName = homeData.structName
         dataSource.contentArr = homeData.contentArr
+        dataSource.inheritanceStr = homeData.inheritanceStr
         array.append(dataSource)
         
-        
-        
-        
-//        for model in homeData.contentArr {
-////            array.append(model)
-//            let dataSource = HomeDataSource()
-////            dataSource.
-//
-//        }
+        for item in homeData.contentArr {
+            if item.childArr.count > 0 {
+                var source = HomeDataSource()
+                source.structName = "\(item.key.localizedCapitalized)Model"
+                source.contentArr = item.childArr
+                source.inheritanceStr = homeData.inheritanceStr
+                array += flatStructModel(source)
+            }
+        }        
         return array
     }
     
@@ -186,8 +194,12 @@ struct HomeDataModel {
                 
         for model in homeData.contentArr {
             if !model.isIgnore {
+                if !model.annotation.isEmpty {
+                    fileHandle?.write(Data.newlineData())
+                    fileHandle?.write(model.key.annotationData)
+                }
                 fileHandle?.write(Data.newlineData())
-                fileHandle?.write(model.key.getKeyContent(model.outputType))
+                fileHandle?.write(model.key.getKeyContent(model.outputType, defaultStr: model.defaultStr))
             }
         }
         

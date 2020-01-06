@@ -24,6 +24,7 @@
 		CA55FF5823BF1BFB00A00C97 /* HomeTypeTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA55FF5723BF1BFB00A00C97 /* HomeTypeTableCellView.swift */; };
 		CA55FF5A23BF22C700A00C97 /* HomeTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA55FF5923BF22C700A00C97 /* HomeTopView.swift */; };
 		CA55FF5C23BF34A600A00C97 /* HomeData+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA55FF5B23BF34A600A00C97 /* HomeData+Extension.swift */; };
+		CA6CB46423C3258C00059B0B /* HomePopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA6CB46323C3258C00059B0B /* HomePopViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 		CA55FF5723BF1BFB00A00C97 /* HomeTypeTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTypeTableCellView.swift; sourceTree = "<group>"; };
 		CA55FF5923BF22C700A00C97 /* HomeTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTopView.swift; sourceTree = "<group>"; };
 		CA55FF5B23BF34A600A00C97 /* HomeData+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeData+Extension.swift"; sourceTree = "<group>"; };
+		CA6CB46323C3258C00059B0B /* HomePopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePopViewController.swift; sourceTree = "<group>"; };
 		D964F1799A2190C9C2C8B789 /* Pods_CreateJSONFile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CreateJSONFile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0BDDD0D28925B81ED9EBA75 /* Pods-CreateJSONFile-CreateJSONFileUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CreateJSONFile-CreateJSONFileUITests.debug.xcconfig"; path = "Target Support Files/Pods-CreateJSONFile-CreateJSONFileUITests/Pods-CreateJSONFile-CreateJSONFileUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -188,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				CA55FF4E23BEE64C00A00C97 /* HomeViewController.swift */,
+				CA6CB46323C3258C00059B0B /* HomePopViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -454,6 +457,7 @@
 				CA55FF4F23BEE64C00A00C97 /* HomeViewController.swift in Sources */,
 				CA43A1CE23BD8B9F00947192 /* AboutApp.swift in Sources */,
 				CA55FF5A23BF22C700A00C97 /* HomeTopView.swift in Sources */,
+				CA6CB46423C3258C00059B0B /* HomePopViewController.swift in Sources */,
 				CA301A7423BB21BE00F27C26 /* ViewController.swift in Sources */,
 				CA55FF5823BF1BFB00A00C97 /* HomeTypeTableCellView.swift in Sources */,
 				2A13BBA723C1F9BD00463B23 /* HomeDataModel.swift in Sources */,
