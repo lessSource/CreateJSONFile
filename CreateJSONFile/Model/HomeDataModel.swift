@@ -164,7 +164,7 @@ struct HomeDataModel {
         for item in homeData.contentArr {
             if item.childArr.count > 0 {
                 let source = HomeDataSource()
-                source.structName = item.defaultStr
+                source.structName = item.outputType.writeStr
                 source.contentArr = item.childArr
                 source.inheritanceStr = homeData.inheritanceStr
                 array += flatStructModel(source)
