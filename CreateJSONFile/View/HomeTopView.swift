@@ -78,10 +78,14 @@ class HomeTopView: NSView {
         return button
     }()
     
+    fileprivate lazy var homePopVC: HomePopViewController = {
+        return HomePopViewController()
+    }()
+    
     fileprivate lazy var popover: NSPopover = {
         let pop = NSPopover()
         pop.contentSize = NSSize(width: 600, height: 300)
-        pop.contentViewController = HomePopViewController()
+        pop.contentViewController = homePopVC
         pop.animates = true
         pop.appearance = NSAppearance(named: NSAppearance.Name.aqua)
         return pop
@@ -180,7 +184,6 @@ class HomeTopView: NSView {
             $0.left.equalToSuperview()
             $0.height.equalTo(25)
         }
-        
     }
     
     // MARK:- objc
@@ -193,17 +196,34 @@ class HomeTopView: NSView {
     }
     
     @objc fileprivate func dataButtonClick() {
-        var params: Dictionary<String, Any> = [:]
-        params.updateValue(1, forKey: "page")
-        params.updateValue(10, forKey: "size")
-        let param: Dictionary = [String: Any]()
-        params.updateValue(param, forKey: "param")
-        let headers = ["Content-type": "application/json","token": "8ed436330a9a4cf8acfe4e286c0cc8eb"]
-        Alamofire.request("http://gateway.test.cef0e73c879624990a12fcf7c3cd3ea9d.cn-shanghai.alicontainer.com/salesman/storage/stock/info/ecs/list", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).responseJSON { (response) in
+        guard let url = URL(string: urlTextField.stringValue) else {
+            alertError("请输入正确URL地址")
+            return
+        }
+        
+        
+        let params: Dictionary<String, Any> = [:]
+//        homePopVC.bodyCheckButton
+        
+        let headers = HomePopDataModel.getHeaderDictionArray(homePopVC.headerArr)
+        
+        Alamofire.request(url, method: .get, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
             if let json = try? JSON(data: response.data ?? Data()) {
                 self.delegate?.homeTopView(self, json: json)
             }
         }
+        
+        
+        
+//        params.updateValue("测试", forKey: "keyword")
+//        params.updateValue(10, forKey: "size")
+//        let param: Dictionary = [String: Any]()
+//        params.updateValue(param, forKey: "param")
+        
+//        http://gateway.test.cef0e73c879624990a12fcf7c3cd3ea9d.cn-shanghai.alicontainer.com/salesman/storage/stock/info/ecs/list
+//        http://gateway.test.cef0e73c879624990a12fcf7c3cd3ea9d.cn-shanghai.alicontainer.com/salesman/storage/transfer/selectSimpleGoods
+//        http://gateway.test.cef0e73c879624990a12fcf7c3cd3ea9d.cn-shanghai.alicontainer.com/salesman/search/getShopCity
+
     }
     
     // json转data

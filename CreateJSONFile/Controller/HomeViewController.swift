@@ -173,9 +173,8 @@ extension HomeViewController: NSOutlineViewDelegate, NSOutlineViewDataSource {
                 cell?.identifier = HomeIgnoreTableViewCell.identifire
             }
             cell?.checkButton.state = model.isIgnore ? .on : .off
-            
-            cell?.didSelectClosure = { [weak self] in
-                self?.test(outlineView, item: item)
+            cell?.didSelectClosure = {
+                model.isIgnore = !model.isIgnore
             }
             return cell
         }
@@ -199,6 +198,13 @@ extension HomeViewController: NSOutlineViewDelegate, NSOutlineViewDataSource {
             cell = HomeTableViewCell()
             cell?.identifier = HomeTableViewCell.identifire
         }
+        cell?.textFieldChangeClosure = { string in
+            if tableColumn?.identifier == "defaultColumn".identifire {
+                model.defaultStr = string
+            }else if tableColumn?.identifier == "annotationColumn".identifire {
+                model.annotation = string
+            }
+        }
         if tableColumn?.identifier == "keyColumn".identifire {
             cell?.nameTextField.isEditable = false
             cell?.nameTextField.stringValue = model.key
@@ -221,21 +227,6 @@ extension HomeViewController: NSOutlineViewDelegate, NSOutlineViewDataSource {
         return cell
     }
     
-    fileprivate func test(_ outlineView: NSOutlineView, item: Any) {
-        var array : Array = [Int]()
-        var any: Any? = item
-        while any != nil {
-            let index = outlineView.childIndex(forItem: any!)
-            array.append(index)
-            any = outlineView.parent(forItem: any)
-        }
-        print(array)
-        
-//        let ddd = NSPanel(contentViewController: self)
-        
-    }
-    
-
     
 }
 
@@ -243,7 +234,8 @@ extension HomeViewController: NSOutlineViewDelegate, NSOutlineViewDataSource {
 extension HomeViewController: HomeTopViewDelegate {
     func homeTopView(_ view: HomeTopView, json: JSON) {
         textView.string = json.description
-//        homeData.contentArr = HomeDataModel.formattingJSON(json.dictionaryObject)
+        guard let dic = json.dictionaryObject else { return }
+        homeData.contentArr = HomeDataModel.formattingJSON(dic)
         outlineView.reloadData()
     }
     
@@ -263,7 +255,9 @@ extension HomeViewController: HomeTopViewDelegate {
                 }
                 textView.string = JSON(parseJSON: textView.string).description
                 homeData.jsonDic = dict
-                homeData.contentArr = HomeDataModel.formattingJSON(dict)
+                if homeData.contentArr.count == 0 {
+                    homeData.contentArr = HomeDataModel.formattingJSON(dict)
+                }
                 homeData.inheritanceStr = view.checkButton.selectedItem?.title ?? ""
                 homeData.structName = fileName
                 HomeDataModel.createFileSwift(fileName, homeData: homeData) { (success) in

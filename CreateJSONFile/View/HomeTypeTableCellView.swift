@@ -42,6 +42,7 @@ class HomeTypeTableCellView: NSTableCellView {
             $0.center.equalToSuperview()
             $0.width.equalTo(110)
         }
+        
     }
     
     // MARK:- objc

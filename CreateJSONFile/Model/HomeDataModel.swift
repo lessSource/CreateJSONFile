@@ -8,7 +8,7 @@
 
 import Cocoa
 
-struct HomeDataSource {
+class HomeDataSource {
     /** 头部注释 */
     var fileHeaderArr: Array = [String]()
     /** json数据 */
@@ -34,7 +34,7 @@ struct HomeDataSource {
     
 }
 
-struct HomeContentModel {
+class HomeContentModel {
     /** key */
     var key: String
     /** value */
@@ -124,7 +124,7 @@ struct HomeDataModel {
     static public func formattingJSON(_ dict: [String: Any]) -> [HomeContentModel] {
         var array = [HomeContentModel]()
         for (key, value) in dict {
-            var model = HomeContentModel(key, value: value)
+            let model = HomeContentModel(key, value: value)
             if let _ = value as? String {
                 model.outputType = .string
             }else if let _ = value as? Int {
@@ -155,7 +155,7 @@ struct HomeDataModel {
     static fileprivate func flatStructModel(_ homeData: HomeDataSource) -> [HomeDataSource] {
         var array = [HomeDataSource]()
     
-        var dataSource = HomeDataSource()
+        let dataSource = HomeDataSource()
         dataSource.structName = homeData.structName
         dataSource.contentArr = homeData.contentArr
         dataSource.inheritanceStr = homeData.inheritanceStr
@@ -163,7 +163,7 @@ struct HomeDataModel {
         
         for item in homeData.contentArr {
             if item.childArr.count > 0 {
-                var source = HomeDataSource()
+                let source = HomeDataSource()
                 source.structName = item.defaultStr
                 source.contentArr = item.childArr
                 source.inheritanceStr = homeData.inheritanceStr
@@ -196,7 +196,7 @@ struct HomeDataModel {
             if !model.isIgnore {
                 if !model.annotation.isEmpty {
                     fileHandle?.write(Data.newlineData())
-                    fileHandle?.write(model.key.annotationData)
+                    fileHandle?.write(model.annotation.annotationData)
                 }
                 fileHandle?.write(Data.newlineData())
                 fileHandle?.write(model.key.getKeyContent(model.outputType, defaultStr: model.defaultStr))

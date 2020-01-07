@@ -11,11 +11,14 @@ import SnapKit
 
 class HomeTableViewCell: NSTableCellView {
     
+    public var textFieldChangeClosure: ((String) -> ())?
+    
     public lazy var nameTextField: NSTextField = {
         let textField = NSTextField(frame: .zero)
         textField.isBordered = false
         textField.font = NSFont.systemFont(ofSize: 16)
         textField.backgroundColor = NSColor.clear
+        textField.delegate = self
         textField.cell = BaseTextFieldCell()
         return textField
     }()
@@ -46,6 +49,14 @@ class HomeTableViewCell: NSTableCellView {
             $0.center.equalToSuperview()
         })
     }
+}
+
+extension HomeTableViewCell: NSTextFieldDelegate {
+    
+    func controlTextDidChange(_ obj: Notification) {
+        textFieldChangeClosure?(nameTextField.stringValue)
+    }
+    
 }
 
 class BaseTextFieldCell: NSTextFieldCell {
