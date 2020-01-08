@@ -116,11 +116,11 @@ class HomePopViewController: NSViewController {
         let homePopModel = HomePopModel(key: "params", value: "(0 items)", type: .dictionary(""), isEdit: false)
         contentArr.append(homePopModel)
         
-        contentArr[0].childArr.append(HomePopModel(key: "page", value: "1", type: .string))
-        
-        contentArr[0].childArr.append(HomePopModel(key: "size", value: "10", type: .string))
-
-        contentArr[0].childArr.append(HomePopModel(key: "param", value: "didcaodas", type: .dictionary("")))
+//        contentArr[0].childArr.append(HomePopModel(key: "page", value: "1", type: .string))
+//
+//        contentArr[0].childArr.append(HomePopModel(key: "size", value: "10", type: .string))
+//
+//        contentArr[0].childArr.append(HomePopModel(key: "param", value: "didcaodas", type: .dictionary("")))
 
         
         
@@ -211,19 +211,19 @@ class HomePopViewController: NSViewController {
          
          let contentKeyColumn = NSTableColumn(identifier: "contentKeyColumn".identifire)
          contentKeyColumn.title = "key"
-         contentKeyColumn.width = 100
+         contentKeyColumn.width = view.width/5
          contentKeyColumn.minWidth = 100
          contentOutlineView.addTableColumn(contentKeyColumn)
          
          let contentTypeColumn = NSTableColumn(identifier: "contentTypeColumn".identifire)
          contentTypeColumn.title = "type"
-         contentTypeColumn.width = view.width/5*3-200
+         contentTypeColumn.width = view.width/5 - 15
          contentTypeColumn.minWidth = 100
          contentOutlineView.addTableColumn(contentTypeColumn)
          
          let contentStateColumn = NSTableColumn(identifier: "contentStateColumn".identifire)
          contentStateColumn.title = "value"
-         contentStateColumn.width = 100
+         contentStateColumn.width = view.width/5 + 15
          contentStateColumn.minWidth = 100
          contentOutlineView.addTableColumn(contentStateColumn)
          
@@ -340,6 +340,7 @@ extension HomePopViewController: NSOutlineViewDelegate, NSOutlineViewDataSource 
                 cell?.checkButton.isEnabled = model.isEdit
                 cell?.didSelectCheck = { [weak self] type in
                     model.type = type
+                    model.childArr.removeAll()
                     self?.contentOutlineView.reloadData()
                 }
                 return cell
@@ -356,12 +357,14 @@ extension HomePopViewController: NSOutlineViewDelegate, NSOutlineViewDataSource 
                     cell?.nameTextField.placeholderString = model.key
                 }else {
                     cell?.nameTextField.placeholderString = model.value
+                    cell?.isMouse = true
                 }
             }else {
                 if tableColumn?.identifier == "contentKeyColumn".identifire {
                     cell?.nameTextField.placeholderString = "key"
                     cell?.nameTextField.stringValue = model.key
                 }else {
+                    cell?.isMouse = true
                     switch model.type {
                     case .array(_), .dictionary(_):
                         cell?.nameTextField.isEditable = false
@@ -371,8 +374,29 @@ extension HomePopViewController: NSOutlineViewDelegate, NSOutlineViewDataSource 
                         cell?.nameTextField.stringValue = model.value
                     }
                 }
+            }
+            cell?.didSelectButtonClosure = { [weak self] state in
+                if state {
+                    switch model.type {
+                    case .array(""), .dictionary(""):
+                        let popModel = HomePopModel()
+                        model.childArr.append(popModel)
+                        self?.contentOutlineView.reloadData()
+                    default:
+                        if let parentModel = outlineView.parent(forItem: item) as? HomePopModel {
+                            let popModel = HomePopModel()
+                            parentModel.childArr.append(popModel)
+                            self?.contentOutlineView.reloadData()
+                        }
+                        
+                        
+                    }
+                    
+
+                }
                 
             }
+            
             cell?.textFieldChangeClosure = { str in
                 if tableColumn?.identifier == "contentKeyColumn".identifire {
                     model.value = str

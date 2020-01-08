@@ -13,6 +13,11 @@ class HomeTableViewCell: NSTableCellView {
     
     public var textFieldChangeClosure: ((String) -> ())?
     
+    public var didSelectButtonClosure: ((Bool) -> ())?
+
+    
+    public var isMouse: Bool = false
+    
     public lazy var nameTextField: NSTextField = {
         let textField = NSTextField(frame: .zero)
         textField.isBordered = false
@@ -23,11 +28,37 @@ class HomeTableViewCell: NSTableCellView {
         return textField
     }()
     
+    fileprivate lazy var addButton: NSButton = {
+        let button = NSButton(image: NSImage(named: NSImage.addTemplateName)!, target: self, action: #selector(addButtonClick))
+        button.setButtonType(.momentaryPushIn)
+        button.isHidden = true
+        return button
+    }()
+    
+    fileprivate lazy var reduceButton: NSButton = {
+        let button = NSButton(image: NSImage(named: NSImage.removeTemplateName)!, target: self, action: #selector(reduceButtonClick))
+        button.setButtonType(.momentaryPushIn)
+        button.isHidden = true
+        return button
+    }()
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
 
         // Drawing code here.
+        if isMouse {
+            addTrackingRect(bounds, owner: self, userData: nil, assumeInside: false)
+        }
+    }
+    
+    override func mouseEntered(with event: NSEvent) {
+        addButton.isHidden = false
+        reduceButton.isHidden = false
+    }
+    
+    override func mouseExited(with event: NSEvent) {
+        addButton.isHidden = true
+        reduceButton.isHidden = true
     }
     
     override init(frame frameRect: NSRect) {
@@ -43,11 +74,35 @@ class HomeTableViewCell: NSTableCellView {
     // MARK:- initView
     fileprivate func initView() {
         addSubview(nameTextField)
+        addSubview(addButton)
+        addSubview(reduceButton)
+
         nameTextField.snp.makeConstraints({
             $0.height.equalTo(25)
             $0.left.equalTo(5)
             $0.center.equalToSuperview()
         })
+        
+        addButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.height.equalTo(30)
+            $0.right.equalToSuperview()
+        }
+        
+        reduceButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.height.equalTo(30)
+            $0.right.equalTo(addButton.snp.left)
+        }
+    }
+    
+    // MARK:- objc
+    @objc fileprivate func addButtonClick() {
+        didSelectButtonClosure?(true)
+    }
+    
+    @objc fileprivate func reduceButtonClick() {
+        didSelectButtonClosure?(false)
     }
 }
 

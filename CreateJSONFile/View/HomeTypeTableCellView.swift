@@ -19,14 +19,13 @@ class HomeTypeTableCellView: NSTableCellView {
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
-        
-        // Drawing code here.
+                // Drawing code here.
+
     }
     
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         initView()
-        
     }
     
     required init?(coder: NSCoder) {
