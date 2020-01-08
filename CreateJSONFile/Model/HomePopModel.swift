@@ -8,7 +8,7 @@
 
 import Cocoa
 
-struct HomePopModel {
+class HomePopModel {
     /** key */
     var key: String
     /** value */
@@ -38,10 +38,36 @@ struct HomePopDataModel {
     // 获取header
     static public func getHeaderDictionArray(_ array: [HomePopModel]) -> [String: String] {
         var header = [String: String]()
-        for item in array {
+        for item in array where !item.key.isEmpty {
             header.updateValue(item.value, forKey: item.key)
         }
         return header
+    }
+    
+    // 获取content
+    static public func getContentDictionArray(_ popModel: HomePopModel) -> [String: Any] {
+        var params = [String: Any]()
+
+        for item in popModel.childArr where !item.key.isEmpty {
+            switch item.type {
+            case .array(_):
+                let param = getContentDictionArray(item)
+                var array = [Any]()
+                for (_, value) in param {
+                    array.append(value)
+                }
+                params.updateValue(array, forKey: item.key)
+            case .dictionary(_):
+                params.updateValue(getContentDictionArray(item), forKey: item.key)
+            case .bool:
+                params.updateValue((item.value as NSString).boolValue, forKey: item.key)
+            case .string:
+                params.updateValue(item.value, forKey: item.key)
+            case .int:
+                params.updateValue((item.value as NSString).intValue, forKey: item.key)
+            }
+        }
+        return params
     }
     
 }

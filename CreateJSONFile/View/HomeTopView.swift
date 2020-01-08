@@ -201,19 +201,34 @@ class HomeTopView: NSView {
             return
         }
         
-        
-        let params: Dictionary<String, Any> = [:]
-//        homePopVC.bodyCheckButton
-        
         let headers = HomePopDataModel.getHeaderDictionArray(homePopVC.headerArr)
+        var params: Dictionary<String, Any> = [:]
+        if homePopVC.contentArr.count > 0 {
+            params = HomePopDataModel.getContentDictionArray(homePopVC.contentArr[0])
+        }
+        guard let method = HTTPMethod(rawValue: homePopVC.checkButton.title) else {
+            alertError("添加请求方式")
+            return
+        }
         
-        Alamofire.request(url, method: .get, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
-            if let json = try? JSON(data: response.data ?? Data()) {
-                self.delegate?.homeTopView(self, json: json)
+        switch method {
+        case .get:
+            Alamofire.request(url, method: .get, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
+                if let json = try? JSON(data: response.data ?? Data()) {
+                    self.delegate?.homeTopView(self, json: json)
+                }
+            }
+        default:
+            Alamofire.request(url, method: method, parameters: params, encoding: JSONEncoding.default, headers: headers).responseJSON { (response) in
+                if let json = try? JSON(data: response.data ?? Data()) {
+                    self.delegate?.homeTopView(self, json: json)
+                }
             }
         }
         
-        
+        //        let header1 = HomePopModel(key: "Content-type", value: "application/json")
+        //        let header2 = HomePopModel(key: "token", value: "8ed436330a9a4cf8acfe4e286c0cc8eb")
+        //        let headerModel =
         
 //        params.updateValue("测试", forKey: "keyword")
 //        params.updateValue(10, forKey: "size")

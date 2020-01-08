@@ -94,7 +94,17 @@ class HomePopViewController: NSViewController {
         return splitView
     }()
     
-//    fileprivate
+    fileprivate lazy var addButton: NSButton = {
+        let button = NSButton(image: NSImage(named: NSImage.addTemplateName)!, target: self, action: #selector(addButtonClick))
+        button.setButtonType(.momentaryPushIn)
+        return button
+    }()
+    
+    fileprivate lazy var reduceButton: NSButton = {
+        let button = NSButton(image: NSImage(named: NSImage.removeTemplateName)!, target: self, action: #selector(reduceButtonClick))
+        button.setButtonType(.momentaryPushIn)
+        return button
+    }()
     
     public lazy var headerArr: Array = [HomePopModel]()
     public lazy var contentArr: Array = [HomePopModel]()
@@ -105,12 +115,16 @@ class HomePopViewController: NSViewController {
         // Do view setup here.
         let homePopModel = HomePopModel(key: "params", value: "(0 items)", type: .dictionary(""), isEdit: false)
         contentArr.append(homePopModel)
+        
+        contentArr[0].childArr.append(HomePopModel(key: "page", value: "1", type: .string))
+        
+        contentArr[0].childArr.append(HomePopModel(key: "size", value: "10", type: .string))
 
-        let header1 = HomePopModel(key: "Content-type", value: "application/json")
-        let header2 = HomePopModel(key: "token", value: "8ed436330a9a4cf8acfe4e286c0cc8eb")
-        headerArr.append(header1)
-        headerArr.append(header2)
+        contentArr[0].childArr.append(HomePopModel(key: "param", value: "didcaodas", type: .dictionary("")))
 
+        
+        
+        
         initView()
     }
     
@@ -130,9 +144,13 @@ class HomePopViewController: NSViewController {
         contentScrollView.documentView = contentOutlineView
         splitView.addSubview(scrollView)
         splitView.addSubview(contentScrollView)
+        addTableColumn()
         view.addSubview(splitView)
         view.addSubview(headerGinsengTextField)
         view.addSubview(bodyGinsengTextField)
+        view.addSubview(addButton)
+        view.addSubview(reduceButton)
+
 
         headerGinsengTextField.snp.makeConstraints {
             $0.left.equalTo(scrollView)
@@ -143,42 +161,6 @@ class HomePopViewController: NSViewController {
             $0.left.equalTo(contentScrollView)
             $0.bottom.equalTo(contentScrollView.snp.top).offset(-10)
         }
-        
-        
-        let keyColumn = NSTableColumn(identifier: "keyColumn".identifire)
-        keyColumn.title = "key"
-        keyColumn.width = 100
-        keyColumn.minWidth = 100
-        headerOutlineView.addTableColumn(keyColumn)
-        
-        let stateColumn = NSTableColumn(identifier: "valueColumn".identifire)
-        stateColumn.title = "value"
-        stateColumn.width = view.width/5*2-100
-        stateColumn.minWidth = 100
-        headerOutlineView.addTableColumn(stateColumn)
-        
-        let contentKeyColumn = NSTableColumn(identifier: "contentKeyColumn".identifire)
-        contentKeyColumn.title = "key"
-        contentKeyColumn.width = 100
-        contentKeyColumn.minWidth = 100
-        contentOutlineView.addTableColumn(contentKeyColumn)
-        
-        let contentTypeColumn = NSTableColumn(identifier: "contentTypeColumn".identifire)
-        contentTypeColumn.title = "type"
-        contentTypeColumn.width = view.width/5*3-200
-        contentTypeColumn.minWidth = 100
-        contentOutlineView.addTableColumn(contentTypeColumn)
-        
-        let contentStateColumn = NSTableColumn(identifier: "contentStateColumn".identifire)
-        contentStateColumn.title = "value"
-        contentStateColumn.width = 100
-        contentStateColumn.minWidth = 100
-        contentOutlineView.addTableColumn(contentStateColumn)
-        
-        checkButton.removeAllItems()
-        bodyCheckButton.removeAllItems()
-        checkButton.addItems(withTitles: [HTTPMethod.post.rawValue,HTTPMethod.get.rawValue,HTTPMethod.put.rawValue,HTTPMethod.delete.rawValue,HTTPMethod.options.rawValue,HTTPMethod.head.rawValue,HTTPMethod.patch.rawValue,HTTPMethod.trace.rawValue,HTTPMethod.connect.rawValue])
-        bodyCheckButton.addItems(withTitles: ["Raw","JSON","From"])
         
         methodTextField.snp.makeConstraints {
             $0.top.left.equalTo(15)
@@ -200,6 +182,55 @@ class HomePopViewController: NSViewController {
             $0.width.equalTo(80)
             $0.left.equalTo(bodyTextField.snp.right).offset(15)
         }
+        
+        addButton.snp.makeConstraints {
+            $0.centerY.equalTo(headerGinsengTextField)
+            $0.height.equalTo(30)
+            $0.right.equalTo(scrollView.snp.right)
+        }
+        
+        reduceButton.snp.makeConstraints {
+            $0.centerY.equalTo(headerGinsengTextField)
+            $0.height.equalTo(30)
+            $0.right.equalTo(addButton.snp.left)
+        }
+    }
+    
+    fileprivate func addTableColumn() {
+        let keyColumn = NSTableColumn(identifier: "keyColumn".identifire)
+         keyColumn.title = "key"
+         keyColumn.width = 100
+         keyColumn.minWidth = 100
+         headerOutlineView.addTableColumn(keyColumn)
+         
+         let stateColumn = NSTableColumn(identifier: "valueColumn".identifire)
+         stateColumn.title = "value"
+         stateColumn.width = view.width/5*2-100
+         stateColumn.minWidth = 100
+         headerOutlineView.addTableColumn(stateColumn)
+         
+         let contentKeyColumn = NSTableColumn(identifier: "contentKeyColumn".identifire)
+         contentKeyColumn.title = "key"
+         contentKeyColumn.width = 100
+         contentKeyColumn.minWidth = 100
+         contentOutlineView.addTableColumn(contentKeyColumn)
+         
+         let contentTypeColumn = NSTableColumn(identifier: "contentTypeColumn".identifire)
+         contentTypeColumn.title = "type"
+         contentTypeColumn.width = view.width/5*3-200
+         contentTypeColumn.minWidth = 100
+         contentOutlineView.addTableColumn(contentTypeColumn)
+         
+         let contentStateColumn = NSTableColumn(identifier: "contentStateColumn".identifire)
+         contentStateColumn.title = "value"
+         contentStateColumn.width = 100
+         contentStateColumn.minWidth = 100
+         contentOutlineView.addTableColumn(contentStateColumn)
+         
+         checkButton.removeAllItems()
+         bodyCheckButton.removeAllItems()
+         checkButton.addItems(withTitles: [HTTPMethod.post.rawValue,HTTPMethod.get.rawValue,HTTPMethod.put.rawValue,HTTPMethod.delete.rawValue,HTTPMethod.options.rawValue,HTTPMethod.head.rawValue,HTTPMethod.patch.rawValue,HTTPMethod.trace.rawValue,HTTPMethod.connect.rawValue])
+         bodyCheckButton.addItems(withTitles: ["Raw","JSON","From"])
     }
     
     fileprivate func setOutlineView(_ outlineView: NSOutlineView) {
@@ -211,6 +242,19 @@ class HomePopViewController: NSViewController {
         outlineView.usesAlternatingRowBackgroundColors = true
     }
     
+    
+    // MARK:- objc
+    @objc fileprivate func addButtonClick() {
+        headerArr.append(HomePopModel())
+        headerOutlineView.reloadData()
+    }
+    
+    @objc fileprivate func reduceButtonClick() {
+        if headerOutlineView.selectedRow != -1 {
+            headerArr.remove(at: headerOutlineView.selectedRow)
+            headerOutlineView.reloadData()
+        }
+    }
 }
 
 
@@ -247,7 +291,12 @@ extension HomePopViewController: NSOutlineViewDelegate, NSOutlineViewDataSource 
             return false
         }else {
             if let model = item as? HomePopModel {
-                return true
+                switch model.type {
+                case .array(_), .dictionary(_):
+                    return true
+                default:
+                    return false
+                }
             }else {
                 return true
             }
@@ -272,6 +321,13 @@ extension HomePopViewController: NSOutlineViewDelegate, NSOutlineViewDataSource 
                 cell?.nameTextField.placeholderString = "value"
                 cell?.nameTextField.stringValue = model.value
             }
+            cell?.textFieldChangeClosure = { str in
+                if tableColumn?.identifier == "keyColumn".identifire {
+                    model.key = str
+                }else {
+                    model.value = str
+                }
+            }
             return cell
         }else {
             if tableColumn?.identifier == "contentTypeColumn".identifire {
@@ -282,7 +338,10 @@ extension HomePopViewController: NSOutlineViewDelegate, NSOutlineViewDataSource 
                 }
                 cell?.checkButton.selectItem(withTitle: model.type.outputStr)
                 cell?.checkButton.isEnabled = model.isEdit
-                
+                cell?.didSelectCheck = { [weak self] type in
+                    model.type = type
+                    self?.contentOutlineView.reloadData()
+                }
                 return cell
             }
             var cell = outlineView.makeView(withIdentifier: HomeTableViewCell.identifire, owner: self) as? HomeTableViewCell
@@ -291,17 +350,35 @@ extension HomePopViewController: NSOutlineViewDelegate, NSOutlineViewDataSource 
                 cell?.identifier = HomeTableViewCell.identifire
             }
             cell?.nameTextField.isEditable = model.isEdit
+            cell?.nameTextField.stringValue = ""
             if !model.isEdit {
-                cell?.nameTextField.stringValue = ""
                 if tableColumn?.identifier == "contentKeyColumn".identifire {
                     cell?.nameTextField.placeholderString = model.key
                 }else {
                     cell?.nameTextField.placeholderString = model.value
                 }
             }else {
-                cell?.nameTextField.stringValue = ""
-                cell?.nameTextField.placeholderString = "key"
-                cell?.nameTextField.isEditable = true
+                if tableColumn?.identifier == "contentKeyColumn".identifire {
+                    cell?.nameTextField.placeholderString = "key"
+                    cell?.nameTextField.stringValue = model.key
+                }else {
+                    switch model.type {
+                    case .array(_), .dictionary(_):
+                        cell?.nameTextField.isEditable = false
+                        cell?.nameTextField.placeholderString = "(\(model.childArr.count) items)"
+                    default:
+                        cell?.nameTextField.placeholderString = "value"
+                        cell?.nameTextField.stringValue = model.value
+                    }
+                }
+                
+            }
+            cell?.textFieldChangeClosure = { str in
+                if tableColumn?.identifier == "contentKeyColumn".identifire {
+                    model.value = str
+                }else {
+                    model.key = str
+                }
             }
             return cell
         }

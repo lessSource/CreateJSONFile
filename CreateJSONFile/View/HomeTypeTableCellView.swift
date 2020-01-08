@@ -10,6 +10,8 @@ import Cocoa
 
 class HomeTypeTableCellView: NSTableCellView {
     
+    public var didSelectCheck: ((DataType) -> ())?
+    
     public lazy var checkButton: NSPopUpButton = {
         let button = NSPopUpButton()
         return button
@@ -36,6 +38,8 @@ class HomeTypeTableCellView: NSTableCellView {
         checkButton.removeAllItems()
         checkButton.addItems(withTitles: ["Array","Int","String","Dictionary","Bool"])
         checkButton.selectItem(at: 0)
+        checkButton.target = self
+        checkButton.action = #selector(checkButtonClick)
         
         addSubview(checkButton)
         checkButton.snp.makeConstraints {
@@ -47,6 +51,18 @@ class HomeTypeTableCellView: NSTableCellView {
     
     // MARK:- objc
     @objc fileprivate func checkButtonClick() {
+        switch checkButton.title {
+        case "Array":
+            didSelectCheck?(.array(""))
+        case "Int":
+            didSelectCheck?(.int)
+        case "Dictionary":
+            didSelectCheck?(.dictionary(""))
+        case "Bool":
+            didSelectCheck?(.bool)
+        default:
+            didSelectCheck?(.string)
+        }
         
     }
     
