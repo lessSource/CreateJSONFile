@@ -123,7 +123,7 @@ class HomePopViewController: NSViewController {
 //
 //        contentArr[0].childArr.append(HomePopModel(key: "param", value: "didcaodas", type: .dictionary("")))
 
-        let ddd: NSSplitView
+//        let ddd: NSSplitView
         
         
         initView()

@@ -11,32 +11,69 @@ import SwiftyJSON
 
 class HomeViewController: NSViewController {
     
-    @IBOutlet weak var mainSplitView: MainSplitView!
+//    @IBOutlet weak var mainSplitView: MainSplitView!
+//    
+//    @IBOutlet weak var contentSplitView: ContentSplitView!
+//    
+//    @IBOutlet weak var contentOutlineView: ContentOutlineView!
     
-    @IBOutlet weak var contentSplitView: ContentSplitView!
-    
+//    @IBOutlet weak var historyTableView: HistoryTableView!
+        
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
+        print(Date.dateWithStr(time: "2020-01-09T03:57:59.000+0000").formattingDate("yyyy-MM-dd HH:mm:ss"))
+        initView()
     }
+    
+    // MARK:- initView
+    fileprivate func initView() {
+        
+//        contentOutlineView.reloadData()
+    }
+    
 }
     
+
+
     
-extension HomeViewController: NSSplitViewDelegate {
+extension HomeViewController: NSSplitViewDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource {
+        
+    func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
+        return 2
+    }
+    
+    func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
+        return "1212"
+    }
+
+    func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
+        return false
+    }
+    
+    func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
+        return nil
+       
+    }
     
     
     func splitView(_ splitView: NSSplitView, constrainMinCoordinate proposedMinimumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
         return 260
     }
     
-    func splitView(_ splitView: NSSplitView, constrainMaxCoordinate proposedMaximumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
-        return 500
-    }
+//    func splitView(_ splitView: NSSplitView, constrainMaxCoordinate proposedMaximumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
+//        return 500
+//    }
     
 }
     
+extension HomeViewController: NSTableViewDelegate, NSTableViewDataSource {
+    func numberOfRows(in tableView: NSTableView) -> Int {
+        return 10
+    }
     
+}
     
     
     

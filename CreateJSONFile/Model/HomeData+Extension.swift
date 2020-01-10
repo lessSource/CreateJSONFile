@@ -61,14 +61,14 @@ extension String {
         return "\(keyword.space4)\(keyword.variable)\(self)\(keyword.colon) \(dataType.writeStr)\(keyword.equal)\(defaultStr)".wirteData
     }
     
-
+    
     
 }
 
 extension NSObject {
     class var nameOfClass: String {
-         return NSStringFromClass(self).components(separatedBy: ".").last! as String
-     }
+        return NSStringFromClass(self).components(separatedBy: ".").last! as String
+    }
     
     // 用于获取cell的reuse identifire
     class var identifire: NSUserInterfaceItemIdentifier {
@@ -120,6 +120,18 @@ extension Date {
         dateformatter.dateFormat = dateFormat
         return dateformatter.string(from: self)
     }
+    
+    static func dateWithStr(time: String) -> Date {
+        let formatter = DateFormatter()
+        formatter.dateFormat = dateFormatZone
+        formatter.timeZone = TimeZone(identifier: "UTC")
+        guard let createdDate = formatter.date(from: time) else {
+            return Date()
+        }
+        return createdDate
+    }
+    
+    
 }
 
 
