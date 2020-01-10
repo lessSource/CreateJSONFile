@@ -116,6 +116,16 @@ class HomePopViewController: NSViewController {
         let homePopModel = HomePopModel(key: "params", value: "(0 items)", type: .dictionary(""), isEdit: false)
         contentArr.append(homePopModel)
         
+
+//        contentArr[0].childArr.append(HomePopModel(key: "page", value: "1", type: .string))
+//
+//        contentArr[0].childArr.append(HomePopModel(key: "size", value: "10", type: .string))
+//
+//        contentArr[0].childArr.append(HomePopModel(key: "param", value: "didcaodas", type: .dictionary("")))
+
+        let ddd: NSSplitView
+        
+        
         initView()
     }
     

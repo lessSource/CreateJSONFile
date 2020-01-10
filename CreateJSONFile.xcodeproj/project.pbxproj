@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2A13BBA723C1F9BD00463B23 /* HomeDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A13BBA623C1F9BD00463B23 /* HomeDataModel.swift */; };
+		2A32CABD23C7826E00E573A2 /* MainSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A32CABC23C7826E00E573A2 /* MainSplitView.swift */; };
+		2A32CABF23C784E800E573A2 /* ContentSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A32CABE23C784E800E573A2 /* ContentSplitView.swift */; };
 		3ED2D86F8D375A20AD50009E /* Pods_CreateJSONFile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D964F1799A2190C9C2C8B789 /* Pods_CreateJSONFile.framework */; };
 		45B7FD4B966691793932CC36 /* Pods_CreateJSONFile_CreateJSONFileUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9518D27F975515BED2279A8 /* Pods_CreateJSONFile_CreateJSONFileUITests.framework */; };
 		716E69AE265BA91A73939596 /* Pods_CreateJSONFileTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E11758EA0AD07E45FCC846 /* Pods_CreateJSONFileTests.framework */; };
@@ -48,6 +50,8 @@
 /* Begin PBXFileReference section */
 		2677991920C25402836F22F3 /* Pods-CreateJSONFileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CreateJSONFileTests.debug.xcconfig"; path = "Target Support Files/Pods-CreateJSONFileTests/Pods-CreateJSONFileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2A13BBA623C1F9BD00463B23 /* HomeDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeDataModel.swift; sourceTree = "<group>"; };
+		2A32CABC23C7826E00E573A2 /* MainSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSplitView.swift; sourceTree = "<group>"; };
+		2A32CABE23C784E800E573A2 /* ContentSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSplitView.swift; sourceTree = "<group>"; };
 		2C5FDD1E8880623C300A6EC2 /* Pods-CreateJSONFile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CreateJSONFile.release.xcconfig"; path = "Target Support Files/Pods-CreateJSONFile/Pods-CreateJSONFile.release.xcconfig"; sourceTree = "<group>"; };
 		49E11758EA0AD07E45FCC846 /* Pods_CreateJSONFileTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CreateJSONFileTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AEA25D852F9E5C7B123D2C0 /* Pods-CreateJSONFile-CreateJSONFileUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CreateJSONFile-CreateJSONFileUITests.release.xcconfig"; path = "Target Support Files/Pods-CreateJSONFile-CreateJSONFileUITests/Pods-CreateJSONFile-CreateJSONFileUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -108,6 +112,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2A32CA7C23C77A2900E573A2 /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				2A32CABB23C7825200E573A2 /* View */,
+				2A32CA7D23C77A3200E573A2 /* Home */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		2A32CA7D23C77A3200E573A2 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				CA55FF4E23BEE64C00A00C97 /* HomeViewController.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		2A32CABB23C7825200E573A2 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				2A32CABC23C7826E00E573A2 /* MainSplitView.swift */,
+				2A32CABE23C784E800E573A2 /* ContentSplitView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		5051B33464D5DEDEDF3F7094 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -146,6 +176,7 @@
 		CA301A7023BB21BE00F27C26 /* CreateJSONFile */ = {
 			isa = PBXGroup;
 			children = (
+				2A32CA7C23C77A2900E573A2 /* Modules */,
 				CA55FF5223BF0CA700A00C97 /* Model */,
 				CA55FF4D23BEE63200A00C97 /* Controller */,
 				CA55FF4623BEDCE800A00C97 /* View */,
@@ -191,7 +222,6 @@
 		CA55FF4D23BEE63200A00C97 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				CA55FF4E23BEE64C00A00C97 /* HomeViewController.swift */,
 				CA6CB46323C3258C00059B0B /* HomePopViewController.swift */,
 			);
 			path = Controller;
@@ -458,12 +488,14 @@
 			files = (
 				CA55FF5123BF0AB700A00C97 /* HomeTableViewCell.swift in Sources */,
 				CA55FF4F23BEE64C00A00C97 /* HomeViewController.swift in Sources */,
+				2A32CABD23C7826E00E573A2 /* MainSplitView.swift in Sources */,
 				CA43A1CE23BD8B9F00947192 /* AboutApp.swift in Sources */,
 				CA55FF5A23BF22C700A00C97 /* HomeTopView.swift in Sources */,
 				CA6CB46423C3258C00059B0B /* HomePopViewController.swift in Sources */,
 				CA301A7423BB21BE00F27C26 /* ViewController.swift in Sources */,
 				CA55FF5823BF1BFB00A00C97 /* HomeTypeTableCellView.swift in Sources */,
 				2A13BBA723C1F9BD00463B23 /* HomeDataModel.swift in Sources */,
+				2A32CABF23C784E800E573A2 /* ContentSplitView.swift in Sources */,
 				CA55FF5C23BF34A600A00C97 /* HomeData+Extension.swift in Sources */,
 				CA301A7223BB21BE00F27C26 /* AppDelegate.swift in Sources */,
 				CA6562E923C4310A008387A7 /* HomePopModel.swift in Sources */,
