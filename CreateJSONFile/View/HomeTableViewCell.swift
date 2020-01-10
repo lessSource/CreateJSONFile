@@ -16,7 +16,15 @@ class HomeTableViewCell: NSTableCellView {
     public var didSelectButtonClosure: ((Bool) -> ())?
 
     
-    public var isMouse: Bool = false
+    public var isMouse: Bool = false {
+        didSet {
+            addButton.isHidden = true
+            reduceButton.isHidden = true
+        }
+    }
+    
+
+    public var isRoot: Bool = false
     
     public lazy var nameTextField: NSTextField = {
         let textField = NSTextField(frame: .zero)
@@ -53,7 +61,7 @@ class HomeTableViewCell: NSTableCellView {
     
     override func mouseEntered(with event: NSEvent) {
         addButton.isHidden = false
-        reduceButton.isHidden = false
+        reduceButton.isHidden = isRoot
     }
     
     override func mouseExited(with event: NSEvent) {

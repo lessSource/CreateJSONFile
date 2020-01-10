@@ -26,6 +26,10 @@ protocol HomeTopViewDelegate: class {
 
 class HomeTopView: NSView {
     
+//    override var isFlipped: Bool {
+//        return true
+//    }
+    
     public weak var delegate: HomeTopViewDelegate?
     
     public lazy var fileNameTextField: NSTextField = {
@@ -48,13 +52,20 @@ class HomeTopView: NSView {
         textField.placeholderString = "请输入项目名称"
         textField.isBordered = true
         textField.alignment = .right
+//        textField.cell = TestTextFieldCell()
+//        textField.
         return textField
     }()
     
     public lazy var urlTextField: NSTextField = {
-        let textField = NSTextField()
+        let textField = NSTextField(frame: .zero)
         textField.placeholderString = "请输入url地址获取数据"
         textField.isBordered = true
+//        textField.focusRingType = .none
+        textField.font = NSFont.systemFont(ofSize: 14)
+        textField.delegate = self
+        textField.cell = BaseTextFieldCell()
+//        textField.usesSingleLineMode = true
         return textField
     }()
     
@@ -123,6 +134,9 @@ class HomeTopView: NSView {
         addSubview(addButton)
         addSubview(urlTextField)
         
+//        urlTextField.cell = TestTextFieldCell()
+
+        
         fileNameTextField.snp.makeConstraints {
             $0.left.equalToSuperview()
             $0.height.equalTo(25)
@@ -182,7 +196,7 @@ class HomeTopView: NSView {
             $0.right.equalTo(addButton.snp.left).offset(-5)
             $0.centerY.equalTo(dataButton)
             $0.left.equalToSuperview()
-            $0.height.equalTo(25)
+            $0.height.equalTo(50)
         }
     }
     
@@ -269,4 +283,65 @@ class HomeTopView: NSView {
     }
     
     
+}
+
+extension HomeTopView: NSTextFieldDelegate {
+    func control(_ control: NSControl, textShouldBeginEditing fieldEditor: NSText) -> Bool {
+        return true
+    }
+    
+    func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
+        return true
+    }
+}
+
+class TestTextFieldCell: NSTextFieldCell {
+    
+//    override init(textCell string: String) {
+//        super.init(textCell: string)
+//    }
+//
+//    required init(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+//    required init(coder: NSCoder) {
+//        super.init(coder: coder)
+//
+////        .vCentr
+//    }
+    
+    
+    fileprivate func adjustedFrameToVerticallyCenterText(frame: NSRect) -> NSRect {
+//        let fontSize = font?.boundingRectForFont.size.height ?? 0
+//        let offset = floor(NSHeight(frame) - ceil(fontSize)/2) - 5
+//        let offset = NSHeight(frame)/2 - ((font?.ascender ?? 0) + (font?.descender ?? 0))
+        
+        var titleRect = super.titleRect(forBounds: frame)
+
+        let minimumHeight = self.cellSize(forBounds: frame).height
+        titleRect.origin.y += (titleRect.height - minimumHeight)/2
+        titleRect.size.height = minimumHeight
+        return titleRect
+
+//        return NSInsetRect(frame, 0.0, offset)
+    }
+
+
+    override func edit(withFrame rect: NSRect, in controlView: NSView, editor textObj: NSText, delegate: Any?, event: NSEvent?) {
+        super.edit(withFrame: adjustedFrameToVerticallyCenterText(frame: rect), in: controlView, editor: textObj, delegate: delegate, event: event)
+    }
+
+    override func select(withFrame rect: NSRect, in controlView: NSView, editor textObj: NSText, delegate: Any?, start selStart: Int, length selLength: Int) {
+        super.select(withFrame: adjustedFrameToVerticallyCenterText(frame: rect), in: controlView, editor: textObj, delegate: delegate, start: selStart, length: selLength)
+    }
+    
+    override func drawInterior(withFrame cellFrame: NSRect, in controlView: NSView) {
+        super.drawInterior(withFrame: adjustedFrameToVerticallyCenterText(frame: cellFrame), in: controlView)
+    }
+    
+    override func draw(withFrame cellFrame: NSRect, in controlView: NSView) {
+        super.draw(withFrame: cellFrame, in: controlView)
+    }
+    
+
 }

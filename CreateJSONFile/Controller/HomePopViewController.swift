@@ -116,15 +116,6 @@ class HomePopViewController: NSViewController {
         let homePopModel = HomePopModel(key: "params", value: "(0 items)", type: .dictionary(""), isEdit: false)
         contentArr.append(homePopModel)
         
-//        contentArr[0].childArr.append(HomePopModel(key: "page", value: "1", type: .string))
-//
-//        contentArr[0].childArr.append(HomePopModel(key: "size", value: "10", type: .string))
-//
-//        contentArr[0].childArr.append(HomePopModel(key: "param", value: "didcaodas", type: .dictionary("")))
-
-        
-        
-        
         initView()
     }
     
@@ -351,6 +342,7 @@ extension HomePopViewController: NSOutlineViewDelegate, NSOutlineViewDataSource 
                 cell?.identifier = HomeTableViewCell.identifire
             }
             cell?.nameTextField.isEditable = model.isEdit
+            cell?.isRoot = !model.isEdit
             cell?.nameTextField.stringValue = ""
             if !model.isEdit {
                 if tableColumn?.identifier == "contentKeyColumn".identifire {
@@ -388,20 +380,20 @@ extension HomePopViewController: NSOutlineViewDelegate, NSOutlineViewDataSource 
                             parentModel.childArr.append(popModel)
                             self?.contentOutlineView.reloadData()
                         }
-                        
-                        
                     }
-                    
-
+                }else {
+                    if let parentModel = outlineView.parent(forItem: item) as? HomePopModel {
+                        parentModel.childArr.remove(at: outlineView.childIndex(forItem: item))
+                        self?.contentOutlineView.reloadData()
+                    }
                 }
-                
             }
             
             cell?.textFieldChangeClosure = { str in
                 if tableColumn?.identifier == "contentKeyColumn".identifire {
-                    model.value = str
-                }else {
                     model.key = str
+                }else {
+                    model.value = str
                 }
             }
             return cell
