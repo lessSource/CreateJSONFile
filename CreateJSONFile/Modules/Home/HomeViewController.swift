@@ -11,14 +11,14 @@ import SwiftyJSON
 
 class HomeViewController: NSViewController {
     
-//    @IBOutlet weak var mainSplitView: MainSplitView!
-//    
-//    @IBOutlet weak var contentSplitView: ContentSplitView!
-//    
-//    @IBOutlet weak var contentOutlineView: ContentOutlineView!
-    
-//    @IBOutlet weak var historyTableView: HistoryTableView!
-        
+    fileprivate lazy var mainSplitView: MainSplitView = {
+        let splitView = MainSplitView(frame: CGRect(x: 0, y: 50, width: self.view.width, height: self.view.height - 50))
+        splitView.autoresizingMask = [.height, .width]
+        splitView.isVertical = true
+        splitView.dividerStyle = .thin
+        splitView.delegate = self
+        return splitView
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,7 +30,19 @@ class HomeViewController: NSViewController {
     // MARK:- initView
     fileprivate func initView() {
         
-//        contentOutlineView.reloadData()
+        let view1 = NSView(frame: NSRect(x: 0, y: 0, width: 200, height: mainSplitView.height))
+        view1.wantsLayer = true
+        view1.autoresizingMask = [.width, .height]
+        view1.layer?.backgroundColor = NSColor.randomColor.cgColor
+        
+        let rightView = MainRightView(frame: NSRect(x: 201, y: 0, width: mainSplitView.width - 201, height: mainSplitView.height))
+        rightView.autoresizingMask = [.width, .height]
+        
+        mainSplitView.addArrangedSubview(view1)
+        mainSplitView.addArrangedSubview(rightView)
+        view.addSubview(mainSplitView)
+        
+        
     }
     
 }
@@ -57,15 +69,23 @@ extension HomeViewController: NSSplitViewDelegate, NSOutlineViewDelegate, NSOutl
        
     }
     
-    
+        
     func splitView(_ splitView: NSSplitView, constrainMinCoordinate proposedMinimumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
-        return 260
+        return 200
     }
     
-//    func splitView(_ splitView: NSSplitView, constrainMaxCoordinate proposedMaximumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
-//        return 500
-//    }
     
+    
+    func splitView(_ splitView: NSSplitView, constrainMaxCoordinate proposedMaximumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
+        return 500
+    }
+    
+    func splitView(_ splitView: NSSplitView, shouldAdjustSizeOfSubview view: NSView) -> Bool {
+        if view == splitView.subviews[1] {
+            return true
+        }
+        return false
+    }
 }
     
 extension HomeViewController: NSTableViewDelegate, NSTableViewDataSource {

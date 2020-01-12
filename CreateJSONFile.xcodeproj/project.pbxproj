@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		2A13BBA723C1F9BD00463B23 /* HomeDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A13BBA623C1F9BD00463B23 /* HomeDataModel.swift */; };
 		2A32CABF23C784E800E573A2 /* ContentSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A32CABE23C784E800E573A2 /* ContentSplitView.swift */; };
+		2A33201B23C8A7E300A2F33B /* MainRightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A33201A23C8A7E300A2F33B /* MainRightView.swift */; };
+		2A33201D23C8E2E700A2F33B /* ContentBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A33201C23C8E2E700A2F33B /* ContentBottomView.swift */; };
+		2A33201F23C9C9B500A2F33B /* ContentTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A33201E23C9C9B500A2F33B /* ContentTopView.swift */; };
 		3ED2D86F8D375A20AD50009E /* Pods_CreateJSONFile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D964F1799A2190C9C2C8B789 /* Pods_CreateJSONFile.framework */; };
 		45B7FD4B966691793932CC36 /* Pods_CreateJSONFile_CreateJSONFileUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9518D27F975515BED2279A8 /* Pods_CreateJSONFile_CreateJSONFileUITests.framework */; };
 		716E69AE265BA91A73939596 /* Pods_CreateJSONFileTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E11758EA0AD07E45FCC846 /* Pods_CreateJSONFileTests.framework */; };
@@ -54,6 +57,9 @@
 		2677991920C25402836F22F3 /* Pods-CreateJSONFileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CreateJSONFileTests.debug.xcconfig"; path = "Target Support Files/Pods-CreateJSONFileTests/Pods-CreateJSONFileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2A13BBA623C1F9BD00463B23 /* HomeDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeDataModel.swift; sourceTree = "<group>"; };
 		2A32CABE23C784E800E573A2 /* ContentSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSplitView.swift; sourceTree = "<group>"; };
+		2A33201A23C8A7E300A2F33B /* MainRightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRightView.swift; sourceTree = "<group>"; };
+		2A33201C23C8E2E700A2F33B /* ContentBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBottomView.swift; sourceTree = "<group>"; };
+		2A33201E23C9C9B500A2F33B /* ContentTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentTopView.swift; sourceTree = "<group>"; };
 		2C5FDD1E8880623C300A6EC2 /* Pods-CreateJSONFile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CreateJSONFile.release.xcconfig"; path = "Target Support Files/Pods-CreateJSONFile/Pods-CreateJSONFile.release.xcconfig"; sourceTree = "<group>"; };
 		49E11758EA0AD07E45FCC846 /* Pods_CreateJSONFileTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CreateJSONFileTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AEA25D852F9E5C7B123D2C0 /* Pods-CreateJSONFile-CreateJSONFileUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CreateJSONFile-CreateJSONFileUITests.release.xcconfig"; path = "Target Support Files/Pods-CreateJSONFile-CreateJSONFileUITests/Pods-CreateJSONFile-CreateJSONFileUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -143,6 +149,9 @@
 				2A32CABE23C784E800E573A2 /* ContentSplitView.swift */,
 				CAB4A05923C81EE60065F6F2 /* ContentOutlineView.swift */,
 				CAB4A05B23C863130065F6F2 /* HistoryTableView.swift */,
+				2A33201A23C8A7E300A2F33B /* MainRightView.swift */,
+				2A33201C23C8E2E700A2F33B /* ContentBottomView.swift */,
+				2A33201E23C9C9B500A2F33B /* ContentTopView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -503,6 +512,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A33201F23C9C9B500A2F33B /* ContentTopView.swift in Sources */,
 				CAEDC92C23C880A800DC3617 /* ControlsViewController.swift in Sources */,
 				CA55FF5123BF0AB700A00C97 /* HomeTableViewCell.swift in Sources */,
 				CA55FF4F23BEE64C00A00C97 /* HomeViewController.swift in Sources */,
@@ -512,11 +522,13 @@
 				CAB4A05C23C863130065F6F2 /* HistoryTableView.swift in Sources */,
 				CA301A7423BB21BE00F27C26 /* ViewController.swift in Sources */,
 				CA55FF5823BF1BFB00A00C97 /* HomeTypeTableCellView.swift in Sources */,
+				2A33201D23C8E2E700A2F33B /* ContentBottomView.swift in Sources */,
 				2A13BBA723C1F9BD00463B23 /* HomeDataModel.swift in Sources */,
 				2A32CABF23C784E800E573A2 /* ContentSplitView.swift in Sources */,
 				CAEDC92923C87F7C00DC3617 /* MainSplitView.swift in Sources */,
 				CA55FF5C23BF34A600A00C97 /* HomeData+Extension.swift in Sources */,
 				CA301A7223BB21BE00F27C26 /* AppDelegate.swift in Sources */,
+				2A33201B23C8A7E300A2F33B /* MainRightView.swift in Sources */,
 				CA6562E923C4310A008387A7 /* HomePopModel.swift in Sources */,
 				CA55FF5623BF195700A00C97 /* HomeIgnoreTableViewCell.swift in Sources */,
 				CAB4A05A23C81EE60065F6F2 /* ContentOutlineView.swift in Sources */,

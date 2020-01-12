@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="5AO-7l-2Ld">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="5AO-7l-2Ld">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15702"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15400"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -701,30 +701,11 @@
             </objects>
             <point key="canvasLocation" x="61" y="90"/>
         </scene>
-        <!--Controls View Controller-->
-        <scene sceneID="6Du-t6-jr7">
-            <objects>
-                <viewController id="MZQ-og-MaK" customClass="ControlsViewController" customModule="CreateJSONFile" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="4o5-pO-GRs">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <subviews>
-                            <splitView fixedFrame="YES" arrangesAllSubviews="NO" dividerStyle="paneSplitter" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Xp-ax-R0N" customClass="MainSplitView" customModule="CreateJSONFile" customModuleProvider="target">
-                                <rect key="frame" x="20" y="193" width="163" height="96"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            </splitView>
-                        </subviews>
-                    </view>
-                </viewController>
-                <customObject id="BeP-zC-kGo" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="580" y="79"/>
-        </scene>
         <!--Home View Controller-->
         <scene sceneID="52Y-Pl-lmp">
             <objects>
                 <viewController id="F0w-Hl-8fL" customClass="HomeViewController" customModule="CreateJSONFile" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="4Fm-XW-oUh">
+                    <view key="view" id="4Fm-XW-oUh" customClass="ContentView" customModule="CreateJSONFile" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="487" height="345"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </view>
