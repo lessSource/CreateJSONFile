@@ -116,6 +116,9 @@ class HomePopViewController: NSViewController {
         let homePopModel = HomePopModel(key: "params", value: "(0 items)", type: .dictionary(""), isEdit: false)
         contentArr.append(homePopModel)
         
+        view.wantsLayer = true
+        view.layer?.backgroundColor = NSColor.randomColor.cgColor
+
 
 //        contentArr[0].childArr.append(HomePopModel(key: "page", value: "1", type: .string))
 //
