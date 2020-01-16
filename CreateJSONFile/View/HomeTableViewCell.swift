@@ -52,10 +52,26 @@ class HomeTableViewCell: NSTableCellView {
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
-
         // Drawing code here.
         if isMouse {
             addTrackingRect(bounds, owner: self, userData: nil, assumeInside: false)
+        }
+    }
+    
+    public func setModel(_ model: HomeContentModel, tableColumn: NSTableColumn?) {
+        nameTextField.isEditable = true
+        switch tableColumn?.identifier {
+        case ContentBottomKey.key:
+            nameTextField.isEditable = false
+            nameTextField.stringValue = model.key
+            nameTextField.placeholderString = "key"
+        case ContentBottomKey.patientia:
+            nameTextField.placeholderString = "默认值"
+            nameTextField.stringValue = model.defaultStr
+        case ContentBottomKey.annotation:
+            nameTextField.placeholderString = "注释"
+            nameTextField.stringValue = model.annotation
+        default: break
         }
     }
     

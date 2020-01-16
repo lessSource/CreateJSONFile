@@ -32,6 +32,18 @@ class HomeTypeTableCellView: NSTableCellView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public var model: HomeContentModel? {
+        didSet {
+            checkButton.selectItem(withTitle: model?.outputType.outputStr ?? "")
+            switch model?.outputType {
+            case .array(_), .dictionary(_):
+                checkButton.isEnabled = false
+            default:
+                checkButton.isEnabled = true
+            }
+        }
+    }
+    
     // MARK:- initView
     fileprivate func initView() {
         checkButton.removeAllItems()
@@ -52,15 +64,15 @@ class HomeTypeTableCellView: NSTableCellView {
     @objc fileprivate func checkButtonClick() {
         switch checkButton.title {
         case "Array":
-            didSelectCheck?(.array(""))
+            model?.outputType = .array("")
         case "Int":
-            didSelectCheck?(.int)
+            model?.outputType = .int
         case "Dictionary":
-            didSelectCheck?(.dictionary(""))
+            model?.outputType = .dictionary("")
         case "Bool":
-            didSelectCheck?(.bool)
+            model?.outputType = .bool
         default:
-            didSelectCheck?(.string)
+            model?.outputType = .string
         }
         
     }

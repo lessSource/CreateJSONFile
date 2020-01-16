@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15702" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15702"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="RequestHeadersViewController" customModule="CreateJSONFile" customModuleProvider="target">
+            <connections>
+                <outlet property="tableView" destination="B0v-5O-wTz" id="3Q9-rh-9H8"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY" customClass="ContentView" customModule="CreateJSONFile" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="684" height="477"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6p8-ML-rlT">
+                    <rect key="frame" x="0.0" y="0.0" width="684" height="477"/>
+                    <clipView key="contentView" id="kCc-g2-r7z">
+                        <rect key="frame" x="1" y="0.0" width="682" height="476"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="sequential" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="T36-MI-8ue" id="B0v-5O-wTz">
+                                <rect key="frame" x="0.0" y="0.0" width="682" height="451"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <size key="intercellSpacing" width="3" height="2"/>
+                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                <tableViewGridLines key="gridStyleMask" vertical="YES" horizontal="YES"/>
+                                <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                            </tableView>
+                        </subviews>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="1N8-n4-A7a">
+                        <rect key="frame" x="1" y="460" width="682" height="16"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="xcF-Nl-uhC">
+                        <rect key="frame" x="224" y="17" width="15" height="102"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <tableHeaderView key="headerView" id="T36-MI-8ue">
+                        <rect key="frame" x="0.0" y="0.0" width="682" height="25"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </tableHeaderView>
+                </scrollView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="6p8-ML-rlT" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="HQ2-gI-LnA"/>
+                <constraint firstAttribute="trailing" secondItem="6p8-ML-rlT" secondAttribute="trailing" id="I0B-F0-uQ3"/>
+                <constraint firstAttribute="bottom" secondItem="6p8-ML-rlT" secondAttribute="bottom" id="kTR-oj-Sts"/>
+                <constraint firstItem="6p8-ML-rlT" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="xD3-H0-mzC"/>
+            </constraints>
+            <point key="canvasLocation" x="139" y="33.5"/>
+        </customView>
+    </objects>
+</document>

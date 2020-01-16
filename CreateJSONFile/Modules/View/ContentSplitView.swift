@@ -12,7 +12,6 @@ class ContentSplitView: NSSplitView {
     
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
-        let ddd: NSScrollView
     }
     
     

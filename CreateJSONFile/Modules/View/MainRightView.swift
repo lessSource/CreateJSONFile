@@ -21,8 +21,6 @@ class MainRightView: NSView {
     fileprivate lazy var contentTopView: ContentTopView = {
         let bottomView = ContentTopView(frame: NSRect(x: 0, y: 0, width: self.width, height: 200))
         bottomView.autoresizingMask = [.height, .width]
-        bottomView.wantsLayer = true
-        bottomView.layer?.backgroundColor = NSColor.randomColor.cgColor
         return bottomView
     }()
     

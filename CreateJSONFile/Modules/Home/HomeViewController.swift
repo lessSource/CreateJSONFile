@@ -31,8 +31,8 @@ class HomeViewController: NSViewController {
     fileprivate func initView() {
         
         let view1 = NSView(frame: NSRect(x: 0, y: 0, width: 200, height: mainSplitView.height))
-        view1.wantsLayer = true
         view1.autoresizingMask = [.width, .height]
+        view1.wantsLayer = true
         view1.layer?.backgroundColor = NSColor.randomColor.cgColor
         
         let rightView = MainRightView(frame: NSRect(x: 201, y: 0, width: mainSplitView.width - 201, height: mainSplitView.height))
@@ -291,6 +291,8 @@ extension HomeViewController: NSTableViewDelegate, NSTableViewDataSource {
 //                model.annotation = string
 //            }
 //        }
+
+
 //        if tableColumn?.identifier == "keyColumn".identifire {
 //            cell?.nameTextField.isEditable = false
 //            cell?.nameTextField.stringValue = model.key

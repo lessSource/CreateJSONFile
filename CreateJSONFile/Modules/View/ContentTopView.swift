@@ -18,6 +18,18 @@ class ContentTopView: NSView {
         return tabView
     }()
     
+    fileprivate lazy var segmentedControl: NSSegmentedControl = {
+        let segmentedControl = NSSegmentedControl(labels: ["Params","Headers","Body"], trackingMode: NSSegmentedControl.SwitchTracking.selectOne, target: self, action: #selector(segmentedControlClick(_ :)))
+        segmentedControl.frame = NSRect(x: 0, y: 0, width: 300, height: 50)
+        segmentedControl.focusRingType = .none
+        segmentedControl.segmentStyle = .automatic
+        return segmentedControl
+    }()
+    
+    fileprivate var paramsVC: RequestParamsViewController = RequestParamsViewController()
+    fileprivate var headersVC: RequestHeadersViewController = RequestHeadersViewController()
+    fileprivate var bodyVC: RequestBodyViewController = RequestBodyViewController()
+
     
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -33,35 +45,28 @@ class ContentTopView: NSView {
     }
     
     fileprivate func initView() {
-        let button = NSButton(title: "按钮", target: self, action: #selector(buttonClick))
-        button.frame = NSRect(x: 100, y: 0, width: 100, height: 50)
-        addSubview(button)
+        addSubview(segmentedControl)
+        let paramsItem = NSTabViewItem(viewController: paramsVC)
+        paramsItem.view = paramsVC.view
+        tabView.addTabViewItem(paramsItem)
+        let headersItem = NSTabViewItem(viewController: headersVC)
+        headersItem.view = headersVC.view
+        tabView.addTabViewItem(headersItem)
+        let bodyItem = NSTabViewItem(viewController: bodyVC)
+        bodyItem.view = bodyVC.view
+        tabView.addTabViewItem(bodyItem)
         
-        
-        
-        let home = HomePopViewController()
-        
-        let home0 = HomePopViewController()
-
-        
-        let item0 = NSTabViewItem(viewController: home)
-        item0.view = home.view
-        item0.label = "item0"
-        
-        let item1 = NSTabViewItem(viewController: home0)
-        item1.view = home0.view
-        item1.label = "item1"
-        item1.toolTip = "1212"
-        item1.image =  NSImage(named: NSImage.addTemplateName)
-        
-        tabView.addTabViewItem(item0)
-        tabView.addTabViewItem(item1)
-
         addSubview(tabView)
+        segmentedControl.setSelected(true, forSegment: 0)
     }
     
-    @objc fileprivate func buttonClick() {
-        print("1212")
-        tabView.selectTabViewItem(at: 1)
+    
+    @objc fileprivate func segmentedControlClick(_ segmented: NSSegmentedControl) {
+        
+        if segmented.selectedSegment < tabView.tabViewItems.count {
+            tabView.selectTabViewItem(at: segmented.selectedSegment)
+        }
+        
+        
     }
 }

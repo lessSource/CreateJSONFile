@@ -15,6 +15,12 @@
 		3ED2D86F8D375A20AD50009E /* Pods_CreateJSONFile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D964F1799A2190C9C2C8B789 /* Pods_CreateJSONFile.framework */; };
 		45B7FD4B966691793932CC36 /* Pods_CreateJSONFile_CreateJSONFileUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9518D27F975515BED2279A8 /* Pods_CreateJSONFile_CreateJSONFileUITests.framework */; };
 		716E69AE265BA91A73939596 /* Pods_CreateJSONFileTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49E11758EA0AD07E45FCC846 /* Pods_CreateJSONFileTests.framework */; };
+		CA00A67623D01206003D8E41 /* RequestParamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA00A67423D01206003D8E41 /* RequestParamsViewController.swift */; };
+		CA00A67723D01206003D8E41 /* RequestParamsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CA00A67523D01206003D8E41 /* RequestParamsViewController.xib */; };
+		CA00A67A23D0121A003D8E41 /* RequestHeadersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA00A67823D0121A003D8E41 /* RequestHeadersViewController.swift */; };
+		CA00A67B23D0121A003D8E41 /* RequestHeadersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CA00A67923D0121A003D8E41 /* RequestHeadersViewController.xib */; };
+		CA00A67E23D01224003D8E41 /* RequestBodyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA00A67C23D01224003D8E41 /* RequestBodyViewController.swift */; };
+		CA00A67F23D01224003D8E41 /* RequestBodyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CA00A67D23D01224003D8E41 /* RequestBodyViewController.xib */; };
 		CA301A7223BB21BE00F27C26 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA301A7123BB21BE00F27C26 /* AppDelegate.swift */; };
 		CA301A7423BB21BE00F27C26 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA301A7323BB21BE00F27C26 /* ViewController.swift */; };
 		CA301A7623BB21C300F27C26 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA301A7523BB21C300F27C26 /* Assets.xcassets */; };
@@ -33,7 +39,6 @@
 		CAB4A05A23C81EE60065F6F2 /* ContentOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB4A05923C81EE60065F6F2 /* ContentOutlineView.swift */; };
 		CAB4A05C23C863130065F6F2 /* HistoryTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB4A05B23C863130065F6F2 /* HistoryTableView.swift */; };
 		CAEDC92923C87F7C00DC3617 /* MainSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAEDC92823C87F7C00DC3617 /* MainSplitView.swift */; };
-		CAEDC92C23C880A800DC3617 /* ControlsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAEDC92B23C880A800DC3617 /* ControlsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +71,12 @@
 		A781855C81BA3305655FBFB3 /* Pods-CreateJSONFile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CreateJSONFile.debug.xcconfig"; path = "Target Support Files/Pods-CreateJSONFile/Pods-CreateJSONFile.debug.xcconfig"; sourceTree = "<group>"; };
 		B728289C74E2B3765B174B65 /* Pods-CreateJSONFileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CreateJSONFileTests.release.xcconfig"; path = "Target Support Files/Pods-CreateJSONFileTests/Pods-CreateJSONFileTests.release.xcconfig"; sourceTree = "<group>"; };
 		C9518D27F975515BED2279A8 /* Pods_CreateJSONFile_CreateJSONFileUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CreateJSONFile_CreateJSONFileUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA00A67423D01206003D8E41 /* RequestParamsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestParamsViewController.swift; sourceTree = "<group>"; };
+		CA00A67523D01206003D8E41 /* RequestParamsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RequestParamsViewController.xib; sourceTree = "<group>"; };
+		CA00A67823D0121A003D8E41 /* RequestHeadersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestHeadersViewController.swift; sourceTree = "<group>"; };
+		CA00A67923D0121A003D8E41 /* RequestHeadersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RequestHeadersViewController.xib; sourceTree = "<group>"; };
+		CA00A67C23D01224003D8E41 /* RequestBodyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBodyViewController.swift; sourceTree = "<group>"; };
+		CA00A67D23D01224003D8E41 /* RequestBodyViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RequestBodyViewController.xib; sourceTree = "<group>"; };
 		CA301A6E23BB21BE00F27C26 /* CreateJSONFile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CreateJSONFile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA301A7123BB21BE00F27C26 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CA301A7323BB21BE00F27C26 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -91,7 +102,6 @@
 		CAB4A05923C81EE60065F6F2 /* ContentOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentOutlineView.swift; sourceTree = "<group>"; };
 		CAB4A05B23C863130065F6F2 /* HistoryTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTableView.swift; sourceTree = "<group>"; };
 		CAEDC92823C87F7C00DC3617 /* MainSplitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainSplitView.swift; sourceTree = "<group>"; };
-		CAEDC92B23C880A800DC3617 /* ControlsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlsViewController.swift; sourceTree = "<group>"; };
 		D964F1799A2190C9C2C8B789 /* Pods_CreateJSONFile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CreateJSONFile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0BDDD0D28925B81ED9EBA75 /* Pods-CreateJSONFile-CreateJSONFileUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CreateJSONFile-CreateJSONFileUITests.debug.xcconfig"; path = "Target Support Files/Pods-CreateJSONFile-CreateJSONFileUITests/Pods-CreateJSONFile-CreateJSONFileUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -259,7 +269,12 @@
 		CAEDC92A23C8807E00DC3617 /* Controls */ = {
 			isa = PBXGroup;
 			children = (
-				CAEDC92B23C880A800DC3617 /* ControlsViewController.swift */,
+				CA00A67423D01206003D8E41 /* RequestParamsViewController.swift */,
+				CA00A67523D01206003D8E41 /* RequestParamsViewController.xib */,
+				CA00A67823D0121A003D8E41 /* RequestHeadersViewController.swift */,
+				CA00A67923D0121A003D8E41 /* RequestHeadersViewController.xib */,
+				CA00A67C23D01224003D8E41 /* RequestBodyViewController.swift */,
+				CA00A67D23D01224003D8E41 /* RequestBodyViewController.xib */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -383,8 +398,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA00A67723D01206003D8E41 /* RequestParamsViewController.xib in Resources */,
+				CA00A67F23D01224003D8E41 /* RequestBodyViewController.xib in Resources */,
 				CA301A7623BB21C300F27C26 /* Assets.xcassets in Resources */,
 				CA301A7923BB21C300F27C26 /* Main.storyboard in Resources */,
+				CA00A67B23D0121A003D8E41 /* RequestHeadersViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -513,20 +531,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A33201F23C9C9B500A2F33B /* ContentTopView.swift in Sources */,
-				CAEDC92C23C880A800DC3617 /* ControlsViewController.swift in Sources */,
 				CA55FF5123BF0AB700A00C97 /* HomeTableViewCell.swift in Sources */,
 				CA55FF4F23BEE64C00A00C97 /* HomeViewController.swift in Sources */,
 				CA43A1CE23BD8B9F00947192 /* AboutApp.swift in Sources */,
 				CA55FF5A23BF22C700A00C97 /* HomeTopView.swift in Sources */,
 				CA6CB46423C3258C00059B0B /* HomePopViewController.swift in Sources */,
+				CA00A67E23D01224003D8E41 /* RequestBodyViewController.swift in Sources */,
 				CAB4A05C23C863130065F6F2 /* HistoryTableView.swift in Sources */,
 				CA301A7423BB21BE00F27C26 /* ViewController.swift in Sources */,
 				CA55FF5823BF1BFB00A00C97 /* HomeTypeTableCellView.swift in Sources */,
 				2A33201D23C8E2E700A2F33B /* ContentBottomView.swift in Sources */,
+				CA00A67623D01206003D8E41 /* RequestParamsViewController.swift in Sources */,
 				2A13BBA723C1F9BD00463B23 /* HomeDataModel.swift in Sources */,
 				2A32CABF23C784E800E573A2 /* ContentSplitView.swift in Sources */,
 				CAEDC92923C87F7C00DC3617 /* MainSplitView.swift in Sources */,
 				CA55FF5C23BF34A600A00C97 /* HomeData+Extension.swift in Sources */,
+				CA00A67A23D0121A003D8E41 /* RequestHeadersViewController.swift in Sources */,
 				CA301A7223BB21BE00F27C26 /* AppDelegate.swift in Sources */,
 				2A33201B23C8A7E300A2F33B /* MainRightView.swift in Sources */,
 				CA6562E923C4310A008387A7 /* HomePopModel.swift in Sources */,

@@ -10,7 +10,7 @@ import Cocoa
 
 class HomeIgnoreTableViewCell: NSTableCellView {
 
-    public var didSelectClosure = { }
+//    public var didSelectClosure = { }
     
     public lazy var checkButton: NSButton = {
         let button = NSButton(checkboxWithTitle: "", target: self, action: #selector(checkButtonClick))
@@ -20,14 +20,17 @@ class HomeIgnoreTableViewCell: NSTableCellView {
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
-
-        // Drawing code here.
+    }
+    
+    public var model: HomeContentModel? {
+        didSet {
+            checkButton.state = (model?.isIgnore == true) ? .on : .off
+        }
     }
     
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         initView()
-    
     }
     
     required init?(coder: NSCoder) {
@@ -44,7 +47,6 @@ class HomeIgnoreTableViewCell: NSTableCellView {
     
     // MARK:- objc
     @objc fileprivate func checkButtonClick() {
-        didSelectClosure()
+        model?.isIgnore = !(model?.isIgnore ?? false)
     }
-    
 }
