@@ -12,7 +12,7 @@ import SwiftyJSON
 class HomeViewController: NSViewController {
     
     fileprivate lazy var mainSplitView: MainSplitView = {
-        let splitView = MainSplitView(frame: CGRect(x: 0, y: 50, width: self.view.width, height: self.view.height - 50))
+        let splitView = MainSplitView(frame: CGRect(x: 0, y: 0, width: self.view.width, height: self.view.height))
         splitView.autoresizingMask = [.height, .width]
         splitView.isVertical = true
         splitView.dividerStyle = .thin

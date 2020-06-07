@@ -64,7 +64,7 @@ class HomeTopView: NSView {
 //        textField.focusRingType = .none
         textField.font = NSFont.systemFont(ofSize: 14)
         textField.delegate = self
-        textField.cell = BaseTextFieldCell()
+//        textField.cell = BaseTextFieldCell()
 //        textField.usesSingleLineMode = true
         return textField
     }()

@@ -8,24 +8,31 @@
 
 import Cocoa
 
-class MainRightView: NSView {
+class MainRightView: ContentView {
     
     fileprivate lazy var contentSplitView: ContentSplitView = {
-        let splitView = ContentSplitView(frame: CGRect(x: 0, y: 0, width: self.width, height: self.height))
+        let splitView = ContentSplitView(frame: CGRect(x: 0, y: 100, width: self.width, height: self.height - 50))
         splitView.autoresizingMask = [.height, .width]
         splitView.dividerStyle = .thin
         splitView.delegate = self
         return splitView
     }()
+    
+    fileprivate lazy var topView: HomeTopView = {
+        let view = HomeTopView(frame: NSRect(x: 10, y: 0, width: self.width - 20, height: 100))
+        view.autoresizingMask = [.width]
+//        view.delegate = self
+        return view
+    }()
         
     fileprivate lazy var contentTopView: ContentTopView = {
-        let bottomView = ContentTopView(frame: NSRect(x: 0, y: 0, width: self.width, height: 200))
+        let bottomView = ContentTopView(frame: NSRect(x: 0, y: 100, width: self.width, height: 200))
         bottomView.autoresizingMask = [.height, .width]
         return bottomView
     }()
     
     fileprivate lazy var contentBottomView: ContentBottomView = {
-        let bottomView = ContentBottomView(frame: NSRect(x: 0, y: 201, width: self.width, height: self.height - 201))
+        let bottomView = ContentBottomView(frame: NSRect(x: 0, y: 300, width: self.width, height: self.height - 300))
         bottomView.autoresizingMask = [.height, .width]
         return bottomView
     }()
@@ -36,7 +43,6 @@ class MainRightView: NSView {
         initView()
     }
     
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -45,7 +51,7 @@ class MainRightView: NSView {
         contentSplitView.addArrangedSubview(contentTopView)
         contentSplitView.addArrangedSubview(contentBottomView)
         addSubview(contentSplitView)
-        
+        addSubview(topView)
     }
     
 }

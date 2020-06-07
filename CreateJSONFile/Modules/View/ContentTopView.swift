@@ -19,7 +19,7 @@ class ContentTopView: NSView {
     }()
     
     fileprivate lazy var segmentedControl: NSSegmentedControl = {
-        let segmentedControl = NSSegmentedControl(labels: ["Params","Headers","Body"], trackingMode: NSSegmentedControl.SwitchTracking.selectOne, target: self, action: #selector(segmentedControlClick(_ :)))
+        let segmentedControl = NSSegmentedControl(labels: ["Params","Headers","Body","JSON"], trackingMode: NSSegmentedControl.SwitchTracking.selectOne, target: self, action: #selector(segmentedControlClick(_ :)))
         segmentedControl.frame = NSRect(x: 0, y: 0, width: 300, height: 50)
         segmentedControl.focusRingType = .none
         segmentedControl.segmentStyle = .automatic
@@ -29,6 +29,7 @@ class ContentTopView: NSView {
     fileprivate var paramsVC: RequestParamsViewController = RequestParamsViewController()
     fileprivate var headersVC: RequestHeadersViewController = RequestHeadersViewController()
     fileprivate var bodyVC: RequestBodyViewController = RequestBodyViewController()
+    fileprivate var jsonVC: RequestJSONViewController = RequestJSONViewController()
 
     
     override init(frame frameRect: NSRect) {
@@ -55,6 +56,9 @@ class ContentTopView: NSView {
         let bodyItem = NSTabViewItem(viewController: bodyVC)
         bodyItem.view = bodyVC.view
         tabView.addTabViewItem(bodyItem)
+        let jsonItem = NSTabViewItem(viewController: jsonVC)
+        jsonItem.view = jsonVC.view
+        tabView.addTabViewItem(jsonItem)
         
         addSubview(tabView)
         segmentedControl.setSelected(true, forSegment: 0)
