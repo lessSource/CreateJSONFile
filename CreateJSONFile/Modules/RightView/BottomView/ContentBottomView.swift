@@ -55,7 +55,7 @@ class ContentBottomView: NSView {
         dict.updateValue(dict, forKey: "dic")
 
 
-        let array = HomeDataModel.formattingJSON(dict)
+        let array = FileDataModel.formattingJSON(dict)
         dataArray += array
         contentOutlineView.autoresizingMask = [.height, .width]
         contentOutlineView.selectionHighlightStyle = .none

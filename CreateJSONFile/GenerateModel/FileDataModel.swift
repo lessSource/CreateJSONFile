@@ -71,7 +71,7 @@ class HomeContentModel {
 }
 
 
-struct HomeDataModel {
+struct FileDataModel {
     
     // 创建
     static public func createFileSwift(_ name: String, homeData: HomeDataSource, success: (Bool) ->()) {

@@ -319,6 +319,8 @@ extension HomeViewController: NSTableViewDelegate, NSTableViewDataSource {
 //}
 //
 //
+
+
 //extension HomeViewController: HomeTopViewDelegate {
 //    func homeTopView(_ view: HomeTopView, json: JSON) {
 //        textView.string = json.description
@@ -326,6 +328,10 @@ extension HomeViewController: NSTableViewDelegate, NSTableViewDataSource {
 //        homeData.contentArr = HomeDataModel.formattingJSON(dic)
 //        outlineView.reloadData()
 //    }
+
+
+
+
 //
 //    func homeTopSelect(_ view: HomeTopView, type: HomeTopButtomType) {
 //        switch type {

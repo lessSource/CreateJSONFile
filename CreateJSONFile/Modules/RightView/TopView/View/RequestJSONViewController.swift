@@ -8,6 +8,8 @@
 
 import Cocoa
 
+
+
 class RequestJSONViewController: NSViewController {
 
     @IBOutlet var textView: NSTextView!
@@ -15,8 +17,6 @@ class RequestJSONViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
-        
-        textView.string = "asdagsdhasdgajhgdajhsdgahdgasjhdgashdgajhdgahsdagsdjhasgdhasdgajshdgahjsdgashjdgashdjgasdhagsd"
     }
     
 }

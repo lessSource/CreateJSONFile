@@ -18,8 +18,8 @@ class MainRightView: ContentView {
         return splitView
     }()
     
-    fileprivate lazy var topView: HomeTopView = {
-        let view = HomeTopView(frame: NSRect(x: 10, y: 0, width: self.width - 20, height: 100))
+    fileprivate lazy var topView: FileOperationsView = {
+        let view = FileOperationsView(frame: NSRect(x: 10, y: 0, width: self.width - 20, height: 100))
         view.autoresizingMask = [.width]
 //        view.delegate = self
         return view

@@ -19,12 +19,12 @@ enum HomeTopButtomType {
 }
 
 protocol HomeTopViewDelegate: class {
-    func homeTopSelect(_ view: HomeTopView, type: HomeTopButtomType)
+    func homeTopSelect(_ view: FileOperationsView, type: HomeTopButtomType)
     
-    func homeTopView(_ view: HomeTopView, json: JSON)
+    func homeTopView(_ view: FileOperationsView, json: JSON)
 }
 
-class HomeTopView: NSView {
+class FileOperationsView: NSView {
     
 //    override var isFlipped: Bool {
 //        return true
@@ -89,8 +89,8 @@ class HomeTopView: NSView {
         return button
     }()
     
-    fileprivate lazy var homePopVC: HomePopViewController = {
-        return HomePopViewController()
+    fileprivate lazy var homePopVC: PopViewController = {
+        return PopViewController()
     }()
     
     fileprivate lazy var popover: NSPopover = {
@@ -207,6 +207,7 @@ class HomeTopView: NSView {
     
     @objc fileprivate func validationButtonClick() {
         delegate?.homeTopSelect(self, type: .validation)
+        print("validationButtonClick")
     }
     
     @objc fileprivate func dataButtonClick() {
@@ -285,7 +286,7 @@ class HomeTopView: NSView {
     
 }
 
-extension HomeTopView: NSTextFieldDelegate {
+extension FileOperationsView: NSTextFieldDelegate {
     func control(_ control: NSControl, textShouldBeginEditing fieldEditor: NSText) -> Bool {
         return true
     }

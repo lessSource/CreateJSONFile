@@ -9,7 +9,7 @@
 import Cocoa
 import Alamofire
 
-class HomePopViewController: NSViewController {
+class PopViewController: NSViewController {
     
     public lazy var methodTextField: NSTextField = {
         let textField = NSTextField(frame: .zero)
@@ -262,7 +262,7 @@ class HomePopViewController: NSViewController {
 }
 
 
-extension HomePopViewController: NSOutlineViewDelegate, NSOutlineViewDataSource {
+extension PopViewController: NSOutlineViewDelegate, NSOutlineViewDataSource {
     // 每一层级节点包含的下一级节点的数量。
     func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
         if outlineView == headerOutlineView {
