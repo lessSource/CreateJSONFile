@@ -36,6 +36,9 @@ class FileOperationsView: NSView {
         let textField = NSTextField()
         textField.placeholderString = "请输入文件名称"
         textField.isBordered = true
+        textField.layer?.cornerRadius = 3
+//        textField.cell = TestTextFieldCell()
+        textField.delegate = self
         return textField
     }()
     
@@ -52,7 +55,7 @@ class FileOperationsView: NSView {
         textField.placeholderString = "请输入项目名称"
         textField.isBordered = true
         textField.alignment = .right
-//        textField.cell = TestTextFieldCell()
+        textField.cell = TestTextFieldCell()
 //        textField.
         return textField
     }()
@@ -63,14 +66,14 @@ class FileOperationsView: NSView {
         textField.isBordered = true
 //        textField.focusRingType = .none
         textField.font = NSFont.systemFont(ofSize: 14)
-        textField.delegate = self
+//        textField.delegate = self
 //        textField.cell = BaseTextFieldCell()
 //        textField.usesSingleLineMode = true
         return textField
     }()
     
     fileprivate lazy var generateButton: NSButton = {
-        let button = NSButton(title: "生成", target: self, action: #selector(generateButtonClick))
+        let button = NSButton(title: "生成", target: self, action: #selector(generateButtonClick(_ :)))
         return button
     }()
     
@@ -97,6 +100,7 @@ class FileOperationsView: NSView {
         let pop = NSPopover()
         pop.contentSize = NSSize(width: 600, height: 300)
         pop.contentViewController = homePopVC
+        pop.behavior = .transient
         pop.animates = true
         pop.appearance = NSAppearance(named: NSAppearance.Name.aqua)
         return pop
@@ -125,85 +129,157 @@ class FileOperationsView: NSView {
     // MARK:- initView
     fileprivate func initView() {
         addSubview(fileNameTextField)
-        addSubview(authorTextField)
-        addSubview(projectNameTextField)
-        addSubview(checkButton)
+        
+        
+        
+//        addSubview(fileNameTextField)
+//        addSubview(authorTextField)
+//        addSubview(projectNameTextField)
+//        addSubview(checkButton)
         addSubview(generateButton)
-        addSubview(validationButton)
-        addSubview(dataButton)
-        addSubview(addButton)
-        addSubview(urlTextField)
-        
-//        urlTextField.cell = TestTextFieldCell()
-
-        
+//        addSubview(validationButton)
+//        addSubview(dataButton)
+//        addSubview(addButton)
+//        addSubview(urlTextField)
+//
+////        urlTextField.cell = TestTextFieldCell()
+//
+//
         fileNameTextField.snp.makeConstraints {
             $0.left.equalToSuperview()
             $0.height.equalTo(25)
             $0.width.equalTo(120)
             $0.top.equalTo(15)
         }
-        
-        checkButton.removeAllItems()
-        checkButton.addItems(withTitles: ["HandyJSON","NSObject"])
-        checkButton.selectItem(at: 0)
-        
-        checkButton.snp.makeConstraints {
-            $0.centerY.equalTo(fileNameTextField)
-            $0.width.equalTo(110)
-            $0.left.equalTo(fileNameTextField.snp.right).offset(10)
-        }
-        
+//
+//        checkButton.removeAllItems()
+//        checkButton.addItems(withTitles: ["HandyJSON","NSObject"])
+//        checkButton.selectItem(at: 0)
+//
+//        checkButton.snp.makeConstraints {
+//            $0.centerY.equalTo(fileNameTextField)
+//            $0.width.equalTo(110)
+//            $0.left.equalTo(fileNameTextField.snp.right).offset(10)
+//        }
+//
         generateButton.snp.makeConstraints {
             $0.right.equalToSuperview()
             $0.centerY.equalTo(fileNameTextField)
             $0.width.equalTo(67)
         }
-        
-        validationButton.snp.makeConstraints {
-            $0.centerY.equalTo(fileNameTextField)
-            $0.width.equalTo(67)
-            $0.right.equalTo(generateButton.snp.left).offset(-10)
-        }
-        
-        authorTextField.snp.makeConstraints {
-            $0.centerY.equalTo(fileNameTextField)
-            $0.height.equalTo(25)
-            $0.width.equalTo(80)
-            $0.right.equalTo(validationButton.snp.left).offset(-10)
-        }
-        
-        projectNameTextField.snp.makeConstraints {
-            $0.centerY.equalTo(fileNameTextField)
-            $0.height.equalTo(25)
-            $0.width.equalTo(120)
-            $0.right.equalTo(authorTextField.snp.left).offset(-10)
-        }
-        
-        dataButton.snp.makeConstraints {
-            $0.top.equalTo(validationButton.snp.bottom).offset(18)
-            $0.width.equalTo(80)
-            $0.right.equalToSuperview()
-        }
-        
-        addButton.snp.makeConstraints {
-            $0.centerY.equalTo(dataButton)
-            $0.width.equalTo(50)
-            $0.right.equalTo(dataButton.snp.left).offset(-5)
-        }
-        
-        urlTextField.snp.makeConstraints {
-            $0.right.equalTo(addButton.snp.left).offset(-5)
-            $0.centerY.equalTo(dataButton)
-            $0.left.equalToSuperview()
-            $0.height.equalTo(50)
-        }
+//
+//        validationButton.snp.makeConstraints {
+//            $0.centerY.equalTo(fileNameTextField)
+//            $0.width.equalTo(67)
+//            $0.right.equalTo(generateButton.snp.left).offset(-10)
+//        }
+//
+//        authorTextField.snp.makeConstraints {
+//            $0.centerY.equalTo(fileNameTextField)
+//            $0.height.equalTo(25)
+//            $0.width.equalTo(80)
+//            $0.right.equalTo(validationButton.snp.left).offset(-10)
+//        }
+//
+//        projectNameTextField.snp.makeConstraints {
+//            $0.centerY.equalTo(fileNameTextField)
+//            $0.height.equalTo(25)
+//            $0.width.equalTo(120)
+//            $0.right.equalTo(authorTextField.snp.left).offset(-10)
+//        }
+//
+//        dataButton.snp.makeConstraints {
+//            $0.top.equalTo(validationButton.snp.bottom).offset(18)
+//            $0.width.equalTo(80)
+//            $0.right.equalToSuperview()
+//        }
+//
+//        addButton.snp.makeConstraints {
+//            $0.centerY.equalTo(dataButton)
+//            $0.width.equalTo(50)
+//            $0.right.equalTo(dataButton.snp.left).offset(-5)
+//        }
+//
+//        urlTextField.snp.makeConstraints {
+//            $0.right.equalTo(addButton.snp.left).offset(-5)
+//            $0.centerY.equalTo(dataButton)
+//            $0.left.equalToSuperview()
+//            $0.height.equalTo(50)
+//        }
     }
     
     // MARK:- objc
-    @objc fileprivate func generateButtonClick() {
-        delegate?.homeTopSelect(self, type: .generate)
+    @objc fileprivate func generateButtonClick(_ sender: NSButton) {
+//        delegate?.homeTopSelect(self, type: .generate)
+        
+//    popover.show(relativeTo: sender.bounds, of: sender, preferredEdge: NSRectEdge.maxX)
+//        NSDocumentController.shared.newDocument(nil)
+//        NSDocument().save(nil)
+//        let document = Document()
+//        document.fileType = "
+        
+//        saveDocumentWithDelegate
+//        document.displayName = "tetx "
+//        document.save("sdd")
+//        Document().do
+//        document.save(withDelegate: self, didSave: #selector(ddd), contextInfo: UnsafeMutableRawPointer(bitPattern: 2))
+
+        
+//        document.runModalSavePanel(for: .saveOperation, delegate: self, didSave: #selector(document(document: )), contextInfo: nil)
+        
+//
+//        let url = URL(fileURLWithPath: "/Users/lj/Desktop/")
+//        try? document.write(to: url, ofType: "text")
+        
+        let panel = NSSavePanel()
+        panel.nameFieldLabel = "csdadka"
+        panel.title = "222"
+        panel.message = "提示"
+        panel.nameFieldStringValue = "21233"
+        panel.allowedFileTypes = ["swit"]
+        panel.allowsOtherFileTypes = true
+        panel.canCreateDirectories = true
+        
+        let viewExt = NSView(frame: NSRect(x: 0, y: 0, width: 180, height: 40))
+        let labeExt = NSTextField(frame: NSRect(x: 0, y: 10, width: 80, height: 20))
+        labeExt.isBordered = false
+        labeExt.drawsBackground = false
+        labeExt.stringValue = "2122"
+        
+        let ext = NSComboBox(frame: NSRect(x: 80, y: 8, width: 100, height: 25))
+        ext.addItems(withObjectValues: ["swift", "h", "m"])
+        ext.selectItem(at: 0)
+        
+        viewExt.addSubview(labeExt)
+        viewExt.addSubview(ext)
+        panel.accessoryView = viewExt
+//        panel.runModal()
+        panel .beginSheetModal(for: self.window!) { (response) in
+            if response == .OK {
+                print(panel.nameFieldStringValue)
+                print(panel.url?.path ?? "")
+                FileDataModel.createFileSwift(panel.nameFieldStringValue, homeData: HomeDataSource()) { (successFul) in
+                    print(successFul)
+                }
+            }
+        }
+        
+        
     }
+    
+//    @objc func ddd() {
+//        print("ss")
+//
+//    }
+//
+//    - (void)document:(NSDocument *)document didSave:(BOOL)didSaveSuccessfully contextInfo:(void *)contextInfo;
+    
+    @objc func document(document: NSDocument) {
+        
+    }
+    
+    
+    
     
     @objc fileprivate func validationButtonClick() {
         delegate?.homeTopSelect(self, type: .validation)
@@ -298,35 +374,44 @@ extension FileOperationsView: NSTextFieldDelegate {
 
 class TestTextFieldCell: NSTextFieldCell {
     
-//    override init(textCell string: String) {
-//        super.init(textCell: string)
-//    }
+    override init(textCell string: String) {
+        super.init(textCell: string)
+    }
 //
-//    required init(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 //    required init(coder: NSCoder) {
 //        super.init(coder: coder)
 //
 ////        .vCentr
 //    }
     
-    
+//
     fileprivate func adjustedFrameToVerticallyCenterText(frame: NSRect) -> NSRect {
 //        let fontSize = font?.boundingRectForFont.size.height ?? 0
 //        let offset = floor(NSHeight(frame) - ceil(fontSize)/2) - 5
 //        let offset = NSHeight(frame)/2 - ((font?.ascender ?? 0) + (font?.descender ?? 0))
-        
-        var titleRect = super.titleRect(forBounds: frame)
 
+        var titleRect = super.titleRect(forBounds: frame)
+//
         let minimumHeight = self.cellSize(forBounds: frame).height
         titleRect.origin.y += (titleRect.height - minimumHeight)/2
         titleRect.size.height = minimumHeight
         return titleRect
 
 //        return NSInsetRect(frame, 0.0, offset)
-    }
 
+//        guard let font = self.font else {
+//                 return frame.insetBy(dx: 0.0, dy: 0.0)
+//             }
+//             let offset = floor(NSHeight(frame)/2 - (font.ascender + font.descender))
+//
+//             return frame.insetBy(dx: 0.0, dy: offset)
+    }
+    
+
+       
 
     override func edit(withFrame rect: NSRect, in controlView: NSView, editor textObj: NSText, delegate: Any?, event: NSEvent?) {
         super.edit(withFrame: adjustedFrameToVerticallyCenterText(frame: rect), in: controlView, editor: textObj, delegate: delegate, event: event)
@@ -335,7 +420,7 @@ class TestTextFieldCell: NSTextFieldCell {
     override func select(withFrame rect: NSRect, in controlView: NSView, editor textObj: NSText, delegate: Any?, start selStart: Int, length selLength: Int) {
         super.select(withFrame: adjustedFrameToVerticallyCenterText(frame: rect), in: controlView, editor: textObj, delegate: delegate, start: selStart, length: selLength)
     }
-    
+
     override func drawInterior(withFrame cellFrame: NSRect, in controlView: NSView) {
         super.drawInterior(withFrame: adjustedFrameToVerticallyCenterText(frame: cellFrame), in: controlView)
     }
@@ -345,4 +430,56 @@ class TestTextFieldCell: NSTextFieldCell {
     }
     
 
+}
+
+
+class Document: NSDocument {
+    
+//    override func save(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType, delegate: Any?, didSave didSaveSelector: Selector?, contextInfo: UnsafeMutableRawPointer?) {
+////        print(withSettings: "12334")
+////        print()
+//
+////        FileDataModel.createFileSwift(typeName, homeData: HomeDataSource()) { (success) in
+//////            print("222")
+////        }
+//    }
+    
+  
+    
+    
+//    override func write(to url: URL, ofType typeName: String) throws {
+//
+//    }
+    
+//    override func makeWindowControllers() {
+//        _  = addWindowController(NSWindowController())
+//    }
+    
+//    override func write(to url: URL, ofType typeName: String) throws {
+//        print("122")
+//    }
+    
+//    override func data(ofType typeName: String) throws -> Data {
+////        let ddd = Data(base64Encoded: "3333")
+//        let data = NSMutableData()
+//        let archiver = NSKeyedArchiver(forWritingWith: data)
+//        archiver.encode(self, forKey: "2222")
+//        archiver.finishEncoding()
+//
+//
+//
+//
+//        return data as Data
+//    }
+    
+//    formDa
+    
+}
+
+
+extension Document {
+//    override func save(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType, delegate: Any?, didSave didSaveSelector: Selector?, contextInfo: UnsafeMutableRawPointer?) {
+////          print("123")
+//
+//      }
 }
