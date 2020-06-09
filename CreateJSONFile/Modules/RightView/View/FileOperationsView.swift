@@ -266,18 +266,7 @@ class FileOperationsView: NSView {
         
         
     }
-    
-//    @objc func ddd() {
-//        print("ss")
-//
-//    }
-//
-//    - (void)document:(NSDocument *)document didSave:(BOOL)didSaveSuccessfully contextInfo:(void *)contextInfo;
-    
-    @objc func document(document: NSDocument) {
-        
-    }
-    
+
     
     
     
@@ -433,53 +422,3 @@ class TestTextFieldCell: NSTextFieldCell {
 }
 
 
-class Document: NSDocument {
-    
-//    override func save(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType, delegate: Any?, didSave didSaveSelector: Selector?, contextInfo: UnsafeMutableRawPointer?) {
-////        print(withSettings: "12334")
-////        print()
-//
-////        FileDataModel.createFileSwift(typeName, homeData: HomeDataSource()) { (success) in
-//////            print("222")
-////        }
-//    }
-    
-  
-    
-    
-//    override func write(to url: URL, ofType typeName: String) throws {
-//
-//    }
-    
-//    override func makeWindowControllers() {
-//        _  = addWindowController(NSWindowController())
-//    }
-    
-//    override func write(to url: URL, ofType typeName: String) throws {
-//        print("122")
-//    }
-    
-//    override func data(ofType typeName: String) throws -> Data {
-////        let ddd = Data(base64Encoded: "3333")
-//        let data = NSMutableData()
-//        let archiver = NSKeyedArchiver(forWritingWith: data)
-//        archiver.encode(self, forKey: "2222")
-//        archiver.finishEncoding()
-//
-//
-//
-//
-//        return data as Data
-//    }
-    
-//    formDa
-    
-}
-
-
-extension Document {
-//    override func save(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType, delegate: Any?, didSave didSaveSelector: Selector?, contextInfo: UnsafeMutableRawPointer?) {
-////          print("123")
-//
-//      }
-}
