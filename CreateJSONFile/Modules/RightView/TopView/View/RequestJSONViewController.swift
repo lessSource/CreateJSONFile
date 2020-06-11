@@ -7,11 +7,10 @@
 //
 
 import Cocoa
-
-
+import SwiftyJSON
 
 class RequestJSONViewController: NSViewController {
-
+    
     @IBOutlet var textView: NSTextView!
     
     override func viewDidLoad() {
@@ -19,4 +18,10 @@ class RequestJSONViewController: NSViewController {
         // Do view setup here.
     }
     
+    // MARK: - public
+    // 返回JSON
+    public func setResponseContent(_ json: JSON) {
+        print(json.description)
+        textView.string = json.description
+    }
 }

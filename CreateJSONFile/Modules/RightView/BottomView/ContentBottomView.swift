@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import SwiftyJSON
 
 struct ContentBottomKey {
     static let key = "keyColumn".identifire
@@ -43,20 +44,7 @@ class ContentBottomView: NSView {
     }
     
     fileprivate func initView() {
-        let model: HomeContentModel = HomeContentModel("header")
-        dataArray.append(model)
-        var dict: Dictionary = [String: Any]()
-        dict.updateValue("1212", forKey: "name")
-        let array0 = ["qw", "qw", "qw"]
-        dict.updateValue(array0, forKey: "array")
         
-        let arr = [dict, dict]
-        dict.updateValue(arr, forKey: "arr")
-        dict.updateValue(dict, forKey: "dic")
-
-
-        let array = FileDataModel.formattingJSON(dict)
-        dataArray += array
         contentOutlineView.autoresizingMask = [.height, .width]
         contentOutlineView.selectionHighlightStyle = .none
         contentOutlineView.usesAlternatingRowBackgroundColors = true
@@ -109,6 +97,42 @@ class ContentBottomView: NSView {
         contentOutlineView.addTableColumn(annotationColumn)
     }
     
+    // MARK: - public
+    public func setContentBottomContent(_ json: JSON) {
+        let array = FileDataModel.formattingJSON(json.dictionaryObject ?? [String: Any]())
+        dataArray = array
+        contentOutlineView.reloadData()
+    }
+    
+    public func getContentBottomContentModel() -> [HomeContentModel] {
+        return dataArray
+    }
+    
+    // MARK: - fileprivate
+    fileprivate func updatValue(_ string: String, tableColumn: NSTableColumn?, item: Any) {
+        if let model = item as? HomeContentModel {
+            if tableColumn?.identifier == ContentBottomKey.patientia {
+                model.defaultStr = string
+            }else if tableColumn?.identifier == ContentBottomKey.annotation {
+                model.annotation = string
+            }
+        }
+    }
+    
+    fileprivate func updateDataType(_ item: Any) {
+        guard let model = item as? HomeContentModel else {
+            return
+        }
+        switch model.outputType {
+        case .array(_): model.defaultStr = "[String]()"
+        case .bool: model.defaultStr = "false"
+        case .dictionary(_): model.defaultStr = "[String: Any]()"
+        case .int: model.defaultStr = "0"
+        case .string: model.defaultStr = "\"\""
+        }
+        contentOutlineView.reloadItem(item)
+    }
+    
 }
 
 
@@ -156,6 +180,9 @@ extension ContentBottomView: NSOutlineViewDelegate, NSOutlineViewDataSource {
                 cell?.identifier = HomeTypeTableCellView.identifire
             }
             cell?.model = model
+            cell?.didSelectCheck = { [weak self] in
+                self?.updateDataType(item)
+            }
             return cell
         default:
             var cell = outlineView.makeView(withIdentifier: HomeTableViewCell.identifire, owner: self) as? HomeTableViewCell
@@ -164,6 +191,9 @@ extension ContentBottomView: NSOutlineViewDelegate, NSOutlineViewDataSource {
                 cell?.identifier = HomeTableViewCell.identifire
             }
             cell?.setModel(model, tableColumn: tableColumn)
+            cell?.textFieldChangeClosure = { [weak self] value in
+                self?.updatValue(value, tableColumn: tableColumn, item: item)
+            }
             return cell
         }
     }

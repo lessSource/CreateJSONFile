@@ -10,7 +10,7 @@ import Cocoa
 
 class HomeTypeTableCellView: NSTableCellView {
     
-    public var didSelectCheck: ((DataType) -> ())?
+    public var didSelectCheck = { }
     
     public lazy var checkButton: NSPopUpButton = {
         let button = NSPopUpButton()
@@ -37,7 +37,7 @@ class HomeTypeTableCellView: NSTableCellView {
             checkButton.selectItem(withTitle: model?.outputType.outputStr ?? "")
             switch model?.outputType {
             case .array(_), .dictionary(_):
-                checkButton.isEnabled = false
+                checkButton.isEnabled = model?.childArr.count == 0
             default:
                 checkButton.isEnabled = true
             }
@@ -74,7 +74,9 @@ class HomeTypeTableCellView: NSTableCellView {
         default:
             model?.outputType = .string
         }
-        
+        didSelectCheck()
     }
+    
+ 
     
 }

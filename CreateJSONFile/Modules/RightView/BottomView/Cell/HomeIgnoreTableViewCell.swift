@@ -9,8 +9,6 @@
 import Cocoa
 
 class HomeIgnoreTableViewCell: NSTableCellView {
-
-//    public var didSelectClosure = { }
     
     public lazy var checkButton: NSButton = {
         let button = NSButton(checkboxWithTitle: "", target: self, action: #selector(checkButtonClick))

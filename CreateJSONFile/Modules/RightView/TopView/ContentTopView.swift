@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import SwiftyJSON
 
 class ContentTopView: NSView {
 
@@ -65,12 +66,31 @@ class ContentTopView: NSView {
     }
     
     
+    // MARK: - @objc
     @objc fileprivate func segmentedControlClick(_ segmented: NSSegmentedControl) {
         
         if segmented.selectedSegment < tabView.tabViewItems.count {
             tabView.selectTabViewItem(at: segmented.selectedSegment)
         }
-        
-        
     }
+    
+    // MARK: - public
+    // 获取header
+    public func getContentTopHerader() -> Dictionary<String, String> {
+        return headersVC.getRequestHerader()
+    }
+    
+    // 返回JSON
+    public func setContentTopContent(_ json: JSON) {
+        jsonVC.setResponseContent(json)
+    }
+    
+//
+//    // 获取header
+//       func fileOperationsGetHeader(_ view: FileOperationsView) -> Dictionary<String, String>
+//       // 获取body
+//       func fileOperationsGetBody(_ view: FileOperationsView) -> Dictionary<String, Any>
+//       // 获取params
+//       func fileOperationsGetParams(_ view: FileOperationsView) -> Dictionary<String, Any>
+//
 }

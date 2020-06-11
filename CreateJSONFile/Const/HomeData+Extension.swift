@@ -114,11 +114,16 @@ extension Date {
         return "yyyy-MM-dd 'T'HH:mm:ss.SSS+SSSS'Z'"
     }
     
+    static var dateForematYear: String {
+        return "yyyy"
+    }
+    
     // 格式化时间
     func formattingDate(_ dateFormat: String = dateFormatDay) -> String {
         let dateformatter = DateFormatter()
         dateformatter.dateFormat = dateFormat
-        return dateformatter.string(from: self)
+        print(dateFormat)
+        return dateformatter.string(from: Date())
     }
     
     static func dateWithStr(time: String) -> Date {

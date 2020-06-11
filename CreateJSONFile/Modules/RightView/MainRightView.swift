@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import SwiftyJSON
 
 class MainRightView: ContentView {
     
@@ -21,7 +22,8 @@ class MainRightView: ContentView {
     fileprivate lazy var topView: FileOperationsView = {
         let view = FileOperationsView(frame: NSRect(x: 10, y: 0, width: self.width - 20, height: 100))
         view.autoresizingMask = [.width]
-//        view.delegate = self
+        view.dataSource = self
+        view.delegate = self
         return view
     }()
         
@@ -55,6 +57,30 @@ class MainRightView: ContentView {
     }
     
 }
+
+extension MainRightView: FileOperationsDataSource, FileOperationsDelegate {
+    func fileOperationsGetBody(_ view: FileOperationsView) -> Dictionary<String, Any> {
+        return [String: Any]()
+    }
+    
+    func fileOperationsGetParams(_ view: FileOperationsView) -> Dictionary<String, Any> {
+        return [String: Any]()
+    }
+    
+    func fileOperationsGetHeader(_ view: FileOperationsView) -> Dictionary<String, String> {
+        return contentTopView.getContentTopHerader()
+    }
+    
+    func fileOperationGetModel(_ view: FileOperationsView) -> [HomeContentModel] {
+        return contentBottomView.getContentBottomContentModel()
+    }
+    
+    func fileOperationsView(_ view: FileOperationsView, json: JSON) {
+        contentTopView.setContentTopContent(json)
+        contentBottomView.setContentBottomContent(json)
+    }
+}
+
 
 extension MainRightView: NSSplitViewDelegate {
     

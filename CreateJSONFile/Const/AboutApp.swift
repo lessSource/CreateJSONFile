@@ -117,8 +117,8 @@ public enum DataType {
             return "Int"
         case .string:
             return "String"
-        case .array(let name):
-            return name.isEmpty ? "Array" : "\(name.localizedCapitalized)ArrModel"
+        case .array(_):
+            return "Array"
         case .dictionary(let name):
             return name.isEmpty ? "Dictionary" : "\(name.localizedCapitalized)DicModel"
 

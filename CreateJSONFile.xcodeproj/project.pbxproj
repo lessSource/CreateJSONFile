@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2A13BBA723C1F9BD00463B23 /* FileDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A13BBA623C1F9BD00463B23 /* FileDataModel.swift */; };
+		2A314EBA2491327B00C07461 /* RequestInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A314EB92491327B00C07461 /* RequestInputCell.swift */; };
+		2A314F32249259A100C07461 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A314F31249259A100C07461 /* WindowController.swift */; };
 		2A32CABF23C784E800E573A2 /* ContentSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A32CABE23C784E800E573A2 /* ContentSplitView.swift */; };
 		2A33201B23C8A7E300A2F33B /* MainRightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A33201A23C8A7E300A2F33B /* MainRightView.swift */; };
 		2A33201D23C8E2E700A2F33B /* ContentBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A33201C23C8E2E700A2F33B /* ContentBottomView.swift */; };
@@ -62,6 +64,8 @@
 /* Begin PBXFileReference section */
 		2677991920C25402836F22F3 /* Pods-CreateJSONFileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CreateJSONFileTests.debug.xcconfig"; path = "Target Support Files/Pods-CreateJSONFileTests/Pods-CreateJSONFileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2A13BBA623C1F9BD00463B23 /* FileDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileDataModel.swift; sourceTree = "<group>"; };
+		2A314EB92491327B00C07461 /* RequestInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestInputCell.swift; sourceTree = "<group>"; };
+		2A314F31249259A100C07461 /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
 		2A32CABE23C784E800E573A2 /* ContentSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSplitView.swift; sourceTree = "<group>"; };
 		2A33201A23C8A7E300A2F33B /* MainRightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRightView.swift; sourceTree = "<group>"; };
 		2A33201C23C8E2E700A2F33B /* ContentBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBottomView.swift; sourceTree = "<group>"; };
@@ -156,6 +160,7 @@
 		2A2FE56F248E8BC300D7FCEE /* TopView */ = {
 			isa = PBXGroup;
 			children = (
+				2A314EB82491325000C07461 /* Cell */,
 				2A2FE576248E8F1500D7FCEE /* View */,
 				2A33201E23C9C9B500A2F33B /* ContentTopView.swift */,
 			);
@@ -258,6 +263,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		2A314EB82491325000C07461 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				2A314EB92491327B00C07461 /* RequestInputCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		2A32CA7C23C77A2900E573A2 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
@@ -312,6 +325,7 @@
 				CA55FF5223BF0CA700A00C97 /* GenerateModel */,
 				CA301A7123BB21BE00F27C26 /* AppDelegate.swift */,
 				CA301A7323BB21BE00F27C26 /* ViewController.swift */,
+				2A314F31249259A100C07461 /* WindowController.swift */,
 				CA301A7523BB21C300F27C26 /* Assets.xcassets */,
 				CA301A7723BB21C300F27C26 /* Main.storyboard */,
 				CA301A7A23BB21C300F27C26 /* Info.plist */,
@@ -611,6 +625,8 @@
 				CA00A67623D01206003D8E41 /* RequestParamsViewController.swift in Sources */,
 				2A13BBA723C1F9BD00463B23 /* FileDataModel.swift in Sources */,
 				2A32CABF23C784E800E573A2 /* ContentSplitView.swift in Sources */,
+				2A314F32249259A100C07461 /* WindowController.swift in Sources */,
+				2A314EBA2491327B00C07461 /* RequestInputCell.swift in Sources */,
 				CAEDC92923C87F7C00DC3617 /* MainSplitView.swift in Sources */,
 				CA55FF5C23BF34A600A00C97 /* HomeData+Extension.swift in Sources */,
 				CA00A67A23D0121A003D8E41 /* RequestHeadersViewController.swift in Sources */,

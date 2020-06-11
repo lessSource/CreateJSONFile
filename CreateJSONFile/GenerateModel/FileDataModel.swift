@@ -8,32 +8,55 @@
 
 import Cocoa
 
-class HomeDataSource {
+struct HomeDataSource {
     /** 头部注释 */
     var fileHeaderArr: Array = [String]()
-    /** json数据 */
-    var jsonDic: Dictionary = [String: Any]()
     /** 继承 */
-    var inheritanceStr: String = ""
-    /** 内容 */
-    var contentArr: Array = [HomeContentModel]()
-    /** struct名称 */
-    var structName: String = ""
+    var inheritanceStr: String
+    /* 内容 */
+    var contentArr: Array<HomeContentModel>
+    /** 文件名称 */
+    var fileName: String
+    /** 项目名称 */
+    var productName: String
     
-    init() {
+    init(inheritanceStr: String, contentArr: [HomeContentModel], fileName: String, productName: String) {
+        self.inheritanceStr = inheritanceStr
+        self.contentArr = contentArr
+        self.fileName = fileName
+        self.productName = productName
+        
         let keyword = APPKeyword()
         fileHeaderArr.removeAll()
         fileHeaderArr.append(keyword.annotationStr)
-        fileHeaderArr.append("")
-        fileHeaderArr.append("\(keyword.annotationStr)\(App.appName)")
+        fileHeaderArr.append("\(keyword.annotationStr)\(fileName).swift")
+        let product = productName.isEmpty ? "__projectName__" : productName
+        fileHeaderArr.append("\(keyword.annotationStr)\(product)")
         fileHeaderArr.append(keyword.annotationStr)
-        fileHeaderArr.append("")
-        fileHeaderArr.append("\(keyword.annotationStr)\(App.copyright)")
+        fileHeaderArr.append("\(keyword.annotationStr)Created by \(NSUserName()) on \(Date().formattingDate(Date.dateFormatSlashDay))")
+        fileHeaderArr.append("\(keyword.annotationStr)Copyright © \(Date().formattingDate(Date.dateForematYear))年 \(NSUserName()). All rights reserved.")
         fileHeaderArr.append(keyword.annotationStr)
     }
-    
 }
 
+// struct模型
+struct HomeStructModel {
+    /** 名称 */
+    var structName: String
+    /** 继承 */
+    var inheritanceStr: String
+    /** 内容 */
+    var contentArr: Array<HomeContentModel>
+    
+    init(structName: String, contentArr: [HomeContentModel], inheritanceStr: String = "") {
+        self.structName = structName
+        self.contentArr = contentArr
+        self.inheritanceStr = inheritanceStr
+    }
+}
+
+
+// 内容
 class HomeContentModel {
     /** key */
     var key: String
@@ -73,22 +96,31 @@ class HomeContentModel {
 
 struct FileDataModel {
     
+    // MARK:- public
     // 创建
-    static public func createFileSwift(_ name: String, homeData: HomeDataSource, success: (Bool) ->()) {
+    static public func createFileSwift(_ fileUrl: URL, homeData: HomeDataSource, success: (Bool) ->()) {
         let manager = FileManager.default
-        let fileName = "\(name).swift"
-        let fileUrl = getFilePath().appendingPathComponent(fileName)
         if manager.fileExists(atPath: fileUrl.path) {
             // 新增数据
             let fileHandle = FileHandle(forUpdatingAtPath: fileUrl.path)
             fileHandle?.seekToEndOfFile()
             
             // 添加模型
-            wirteStructModel(fileHandle, dataArray: flatStructModel(homeData))
+            let structModel = HomeStructModel(structName: homeData.fileName, contentArr: homeData.contentArr, inheritanceStr: homeData.inheritanceStr)
+            wirteStructModel(fileHandle, dataArray: flatStructModel(structModel))
 
             fileHandle?.closeFile()
             return
         }
+        
+        do {
+            var arr = fileUrl.path.components(separatedBy: "/")
+            arr.removeLast()
+            let path = arr.joined(separator: "/")
+            try manager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
+        } catch {
+        }
+                
         if manager.createFile(atPath: fileUrl.path, contents: nil, attributes: nil) {
             let fileHandle = FileHandle(forUpdatingAtPath: fileUrl.path)
             let appKeyword = APPKeyword()
@@ -110,7 +142,8 @@ struct FileDataModel {
             }
             
             // 添加模型
-            wirteStructModel(fileHandle, dataArray: flatStructModel(homeData))
+            let structModel = HomeStructModel(structName: homeData.fileName, contentArr: homeData.contentArr, inheritanceStr: homeData.inheritanceStr)
+            wirteStructModel(fileHandle, dataArray: flatStructModel(structModel))
             
             // 关闭文件
             fileHandle?.closeFile()
@@ -151,48 +184,43 @@ struct FileDataModel {
         return array
     }
     
-    // 扁平数据处理
-    static fileprivate func flatStructModel(_ homeData: HomeDataSource) -> [HomeDataSource] {
-        var array = [HomeDataSource]()
-    
-        let dataSource = HomeDataSource()
-        dataSource.structName = homeData.structName
-        dataSource.contentArr = homeData.contentArr
-        dataSource.inheritanceStr = homeData.inheritanceStr
-        array.append(dataSource)
+    // MARK: - fileprivate
+    // 数据处理
+    static fileprivate func flatStructModel(_ structData: HomeStructModel) -> [HomeStructModel] {
+        var array = [HomeStructModel]()
+        array.append(structData)
         
-        for item in homeData.contentArr {
-            if item.childArr.count > 0 {
-                let source = HomeDataSource()
-                source.structName = item.outputType.writeStr
-                source.contentArr = item.childArr
-                source.inheritanceStr = homeData.inheritanceStr
-                array += flatStructModel(source)
+        for item in structData.contentArr {
+            if item.childArr.count > 0 && !item.isIgnore {
+                let model = HomeStructModel(structName: item.childName, contentArr: item.childArr, inheritanceStr: structData.inheritanceStr)
+                array += flatStructModel(model)
             }
-        }        
+        }
+        
         return array
     }
     
     // 添加结构体
-    static fileprivate func wirteStructModel(_ fileHandle: FileHandle?, dataArray: [HomeDataSource]) {
+    static fileprivate func wirteStructModel(_ fileHandle: FileHandle?, dataArray: [HomeStructModel]) {
         dataArray.forEach {
-            addStructModel(fileHandle, homeData: $0)
+            addStructModel(fileHandle, structModel: $0)
         }
     }
     
-    static fileprivate func addStructModel(_ fileHandle: FileHandle?, homeData: HomeDataSource) {
+    // 写文件
+    static fileprivate func addStructModel(_ fileHandle: FileHandle?, structModel: HomeStructModel) {
         let appKeyword = APPKeyword()
         // 机构体开头
         fileHandle?.write(Data.newlineData())
         var structStart: String = ""
-        if homeData.inheritanceStr == appKeyword.handy {
-            structStart = "\(appKeyword.uct) \(homeData.structName)\(appKeyword.colon) \(appKeyword.handy) \(appKeyword.lPar)"
+        if structModel.inheritanceStr == appKeyword.handy {
+            structStart = "\(appKeyword.uct) \(structModel.structName)\(appKeyword.colon) \(appKeyword.handy) \(appKeyword.lPar)"
         }else {
-            structStart = "\(appKeyword.uct) \(homeData.structName) \(appKeyword.lPar)"
+            structStart = "\(appKeyword.uct) \(structModel.structName) \(appKeyword.lPar)"
         }
         fileHandle?.write(structStart.wirteData)
-                
-        for model in homeData.contentArr {
+
+        for model in structModel.contentArr {
             if !model.isIgnore {
                 if !model.annotation.isEmpty {
                     fileHandle?.write(Data.newlineData())
@@ -207,23 +235,7 @@ struct FileDataModel {
         fileHandle?.write(Data.newlineData())
         fileHandle?.write("\(appKeyword.rPar)".wirteData)
         fileHandle?.write(Data.newlineData())
-        
-    }
-    
-    // 获取桌面路径 创建时间文件夹
-    static fileprivate func getFilePath() -> URL {
-        let manager = FileManager.default
-        let urlForDocument = manager.urls(for: .desktopDirectory, in: .userDomainMask)
-        let url = urlForDocument[0]
-        let folderUrl = url.appendingPathComponent(Date().formattingDate())
-        if !manager.fileExists(atPath: folderUrl.path) {
-            do {
-                try manager.createDirectory(at: folderUrl, withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                return url
-            }
-        }
-        return folderUrl
+
     }
     
 }

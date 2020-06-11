@@ -1,5 +1,5 @@
 //
-//  HomeTopView.swift
+//  fileOperationsView.swift
 //  CreateJSONFile
 //
 //  Created by less on 2020/1/3.
@@ -10,7 +10,7 @@ import Cocoa
 import Alamofire
 import SwiftyJSON
 
-enum HomeTopButtomType {
+enum FileOperationsButtomType {
     case generate // 生成
     case validation // 验证
     case check // 切换
@@ -18,10 +18,44 @@ enum HomeTopButtomType {
     
 }
 
-protocol HomeTopViewDelegate: class {
-    func homeTopSelect(_ view: FileOperationsView, type: HomeTopButtomType)
+protocol FileOperationsDelegate: class {
+    func fileOperationsSelect(_ view: FileOperationsView, type: FileOperationsButtomType)
     
-    func homeTopView(_ view: FileOperationsView, json: JSON)
+    func fileOperationsView(_ view: FileOperationsView, json: JSON)
+}
+
+extension FileOperationsDelegate {
+    func fileOperationsSelect(_ view: FileOperationsView, type: FileOperationsButtomType) { }
+}
+
+protocol FileOperationsDataSource: class {
+    // 获取header
+    func fileOperationsGetHeader(_ view: FileOperationsView) -> Dictionary<String, String>
+    // 获取body
+    func fileOperationsGetBody(_ view: FileOperationsView) -> Dictionary<String, Any>
+    // 获取params
+    func fileOperationsGetParams(_ view: FileOperationsView) -> Dictionary<String, Any>
+    // 获取格式化数据
+    func fileOperationGetModel(_ view: FileOperationsView) -> [HomeContentModel]
+    
+}
+
+extension FileOperationsDataSource {
+    func fileOperationsGetHeader(_ view: FileOperationsView) -> Dictionary<String, String> {
+        return [String: String]()
+    }
+    func fileOperationsGetBody(_ view: FileOperationsView) -> Dictionary<String, Any> {
+        return [String: Any]()
+    }
+    func fileOperationsGetParams(_ view: FileOperationsView) -> Dictionary<String, Any> {
+        return [String: Any]()
+    }
+    func fileOperationGetModel(_ view: FileOperationsView) -> [HomeContentModel] {
+        return []
+    }
+
+    
+    
 }
 
 class FileOperationsView: NSView {
@@ -30,33 +64,15 @@ class FileOperationsView: NSView {
 //        return true
 //    }
     
-    public weak var delegate: HomeTopViewDelegate?
+    public weak var delegate: FileOperationsDelegate?
     
-    public lazy var fileNameTextField: NSTextField = {
-        let textField = NSTextField()
-        textField.placeholderString = "请输入文件名称"
-        textField.isBordered = true
-        textField.layer?.cornerRadius = 3
-//        textField.cell = TestTextFieldCell()
-        textField.delegate = self
-        return textField
-    }()
-    
-    public lazy var authorTextField: NSTextField = {
-        let textField = NSTextField()
-        textField.placeholderString = "请输入作者"
-        textField.isBordered = true
-        textField.alignment = .right
-        return textField
-    }()
+    public weak var dataSource: FileOperationsDataSource?
     
     public lazy var projectNameTextField: NSTextField = {
         let textField = NSTextField()
         textField.placeholderString = "请输入项目名称"
         textField.isBordered = true
-        textField.alignment = .right
-        textField.cell = TestTextFieldCell()
-//        textField.
+        textField.layer?.cornerRadius = 3
         return textField
     }()
     
@@ -64,11 +80,11 @@ class FileOperationsView: NSView {
         let textField = NSTextField(frame: .zero)
         textField.placeholderString = "请输入url地址获取数据"
         textField.isBordered = true
-//        textField.focusRingType = .none
-        textField.font = NSFont.systemFont(ofSize: 14)
+        textField.focusRingType = .none
+        textField.stringValue = "https://api.apiopen.top/musicRankings"
 //        textField.delegate = self
 //        textField.cell = BaseTextFieldCell()
-//        textField.usesSingleLineMode = true
+        textField.usesSingleLineMode = true
         return textField
     }()
     
@@ -108,6 +124,9 @@ class FileOperationsView: NSView {
     
     public lazy var checkButton: NSPopUpButton = {
         let button = NSPopUpButton()
+        button.removeAllItems()
+        button.addItems(withTitles: ["POST", "GET"])
+//        button.pullsDown = true
         return button
     }()
     
@@ -128,43 +147,55 @@ class FileOperationsView: NSView {
     
     // MARK:- initView
     fileprivate func initView() {
-        addSubview(fileNameTextField)
-        
-        
-        
-//        addSubview(fileNameTextField)
-//        addSubview(authorTextField)
-//        addSubview(projectNameTextField)
-//        addSubview(checkButton)
+        addSubview(projectNameTextField)
+        addSubview(checkButton)
+        addSubview(urlTextField)
+        addSubview(dataButton)
+//
+//
         addSubview(generateButton)
 //        addSubview(validationButton)
-//        addSubview(dataButton)
+//
 //        addSubview(addButton)
-//        addSubview(urlTextField)
+//
 //
 ////        urlTextField.cell = TestTextFieldCell()
 //
 //
-        fileNameTextField.snp.makeConstraints {
+        
+        projectNameTextField.snp.makeConstraints {
             $0.left.equalToSuperview()
             $0.height.equalTo(25)
             $0.width.equalTo(120)
             $0.top.equalTo(15)
         }
-//
-//        checkButton.removeAllItems()
-//        checkButton.addItems(withTitles: ["HandyJSON","NSObject"])
-//        checkButton.selectItem(at: 0)
-//
-//        checkButton.snp.makeConstraints {
-//            $0.centerY.equalTo(fileNameTextField)
-//            $0.width.equalTo(110)
-//            $0.left.equalTo(fileNameTextField.snp.right).offset(10)
-//        }
-//
+        
+        checkButton.selectItem(at: 0)
+        checkButton.snp.makeConstraints {
+            $0.top.equalTo(projectNameTextField.snp.bottom).offset(10)
+            $0.width.equalTo(80)
+            $0.left.equalToSuperview()
+            $0.height.equalTo(25)
+        }
+        
+        urlTextField.snp.makeConstraints {
+            $0.right.equalTo(-95)
+            $0.centerY.equalTo(checkButton)
+            $0.left.equalTo(checkButton.snp.right).offset(5)
+            $0.height.equalTo(25)
+        }
+        
+        dataButton.snp.makeConstraints {
+            $0.centerY.equalTo(checkButton)
+            $0.width.equalTo(80)
+            $0.right.equalToSuperview()
+        }
+        
+
+
         generateButton.snp.makeConstraints {
             $0.right.equalToSuperview()
-            $0.centerY.equalTo(fileNameTextField)
+            $0.centerY.equalTo(projectNameTextField)
             $0.width.equalTo(67)
         }
 //
@@ -174,25 +205,11 @@ class FileOperationsView: NSView {
 //            $0.right.equalTo(generateButton.snp.left).offset(-10)
 //        }
 //
-//        authorTextField.snp.makeConstraints {
-//            $0.centerY.equalTo(fileNameTextField)
-//            $0.height.equalTo(25)
-//            $0.width.equalTo(80)
-//            $0.right.equalTo(validationButton.snp.left).offset(-10)
-//        }
+
 //
-//        projectNameTextField.snp.makeConstraints {
-//            $0.centerY.equalTo(fileNameTextField)
-//            $0.height.equalTo(25)
-//            $0.width.equalTo(120)
-//            $0.right.equalTo(authorTextField.snp.left).offset(-10)
-//        }
+
 //
-//        dataButton.snp.makeConstraints {
-//            $0.top.equalTo(validationButton.snp.bottom).offset(18)
-//            $0.width.equalTo(80)
-//            $0.right.equalToSuperview()
-//        }
+
 //
 //        addButton.snp.makeConstraints {
 //            $0.centerY.equalTo(dataButton)
@@ -200,65 +217,23 @@ class FileOperationsView: NSView {
 //            $0.right.equalTo(dataButton.snp.left).offset(-5)
 //        }
 //
-//        urlTextField.snp.makeConstraints {
-//            $0.right.equalTo(addButton.snp.left).offset(-5)
-//            $0.centerY.equalTo(dataButton)
-//            $0.left.equalToSuperview()
-//            $0.height.equalTo(50)
-//        }
+
     }
     
     // MARK:- objc
     @objc fileprivate func generateButtonClick(_ sender: NSButton) {
-//        delegate?.homeTopSelect(self, type: .generate)
-        
-//    popover.show(relativeTo: sender.bounds, of: sender, preferredEdge: NSRectEdge.maxX)
-//        NSDocumentController.shared.newDocument(nil)
-//        NSDocument().save(nil)
-//        let document = Document()
-//        document.fileType = "
-        
-//        saveDocumentWithDelegate
-//        document.displayName = "tetx "
-//        document.save("sdd")
-//        Document().do
-//        document.save(withDelegate: self, didSave: #selector(ddd), contextInfo: UnsafeMutableRawPointer(bitPattern: 2))
-
-        
-//        document.runModalSavePanel(for: .saveOperation, delegate: self, didSave: #selector(document(document: )), contextInfo: nil)
-        
-//
-//        let url = URL(fileURLWithPath: "/Users/lj/Desktop/")
-//        try? document.write(to: url, ofType: "text")
-        
         let panel = NSSavePanel()
-        panel.nameFieldLabel = "csdadka"
-        panel.title = "222"
-        panel.message = "提示"
-        panel.nameFieldStringValue = "21233"
-        panel.allowedFileTypes = ["swit"]
-        panel.allowsOtherFileTypes = true
-        panel.canCreateDirectories = true
-        
-        let viewExt = NSView(frame: NSRect(x: 0, y: 0, width: 180, height: 40))
-        let labeExt = NSTextField(frame: NSRect(x: 0, y: 10, width: 80, height: 20))
-        labeExt.isBordered = false
-        labeExt.drawsBackground = false
-        labeExt.stringValue = "2122"
-        
-        let ext = NSComboBox(frame: NSRect(x: 80, y: 8, width: 100, height: 25))
-        ext.addItems(withObjectValues: ["swift", "h", "m"])
-        ext.selectItem(at: 0)
-        
-        viewExt.addSubview(labeExt)
-        viewExt.addSubview(ext)
-        panel.accessoryView = viewExt
-//        panel.runModal()
-        panel .beginSheetModal(for: self.window!) { (response) in
+        panel.nameFieldStringValue = "JSONModel"
+        panel.allowedFileTypes = ["swift"]
+        guard let showWindow = self.window else { return }
+        panel.beginSheetModal(for: showWindow) { (response) in
             if response == .OK {
-                print(panel.nameFieldStringValue)
-                print(panel.url?.path ?? "")
-                FileDataModel.createFileSwift(panel.nameFieldStringValue, homeData: HomeDataSource()) { (successFul) in
+                guard let model = self.dataSource?.fileOperationGetModel(self), let url = panel.directoryURL else {
+                    return
+                }
+                let folderUrl = url.appendingPathComponent(Date().formattingDate()).appendingPathComponent("\(panel.nameFieldStringValue).swift")
+                let contentModel = HomeDataSource(inheritanceStr: "HandyJSON", contentArr: model, fileName: panel.nameFieldStringValue, productName: self.projectNameTextField.stringValue)
+                FileDataModel.createFileSwift(folderUrl, homeData: contentModel) { (successFul) in
                     print(successFul)
                 }
             }
@@ -271,7 +246,7 @@ class FileOperationsView: NSView {
     
     
     @objc fileprivate func validationButtonClick() {
-        delegate?.homeTopSelect(self, type: .validation)
+        delegate?.fileOperationsSelect(self, type: .validation)
         print("validationButtonClick")
     }
     
@@ -280,44 +255,28 @@ class FileOperationsView: NSView {
             alertError("请输入正确URL地址")
             return
         }
-        
-        let headers = HomePopDataModel.getHeaderDictionArray(homePopVC.headerArr)
-        var params: Dictionary<String, Any> = [:]
-        if homePopVC.contentArr.count > 0 {
-            params = HomePopDataModel.getContentDictionArray(homePopVC.contentArr[0])
-        }
-        guard let method = HTTPMethod(rawValue: homePopVC.checkButton.title) else {
+        guard let method = HTTPMethod(rawValue: checkButton.title) else {
             alertError("添加请求方式")
             return
         }
-        
+        let headers = dataSource?.fileOperationsGetHeader(self) ?? [String: String]()
+        let params = dataSource?.fileOperationsGetParams(self) ?? [String: Any]()
+
         switch method {
         case .get:
             Alamofire.request(url, method: .get, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
                 if let json = try? JSON(data: response.data ?? Data()) {
-                    self.delegate?.homeTopView(self, json: json)
+                    self.delegate?.fileOperationsView(self, json: json)
                 }
             }
         default:
             Alamofire.request(url, method: method, parameters: params, encoding: JSONEncoding.default, headers: headers).responseJSON { (response) in
                 if let json = try? JSON(data: response.data ?? Data()) {
-                    self.delegate?.homeTopView(self, json: json)
+                    self.delegate?.fileOperationsView(self, json: json)
                 }
             }
+            
         }
-        
-        //        let header1 = HomePopModel(key: "Content-type", value: "application/json")
-        //        let header2 = HomePopModel(key: "token", value: "8ed436330a9a4cf8acfe4e286c0cc8eb")
-        //        let headerModel =
-        
-//        params.updateValue("测试", forKey: "keyword")
-//        params.updateValue(10, forKey: "size")
-//        let param: Dictionary = [String: Any]()
-//        params.updateValue(param, forKey: "param")
-        
-//        http://gateway.test.cef0e73c879624990a12fcf7c3cd3ea9d.cn-shanghai.alicontainer.com/salesman/storage/stock/info/ecs/list
-//        http://gateway.test.cef0e73c879624990a12fcf7c3cd3ea9d.cn-shanghai.alicontainer.com/salesman/storage/transfer/selectSimpleGoods
-//        http://gateway.test.cef0e73c879624990a12fcf7c3cd3ea9d.cn-shanghai.alicontainer.com/salesman/search/getShopCity
 
     }
     
@@ -360,65 +319,4 @@ extension FileOperationsView: NSTextFieldDelegate {
         return true
     }
 }
-
-class TestTextFieldCell: NSTextFieldCell {
-    
-    override init(textCell string: String) {
-        super.init(textCell: string)
-    }
-//
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-//    required init(coder: NSCoder) {
-//        super.init(coder: coder)
-//
-////        .vCentr
-//    }
-    
-//
-    fileprivate func adjustedFrameToVerticallyCenterText(frame: NSRect) -> NSRect {
-//        let fontSize = font?.boundingRectForFont.size.height ?? 0
-//        let offset = floor(NSHeight(frame) - ceil(fontSize)/2) - 5
-//        let offset = NSHeight(frame)/2 - ((font?.ascender ?? 0) + (font?.descender ?? 0))
-
-        var titleRect = super.titleRect(forBounds: frame)
-//
-        let minimumHeight = self.cellSize(forBounds: frame).height
-        titleRect.origin.y += (titleRect.height - minimumHeight)/2
-        titleRect.size.height = minimumHeight
-        return titleRect
-
-//        return NSInsetRect(frame, 0.0, offset)
-
-//        guard let font = self.font else {
-//                 return frame.insetBy(dx: 0.0, dy: 0.0)
-//             }
-//             let offset = floor(NSHeight(frame)/2 - (font.ascender + font.descender))
-//
-//             return frame.insetBy(dx: 0.0, dy: offset)
-    }
-    
-
-       
-
-    override func edit(withFrame rect: NSRect, in controlView: NSView, editor textObj: NSText, delegate: Any?, event: NSEvent?) {
-        super.edit(withFrame: adjustedFrameToVerticallyCenterText(frame: rect), in: controlView, editor: textObj, delegate: delegate, event: event)
-    }
-
-    override func select(withFrame rect: NSRect, in controlView: NSView, editor textObj: NSText, delegate: Any?, start selStart: Int, length selLength: Int) {
-        super.select(withFrame: adjustedFrameToVerticallyCenterText(frame: rect), in: controlView, editor: textObj, delegate: delegate, start: selStart, length: selLength)
-    }
-
-    override func drawInterior(withFrame cellFrame: NSRect, in controlView: NSView) {
-        super.drawInterior(withFrame: adjustedFrameToVerticallyCenterText(frame: cellFrame), in: controlView)
-    }
-    
-    override func draw(withFrame cellFrame: NSRect, in controlView: NSView) {
-        super.draw(withFrame: cellFrame, in: controlView)
-    }
-    
-
-}
-
 

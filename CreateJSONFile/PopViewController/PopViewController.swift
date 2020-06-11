@@ -342,8 +342,8 @@ extension PopViewController: NSOutlineViewDelegate, NSOutlineViewDataSource {
                 }
                 cell?.checkButton.selectItem(withTitle: model.type.outputStr)
                 cell?.checkButton.isEnabled = model.isEdit
-                cell?.didSelectCheck = { [weak self] type in
-                    model.type = type
+                cell?.didSelectCheck = { [weak self] in
+//                    model.type = type
                     model.childArr.removeAll()
                     self?.contentOutlineView.reloadData()
                 }

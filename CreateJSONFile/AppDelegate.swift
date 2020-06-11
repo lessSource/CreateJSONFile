@@ -25,6 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        window?.makeKeyAndOrderFront(nil)
 //        window?.center()
 //        window?.contentViewController = HomeSplitViewController()
+        
 //
     }
     

@@ -44,11 +44,9 @@ class HomeViewController: NSViewController {
         
         
     }
+
     
 }
-    
-
-
     
 extension HomeViewController: NSSplitViewDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource {
         
