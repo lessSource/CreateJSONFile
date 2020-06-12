@@ -12,7 +12,7 @@ import SwiftyJSON
 class ContentTopView: NSView {
 
     fileprivate lazy var tabView: NSTabView = {
-        let tabView = NSTabView(frame: NSRect(x: 0, y: 50, width: self.width, height: self.height))
+        let tabView = NSTabView(frame: NSRect(x: 0, y: 50, width: self.width, height: self.height - 50))
         tabView.autoresizingMask = [.height, .width]
         tabView.focusRingType = .none
         tabView.tabViewType = .noTabsNoBorder
@@ -79,18 +79,22 @@ class ContentTopView: NSView {
     public func getContentTopHerader() -> Dictionary<String, String> {
         return headersVC.getRequestHerader()
     }
+    // 获取body
+    public func getContentTopBody() -> Dictionary<String, Any> {
+        return bodyVC.getRequestBody()
+    }
+    // 获取params
+    public func getContentTopParams() -> Dictionary<String, Any> {
+        return paramsVC.getRequestParams()
+    }
+    // 获取json字符串
+    public func getContentTopJson() -> String {
+        return jsonVC.getResponseContentJson()
+    }
     
     // 返回JSON
     public func setContentTopContent(_ json: JSON) {
         jsonVC.setResponseContent(json)
     }
-    
-//
-//    // 获取header
-//       func fileOperationsGetHeader(_ view: FileOperationsView) -> Dictionary<String, String>
-//       // 获取body
-//       func fileOperationsGetBody(_ view: FileOperationsView) -> Dictionary<String, Any>
-//       // 获取params
-//       func fileOperationsGetParams(_ view: FileOperationsView) -> Dictionary<String, Any>
-//
+
 }

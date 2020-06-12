@@ -15,7 +15,6 @@ enum FileOperationsButtomType {
     case validation // 验证
     case check // 切换
     case obtain // 获取数据
-    
 }
 
 protocol FileOperationsDelegate: class {
@@ -37,6 +36,8 @@ protocol FileOperationsDataSource: class {
     func fileOperationsGetParams(_ view: FileOperationsView) -> Dictionary<String, Any>
     // 获取格式化数据
     func fileOperationGetModel(_ view: FileOperationsView) -> [HomeContentModel]
+    // 获取json字符串
+    func fileOperationGetJsonStr(_ view: FileOperationsView) -> String
     
 }
 
@@ -54,7 +55,9 @@ extension FileOperationsDataSource {
         return []
     }
 
-    
+    func fileOperationGetJsonStr(_ view: FileOperationsView) -> String {
+        return ""
+    }
     
 }
 
@@ -73,6 +76,7 @@ class FileOperationsView: NSView {
         textField.placeholderString = "请输入项目名称"
         textField.isBordered = true
         textField.layer?.cornerRadius = 3
+        textField.delegate = self
         return textField
     }()
     
@@ -82,8 +86,6 @@ class FileOperationsView: NSView {
         textField.isBordered = true
         textField.focusRingType = .none
         textField.stringValue = "https://api.apiopen.top/musicRankings"
-//        textField.delegate = self
-//        textField.cell = BaseTextFieldCell()
         textField.usesSingleLineMode = true
         return textField
     }()
@@ -126,7 +128,6 @@ class FileOperationsView: NSView {
         let button = NSPopUpButton()
         button.removeAllItems()
         button.addItems(withTitles: ["POST", "GET"])
-//        button.pullsDown = true
         return button
     }()
     
@@ -151,17 +152,12 @@ class FileOperationsView: NSView {
         addSubview(checkButton)
         addSubview(urlTextField)
         addSubview(dataButton)
-//
-//
         addSubview(generateButton)
-//        addSubview(validationButton)
-//
-//        addSubview(addButton)
-//
-//
-////        urlTextField.cell = TestTextFieldCell()
-//
-//
+        addSubview(validationButton)
+        
+//        checkButton.selectItem(at: 0)
+        checkButton.target = self
+        checkButton.action = #selector(checkButtonSelect(_:))
         
         projectNameTextField.snp.makeConstraints {
             $0.left.equalToSuperview()
@@ -170,7 +166,6 @@ class FileOperationsView: NSView {
             $0.top.equalTo(15)
         }
         
-        checkButton.selectItem(at: 0)
         checkButton.snp.makeConstraints {
             $0.top.equalTo(projectNameTextField.snp.bottom).offset(10)
             $0.width.equalTo(80)
@@ -191,36 +186,26 @@ class FileOperationsView: NSView {
             $0.right.equalToSuperview()
         }
         
-
-
         generateButton.snp.makeConstraints {
             $0.right.equalToSuperview()
             $0.centerY.equalTo(projectNameTextField)
             $0.width.equalTo(67)
         }
-//
-//        validationButton.snp.makeConstraints {
-//            $0.centerY.equalTo(fileNameTextField)
-//            $0.width.equalTo(67)
-//            $0.right.equalTo(generateButton.snp.left).offset(-10)
-//        }
-//
 
-//
-
-//
-
-//
-//        addButton.snp.makeConstraints {
-//            $0.centerY.equalTo(dataButton)
-//            $0.width.equalTo(50)
-//            $0.right.equalTo(dataButton.snp.left).offset(-5)
-//        }
-//
+        validationButton.snp.makeConstraints {
+            $0.centerY.equalTo(projectNameTextField)
+            $0.width.equalTo(67)
+            $0.right.equalTo(generateButton.snp.left).offset(-10)
+        }
 
     }
     
     // MARK:- objc
+    @objc fileprivate func checkButtonSelect(_ sender: NSPopUpButton) {
+        checkButton.title = sender.selectedItem?.title ?? ""
+    }
+    
+    
     @objc fileprivate func generateButtonClick(_ sender: NSButton) {
         let panel = NSSavePanel()
         panel.nameFieldStringValue = "JSONModel"
@@ -238,20 +223,22 @@ class FileOperationsView: NSView {
                 }
             }
         }
-        
-        
     }
 
     
-    
-    
     @objc fileprivate func validationButtonClick() {
-        delegate?.fileOperationsSelect(self, type: .validation)
-        print("validationButtonClick")
+        let str = dataSource?.fileOperationGetJsonStr(self) ?? ""
+        let json = JSON(parseJSON: str)
+        if json.isEmpty {
+            alertError("请输入正确的json字符串")
+        }else {
+            delegate?.fileOperationsView(self, json: json)
+        }
     }
     
     @objc fileprivate func dataButtonClick() {
-        guard let url = URL(string: urlTextField.stringValue) else {
+        let url1 = urlTextField.stringValue.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? ""
+        guard let url = URL(string: url1) else {
             alertError("请输入正确URL地址")
             return
         }
@@ -261,16 +248,16 @@ class FileOperationsView: NSView {
         }
         let headers = dataSource?.fileOperationsGetHeader(self) ?? [String: String]()
         let params = dataSource?.fileOperationsGetParams(self) ?? [String: Any]()
-
+        let body = dataSource?.fileOperationsGetBody(self) ?? [String: Any]()
         switch method {
-        case .get:
+        case .get:            
             Alamofire.request(url, method: .get, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
                 if let json = try? JSON(data: response.data ?? Data()) {
                     self.delegate?.fileOperationsView(self, json: json)
                 }
             }
         default:
-            Alamofire.request(url, method: method, parameters: params, encoding: JSONEncoding.default, headers: headers).responseJSON { (response) in
+            Alamofire.request(url, method: method, parameters: body, encoding: JSONEncoding.default, headers: headers).responseJSON { (response) in
                 if let json = try? JSON(data: response.data ?? Data()) {
                     self.delegate?.fileOperationsView(self, json: json)
                 }

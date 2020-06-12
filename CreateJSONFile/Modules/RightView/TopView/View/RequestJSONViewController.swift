@@ -24,4 +24,9 @@ class RequestJSONViewController: NSViewController {
         print(json.description)
         textView.string = json.description
     }
+    
+    // 获取json字符串
+    public func getResponseContentJson() -> String {
+        return textView.string
+    }
 }

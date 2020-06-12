@@ -12,7 +12,7 @@ import SwiftyJSON
 class MainRightView: ContentView {
     
     fileprivate lazy var contentSplitView: ContentSplitView = {
-        let splitView = ContentSplitView(frame: CGRect(x: 0, y: 100, width: self.width, height: self.height - 50))
+        let splitView = ContentSplitView(frame: CGRect(x: 15, y: 90, width: self.width - 30, height: self.height - 90))
         splitView.autoresizingMask = [.height, .width]
         splitView.dividerStyle = .thin
         splitView.delegate = self
@@ -20,7 +20,7 @@ class MainRightView: ContentView {
     }()
     
     fileprivate lazy var topView: FileOperationsView = {
-        let view = FileOperationsView(frame: NSRect(x: 10, y: 0, width: self.width - 20, height: 100))
+        let view = FileOperationsView(frame: NSRect(x: 15, y: 0, width: self.width - 30, height: 100))
         view.autoresizingMask = [.width]
         view.dataSource = self
         view.delegate = self
@@ -28,13 +28,13 @@ class MainRightView: ContentView {
     }()
         
     fileprivate lazy var contentTopView: ContentTopView = {
-        let bottomView = ContentTopView(frame: NSRect(x: 0, y: 100, width: self.width, height: 200))
+        let bottomView = ContentTopView(frame: NSRect(x: 15, y: 100, width: self.width - 30, height: 200))
         bottomView.autoresizingMask = [.height, .width]
         return bottomView
     }()
     
     fileprivate lazy var contentBottomView: ContentBottomView = {
-        let bottomView = ContentBottomView(frame: NSRect(x: 0, y: 300, width: self.width, height: self.height - 300))
+        let bottomView = ContentBottomView(frame: NSRect(x: 15, y: 300, width: self.width - 30, height: self.height - 300))
         bottomView.autoresizingMask = [.height, .width]
         return bottomView
     }()
@@ -60,15 +60,19 @@ class MainRightView: ContentView {
 
 extension MainRightView: FileOperationsDataSource, FileOperationsDelegate {
     func fileOperationsGetBody(_ view: FileOperationsView) -> Dictionary<String, Any> {
-        return [String: Any]()
+        return contentTopView.getContentTopBody()
     }
     
     func fileOperationsGetParams(_ view: FileOperationsView) -> Dictionary<String, Any> {
-        return [String: Any]()
+        return contentTopView.getContentTopParams()
     }
     
     func fileOperationsGetHeader(_ view: FileOperationsView) -> Dictionary<String, String> {
         return contentTopView.getContentTopHerader()
+    }
+    
+    func fileOperationGetJsonStr(_ view: FileOperationsView) -> String {
+        return contentTopView.getContentTopJson()
     }
     
     func fileOperationGetModel(_ view: FileOperationsView) -> [HomeContentModel] {

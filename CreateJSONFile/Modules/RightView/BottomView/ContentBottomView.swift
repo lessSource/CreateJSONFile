@@ -20,7 +20,7 @@ struct ContentBottomKey {
 class ContentBottomView: NSView {
     
     fileprivate lazy var conetntScrollView: NSScrollView = {
-        let scroll = NSScrollView(frame: NSRect(x: 0, y: 0, width: self.width, height: self.height))
+        let scroll = NSScrollView(frame: NSRect(x: 0, y: 0, width: self.width, height: self.height - 15))
         scroll.autoresizingMask = [.height, .width]
         return scroll
     }()
@@ -99,8 +99,19 @@ class ContentBottomView: NSView {
     
     // MARK: - public
     public func setContentBottomContent(_ json: JSON) {
-        let array = FileDataModel.formattingJSON(json.dictionaryObject ?? [String: Any]())
-        dataArray = array
+        print(json.type)
+        
+        switch json.type {
+        case .dictionary:
+            let array = FileDataModel.formattingJSON(json.dictionaryObject ?? [String: Any]())
+            dataArray = array
+        case .array:
+            let arr = json.arrayObject ?? [Any]()
+            let array = FileDataModel.formattingJSON(["NamrArr": arr])
+            dataArray = array
+        default:
+            break
+        }
         contentOutlineView.reloadData()
     }
     

@@ -42,21 +42,21 @@ class RequestHeadersViewController: NSViewController {
         tableView.rowSizeStyle = .large        
         
         let keyColumn: NSTableColumn = NSTableColumn()
-        keyColumn.identifier = "keyColumn".identifire
+        keyColumn.identifier = ContentBottomKey.key
         keyColumn.minWidth = 100
         keyColumn.width = view.width/3
         keyColumn.title = "KEY"
         tableView.addTableColumn(keyColumn)
         
         let valueColumn: NSTableColumn = NSTableColumn()
-        valueColumn.identifier = "valueColumn".identifire
+        valueColumn.identifier = ContentBottomKey.patientia
         valueColumn.minWidth = 100
         valueColumn.width = view.width/3
         valueColumn.title = "VALUE"
         tableView.addTableColumn(valueColumn)
         
         let descriptionColumn: NSTableColumn = NSTableColumn()
-        descriptionColumn.identifier = "descriptionColumn".identifire
+        descriptionColumn.identifier = ContentBottomKey.annotation
         descriptionColumn.minWidth = 100
         descriptionColumn.width = view.width/3
         descriptionColumn.title = "DESCRIPTION"
@@ -65,15 +65,13 @@ class RequestHeadersViewController: NSViewController {
     }
     
     fileprivate func textFieldChange(_ string: String, tableColumn: NSTableColumn?, row: Int) {
-        if tableColumn?.identifier == "keyColumn".identifire {
+        if tableColumn?.identifier == ContentBottomKey.key {
             dataArray[row].key = string
-        }else if tableColumn?.identifier == "valueColumn".identifire {
+        }else if tableColumn?.identifier == ContentBottomKey.patientia {
             dataArray[row].content = string
         }
         if dataArray.last?.key.isEmpty != true {
             dataArray.append(RequestHeadersModel())
-//            tableView.reloadData(forRowIndexes: IndexSet(arrayLiteral: dataArray.count - 1), columnIndexes: IndexSet())
-            tableView.reloadData()
         }
         
     }
@@ -83,7 +81,7 @@ class RequestHeadersViewController: NSViewController {
         var dic = [String: String]()
         for item in dataArray {
             if !item.key.isEmpty && !item.content.isEmpty {
-                dic.updateValue(item.key, forKey: item.content)
+                dic.updateValue(item.content, forKey: item.key)
             }
         }
         return dic
@@ -105,16 +103,20 @@ extension RequestHeadersViewController: NSTableViewDelegate, NSTableViewDataSour
             cell = RequestInputCell()
             cell?.identifier = RequestInputCell.identifire
         }
-        if tableColumn?.identifier == "keyColumn".identifire {
+        if tableColumn?.identifier == ContentBottomKey.key {
             cell?.nameTextField.placeholderString = dataArray[row].keyPlaceholder
-            cell?.nameTextField.becomeFirstResponder()
-        }else if tableColumn?.identifier == "valueColumn".identifire {
+            cell?.nameTextField.stringValue = dataArray[row].key
+        }else if tableColumn?.identifier == ContentBottomKey.patientia {
             cell?.nameTextField.placeholderString = dataArray[row].contentPlaceholder
+            cell?.nameTextField.stringValue = dataArray[row].content
         }else {
             cell?.nameTextField.placeholderString = ""
         }
         cell?.textFieldChangeClosure = { [weak self] str in
             self?.textFieldChange(str, tableColumn: tableColumn, row: row)
+        }
+        cell?.didSelectButtonClosure = { [weak self] in
+            self?.tableView.reloadData()
         }
         return cell!
     }

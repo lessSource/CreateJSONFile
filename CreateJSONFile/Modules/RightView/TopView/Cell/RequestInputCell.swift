@@ -39,23 +39,6 @@ class RequestInputCell: NSTableCellView {
         }
     }
     
-    public func setModel(_ model: HomeContentModel, tableColumn: NSTableColumn?) {
-        nameTextField.isEditable = true
-        switch tableColumn?.identifier {
-        case ContentBottomKey.key:
-            nameTextField.isEditable = false
-            nameTextField.stringValue = model.key
-            nameTextField.placeholderString = "key"
-        case ContentBottomKey.patientia:
-            nameTextField.placeholderString = "默认值"
-            nameTextField.stringValue = model.defaultStr
-        case ContentBottomKey.annotation:
-            nameTextField.placeholderString = "注释"
-            nameTextField.stringValue = model.annotation
-        default: break
-        }
-    }
-    
     override func mouseEntered(with event: NSEvent) {
     }
     
@@ -75,7 +58,7 @@ class RequestInputCell: NSTableCellView {
     // MARK:- initView
     fileprivate func initView() {
         addSubview(nameTextField)
-        
+                
         nameTextField.snp.makeConstraints({
             $0.left.equalTo(5)
             $0.center.equalToSuperview()
@@ -90,6 +73,11 @@ extension RequestInputCell: NSTextFieldDelegate {
     
     func controlTextDidChange(_ obj: Notification) {
         textFieldChangeClosure?(nameTextField.stringValue)
+    }
+    
+    func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
+        didSelectButtonClosure()
+        return true
     }
     
 }
