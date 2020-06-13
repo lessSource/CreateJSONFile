@@ -31,10 +31,10 @@ struct APPKeyword {
     let imp = "import"
     /** UIKit */
     let kit = "UIKit"
-    /** struct */
-    let uct = "struct"
-    /** HandyJSON */
-    let handy = "HandyJSON"
+    /** required */
+    let req = "required"
+    /** init */
+    let ini = "init"
     /** { */
     let lPar = "{"
     /** } */
@@ -73,6 +73,8 @@ struct APPKeyword {
     let eAnnotation = " */"
     /** : */
     let colon = ":"
+    /** 可选 */
+    let optional = "?"
     /** //  */
     let annotationStr = "//  "
     let space4 = "    "

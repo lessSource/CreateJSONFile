@@ -56,13 +56,11 @@ extension String {
     }
     
     // 获取内容
-    public func getKeyContent(_ dataType: DataType, defaultStr: String = "") -> Data {
+    public func getKeyContent(_ dataType: DataType, defaultStr: String) -> Data {
         let keyword = APPKeyword()
-        return "\(keyword.space4)\(keyword.variable)\(self)\(keyword.colon) \(dataType.writeStr)\(keyword.equal)\(defaultStr)".wirteData
+        return "\(keyword.space4)\(keyword.variable)\(self)\(keyword.colon) \(dataType.writeStr)\(defaultStr.isEmpty ? keyword.optional : keyword.equal)\(defaultStr)".wirteData
     }
-    
-    
-    
+        
 }
 
 extension NSObject {

@@ -12,19 +12,22 @@ struct HomeDataSource {
     /** 头部注释 */
     var fileHeaderArr: Array = [String]()
     /** 继承 */
-    var inheritanceStr: String
+    var inheritanceType: InheritanceType
     /* 内容 */
     var contentArr: Array<HomeContentModel>
     /** 文件名称 */
     var fileName: String
     /** 项目名称 */
     var productName: String
+    /** 模型类型 */
+    var modelType: ModelType
     
-    init(inheritanceStr: String, contentArr: [HomeContentModel], fileName: String, productName: String) {
-        self.inheritanceStr = inheritanceStr
+    init(inheritanceType: InheritanceType, contentArr: [HomeContentModel], fileName: String, productName: String, modelType: ModelType) {
+        self.inheritanceType = inheritanceType
         self.contentArr = contentArr
         self.fileName = fileName
         self.productName = productName
+        self.modelType = modelType
         
         let keyword = APPKeyword()
         fileHeaderArr.removeAll()
@@ -44,14 +47,17 @@ struct HomeStructModel {
     /** 名称 */
     var structName: String
     /** 继承 */
-    var inheritanceStr: String
+    var inheritanceType: InheritanceType
     /** 内容 */
     var contentArr: Array<HomeContentModel>
+    /** 模型类型 */
+    var modelType: ModelType
     
-    init(structName: String, contentArr: [HomeContentModel], inheritanceStr: String = "") {
+    init(structName: String, contentArr: [HomeContentModel], inheritanceType: InheritanceType = .default, modelType: ModelType) {
         self.structName = structName
         self.contentArr = contentArr
-        self.inheritanceStr = inheritanceStr
+        self.inheritanceType = inheritanceType
+        self.modelType = modelType
     }
 }
 
@@ -106,7 +112,7 @@ struct FileDataModel {
             fileHandle?.seekToEndOfFile()
             
             // 添加模型
-            let structModel = HomeStructModel(structName: homeData.fileName, contentArr: homeData.contentArr, inheritanceStr: homeData.inheritanceStr)
+            let structModel = HomeStructModel(structName: homeData.fileName, contentArr: homeData.contentArr, inheritanceType: homeData.inheritanceType, modelType: homeData.modelType)
             wirteStructModel(fileHandle, dataArray: flatStructModel(structModel))
 
             fileHandle?.closeFile()
@@ -136,13 +142,13 @@ struct FileDataModel {
             fileHandle?.write(Data.newlineData())
             fileHandle?.write("\(appKeyword.imp) \(appKeyword.kit)".wirteData)
             fileHandle?.write(Data.newlineData())
-            if homeData.inheritanceStr == appKeyword.handy {
-                fileHandle?.write("\(appKeyword.imp) \(appKeyword.handy)".wirteData)
+            if homeData.inheritanceType != .default {
+                fileHandle?.write("\(appKeyword.imp) \(homeData.inheritanceType.inheritStr)".wirteData)
                 fileHandle?.write(Data.newlineData())
             }
             
             // 添加模型
-            let structModel = HomeStructModel(structName: homeData.fileName, contentArr: homeData.contentArr, inheritanceStr: homeData.inheritanceStr)
+            let structModel = HomeStructModel(structName: homeData.fileName, contentArr: homeData.contentArr, inheritanceType: homeData.inheritanceType, modelType: homeData.modelType)
             wirteStructModel(fileHandle, dataArray: flatStructModel(structModel))
             
             // 关闭文件
@@ -192,7 +198,7 @@ struct FileDataModel {
         
         for item in structData.contentArr {
             if item.childArr.count > 0 && !item.isIgnore {
-                let model = HomeStructModel(structName: item.childName, contentArr: item.childArr, inheritanceStr: structData.inheritanceStr)
+                let model = HomeStructModel(structName: item.childName, contentArr: item.childArr, inheritanceType: structData.inheritanceType, modelType: structData.modelType)
                 array += flatStructModel(model)
             }
         }
@@ -213,10 +219,10 @@ struct FileDataModel {
         // 机构体开头
         fileHandle?.write(Data.newlineData())
         var structStart: String = ""
-        if structModel.inheritanceStr == appKeyword.handy {
-            structStart = "\(appKeyword.uct) \(structModel.structName)\(appKeyword.colon) \(appKeyword.handy) \(appKeyword.lPar)"
+        if structModel.inheritanceType != .default {
+            structStart = "\(structModel.modelType.rawValue) \(structModel.structName)\(appKeyword.colon) \(structModel.inheritanceType.inheritStr) \(appKeyword.lPar)"
         }else {
-            structStart = "\(appKeyword.uct) \(structModel.structName) \(appKeyword.lPar)"
+            structStart = "\(structModel.modelType.rawValue) \(structModel.structName) \(appKeyword.lPar)"
         }
         fileHandle?.write(structStart.wirteData)
 
@@ -230,6 +236,24 @@ struct FileDataModel {
                 fileHandle?.write(model.key.getKeyContent(model.outputType, defaultStr: model.defaultStr))
             }
         }
+        
+        if structModel.modelType == .classType {
+            fileHandle?.write(Data.newlineData())
+            fileHandle?.write(Data.newlineData())
+            fileHandle?.write("\(appKeyword.space4)\(appKeyword.req)\(appKeyword.space1)\(appKeyword.ini)\(appKeyword.sPar)\(appKeyword.space1)\(appKeyword.par)".wirteData)
+
+        }
+        
+        if structModel.inheritanceType == .mapper {
+            fileHandle?.write(Data.newlineData())
+            fileHandle?.write(Data.newlineData())
+            for model in structModel.contentArr {
+                if !model.isIgnore {
+                    fileHandle?.write("Data.newlineData()".wirteData)
+                }
+            }
+        }
+        
         
         // 结构体结束
         fileHandle?.write(Data.newlineData())

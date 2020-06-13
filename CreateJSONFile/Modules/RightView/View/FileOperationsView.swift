@@ -17,6 +17,34 @@ enum FileOperationsButtomType {
     case obtain // 获取数据
 }
 
+enum ModelType: String {
+    case classType = "class"
+    case structType = "struct"
+}
+
+enum InheritanceType: String {
+    case handy = "HandyJSON"
+    case mapper = "ObjectMapper"
+    case kaka = "KakaJSON"
+    case decoder = "JSONDecoder"
+    case `default` = "default"
+    
+    var inheritStr: String {
+        switch self {
+        case .handy:
+            return "HandyJSON"
+        case .mapper:
+            return "ObjectMapper"
+        case .kaka:
+            return "KakaJSON"
+        case .decoder:
+            return "JSONDecoder"
+        case .default:
+            return ""
+        }
+    }
+}
+
 protocol FileOperationsDelegate: class {
     func fileOperationsSelect(_ view: FileOperationsView, type: FileOperationsButtomType)
     
@@ -85,7 +113,7 @@ class FileOperationsView: NSView {
         textField.placeholderString = "请输入url地址获取数据"
         textField.isBordered = true
         textField.focusRingType = .none
-        textField.stringValue = "https://api.apiopen.top/musicRankings"
+//        textField.stringValue = "https://api.apiopen.top/musicRankings"
         textField.usesSingleLineMode = true
         return textField
     }()
@@ -131,11 +159,26 @@ class FileOperationsView: NSView {
         return button
     }()
     
+    public lazy var typeButton: NSPopUpButton = {
+        let button = NSPopUpButton()
+        button.removeAllItems()
+        button.addItems(withTitles: ["struct", "class"])
+        return button
+    }()
+    
+    public lazy var frameworkButton: NSPopUpButton = {
+        let button = NSPopUpButton()
+        button.removeAllItems()
+        button.addItems(withTitles: ["HandyJSON", "ObjectMapper", "KakaJSON", "JSONDecoder", "default"])
+        return button
+    }()
+    
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         
         // Drawing code here.
     }
+    
     
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -154,16 +197,36 @@ class FileOperationsView: NSView {
         addSubview(dataButton)
         addSubview(generateButton)
         addSubview(validationButton)
-        
-//        checkButton.selectItem(at: 0)
+        addSubview(typeButton)
+        addSubview(frameworkButton)
+
         checkButton.target = self
         checkButton.action = #selector(checkButtonSelect(_:))
+        typeButton.target = self
+        typeButton.action = #selector(typeButtonSelect(_:))
+        frameworkButton.target = self
+        frameworkButton.action = #selector(frameworkButtonSelect(_:))
+        frameworkButton.selectItem(at: 0)
         
         projectNameTextField.snp.makeConstraints {
             $0.left.equalToSuperview()
             $0.height.equalTo(25)
             $0.width.equalTo(120)
             $0.top.equalTo(15)
+        }
+        
+        typeButton.snp.makeConstraints {
+            $0.left.equalTo(projectNameTextField.snp.right).offset(10)
+            $0.width.equalTo(80)
+            $0.centerY.equalTo(projectNameTextField)
+            $0.height.equalTo(25)
+        }
+        
+        frameworkButton.snp.makeConstraints {
+            $0.left.equalTo(typeButton.snp.right).offset(10)
+            $0.width.equalTo(130)
+            $0.centerY.equalTo(projectNameTextField)
+            $0.height.equalTo(25)
         }
         
         checkButton.snp.makeConstraints {
@@ -205,6 +268,14 @@ class FileOperationsView: NSView {
         checkButton.title = sender.selectedItem?.title ?? ""
     }
     
+    @objc fileprivate func typeButtonSelect(_ sender: NSPopUpButton) {
+        typeButton.title = sender.selectedItem?.title ?? ""
+    }
+    
+    @objc fileprivate func frameworkButtonSelect(_ sender: NSPopUpButton) {
+        frameworkButton.title = sender.selectedItem?.title ?? ""
+    }
+    
     
     @objc fileprivate func generateButtonClick(_ sender: NSButton) {
         let panel = NSSavePanel()
@@ -217,7 +288,11 @@ class FileOperationsView: NSView {
                     return
                 }
                 let folderUrl = url.appendingPathComponent(Date().formattingDate()).appendingPathComponent("\(panel.nameFieldStringValue).swift")
-                let contentModel = HomeDataSource(inheritanceStr: "HandyJSON", contentArr: model, fileName: panel.nameFieldStringValue, productName: self.projectNameTextField.stringValue)
+                let type = ModelType(rawValue: self.typeButton.title) ?? ModelType.structType
+                let inheritance = InheritanceType(rawValue: self.frameworkButton.title) ?? InheritanceType.default
+
+                
+                let contentModel = HomeDataSource(inheritanceType: inheritance, contentArr: model, fileName: panel.nameFieldStringValue, productName: self.projectNameTextField.stringValue, modelType: type)
                 FileDataModel.createFileSwift(folderUrl, homeData: contentModel) { (successFul) in
                     print(successFul)
                 }

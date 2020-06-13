@@ -20,11 +20,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1000, height: 800), styleMask: style, backing: .buffered, defer: true)
 //        window?.title = "JSONModel"
 //        window?.minSize = NSSize(width: 700, height: 500)
-//
-////        window.is
+////
+//////        window.is
 //        window?.makeKeyAndOrderFront(nil)
 //        window?.center()
-//        window?.contentViewController = HomeSplitViewController()
+//        window?.contentViewController = HomeViewController()
         
 //
     }
