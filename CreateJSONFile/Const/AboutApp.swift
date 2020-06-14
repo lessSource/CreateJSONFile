@@ -63,6 +63,8 @@ struct APPKeyword {
     let constant = "let "
     /** "" */
     let quotes = "\"\""
+    /** " */
+    let sQuptes = "\""
     /** false */
     let fal = "false"
     /** true */
@@ -79,6 +81,18 @@ struct APPKeyword {
     let annotationStr = "//  "
     let space4 = "    "
     let space1 = " "
+    /** Mappable */
+    /** mapping */
+    let mapping = "mapping"
+    /** map */
+    let map = "map"
+    /** Map */
+    let Cmap = "Map"
+    /** <- */
+    let rightTo = " <- "
+    /** 函数 */
+    let function = "func"
+    
     
 }
 

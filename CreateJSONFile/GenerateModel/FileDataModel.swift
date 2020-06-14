@@ -114,7 +114,7 @@ struct FileDataModel {
             // 添加模型
             let structModel = HomeStructModel(structName: homeData.fileName, contentArr: homeData.contentArr, inheritanceType: homeData.inheritanceType, modelType: homeData.modelType)
             wirteStructModel(fileHandle, dataArray: flatStructModel(structModel))
-
+            
             fileHandle?.closeFile()
             return
         }
@@ -126,7 +126,7 @@ struct FileDataModel {
             try manager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
         } catch {
         }
-                
+        
         if manager.createFile(atPath: fileUrl.path, contents: nil, attributes: nil) {
             let fileHandle = FileHandle(forUpdatingAtPath: fileUrl.path)
             let appKeyword = APPKeyword()
@@ -225,7 +225,7 @@ struct FileDataModel {
             structStart = "\(structModel.modelType.rawValue) \(structModel.structName) \(appKeyword.lPar)"
         }
         fileHandle?.write(structStart.wirteData)
-
+        
         for model in structModel.contentArr {
             if !model.isIgnore {
                 if !model.annotation.isEmpty {
@@ -240,18 +240,31 @@ struct FileDataModel {
         if structModel.modelType == .classType {
             fileHandle?.write(Data.newlineData())
             fileHandle?.write(Data.newlineData())
-            fileHandle?.write("\(appKeyword.space4)\(appKeyword.req)\(appKeyword.space1)\(appKeyword.ini)\(appKeyword.sPar)\(appKeyword.space1)\(appKeyword.par)".wirteData)
-
+            if structModel.inheritanceType == .mapper {
+                if structModel.modelType == .classType {
+                    fileHandle?.write("\(appKeyword.space4)required init?(map: Map) {}".wirteData)
+                }else {
+                    fileHandle?.write("\(appKeyword.space4)init?(map: Map) {}".wirteData)
+                }
+                
+            }else {
+                fileHandle?.write("\(appKeyword.space4)required init() {}".wirteData)
+            }
         }
         
         if structModel.inheritanceType == .mapper {
             fileHandle?.write(Data.newlineData())
             fileHandle?.write(Data.newlineData())
+            fileHandle?.write("\(appKeyword.space4)mutating func mapping(map: Map) {".wirteData)
+            
             for model in structModel.contentArr {
                 if !model.isIgnore {
-                    fileHandle?.write("Data.newlineData()".wirteData)
+                    fileHandle?.write(Data.newlineData())
+                    fileHandle?.write(model.key.getKeyMapping())
                 }
             }
+            fileHandle?.write(Data.newlineData())
+            fileHandle?.write("\(appKeyword.space4)\(appKeyword.rPar)".wirteData)
         }
         
         
@@ -259,7 +272,7 @@ struct FileDataModel {
         fileHandle?.write(Data.newlineData())
         fileHandle?.write("\(appKeyword.rPar)".wirteData)
         fileHandle?.write(Data.newlineData())
-
+        
     }
     
 }

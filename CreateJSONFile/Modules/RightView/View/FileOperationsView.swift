@@ -113,7 +113,6 @@ class FileOperationsView: NSView {
         textField.placeholderString = "请输入url地址获取数据"
         textField.isBordered = true
         textField.focusRingType = .none
-//        textField.stringValue = "https://api.apiopen.top/musicRankings"
         textField.usesSingleLineMode = true
         return textField
     }()

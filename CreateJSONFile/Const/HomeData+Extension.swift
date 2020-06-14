@@ -60,6 +60,12 @@ extension String {
         let keyword = APPKeyword()
         return "\(keyword.space4)\(keyword.variable)\(self)\(keyword.colon) \(dataType.writeStr)\(defaultStr.isEmpty ? keyword.optional : keyword.equal)\(defaultStr)".wirteData
     }
+    
+    // 获取映射
+    public func getKeyMapping() -> Data {
+        let keyword = APPKeyword()
+        return "\(keyword.space4)\(keyword.space4)\(self)\(keyword.rightTo)\(keyword.map)\(keyword.mLPar)\(keyword.sQuptes)\(self)\(keyword.sQuptes)\(keyword.mRPar)".wirteData
+    }
         
 }
 
