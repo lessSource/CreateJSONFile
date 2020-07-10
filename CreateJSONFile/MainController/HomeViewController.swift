@@ -21,6 +21,12 @@ class HomeViewController: NSViewController {
         return splitView
     }()
     
+    override func viewWillAppear() {
+        super.viewWillAppear()
+        view.window?.isRestorable = false
+        view.window?.setContentSize(CGSize(width: 1200, height: 800))
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.

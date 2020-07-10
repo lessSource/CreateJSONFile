@@ -242,13 +242,13 @@ struct FileDataModel {
             fileHandle?.write(Data.newlineData())
             if structModel.inheritanceType == .mapper {
                 if structModel.modelType == .classType {
-                    fileHandle?.write("\(appKeyword.space4)required init?(map: Map) {}".wirteData)
+                    fileHandle?.write("\(appKeyword.space4)required init?(map: Map) {  }".wirteData)
                 }else {
-                    fileHandle?.write("\(appKeyword.space4)init?(map: Map) {}".wirteData)
+                    fileHandle?.write("\(appKeyword.space4)init?(map: Map) { }".wirteData)
                 }
                 
             }else {
-                fileHandle?.write("\(appKeyword.space4)required init() {}".wirteData)
+                fileHandle?.write("\(appKeyword.space4)required init() { }".wirteData)
             }
         }
         
