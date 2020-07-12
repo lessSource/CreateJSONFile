@@ -25,9 +25,19 @@ class SQLiteManager {
     var db: Connection?
     
     private init() {
-        var path =  NSSearchPathForDirectoriesInDomains(.documentDirectory, .allDomainsMask, true).first!
-        path.append("/\(App.appName)db.sqlite")
-        print(path)
+        
+        var path = getPath(App.appName)
+        
+        if !FileManager.default.fileExists(atPath: path) {
+            do {
+                try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
+            } catch  {
+//                DataAccessError.datastorConnectionError
+                print(error.localizedDescription)
+                
+            }
+        }
+        path.append("/cache.db")
         do {
             db = try Connection(path)
             db?.busyTimeout = 5
@@ -42,6 +52,19 @@ class SQLiteManager {
             db = nil
         }
     }
+    
+    // 获取路径
+    fileprivate func getPath(_ addPath: String = "") -> String {
+        if let path =  NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .allDomainsMask, true).first {
+            if addPath.isEmpty {
+                return path
+            }else {
+                return path + "/\(addPath)"
+            }
+        }
+        return ""
+    }
+    
     
     func createTables() throws {
         do {

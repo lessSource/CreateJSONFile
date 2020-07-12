@@ -47,10 +47,13 @@ class HomeViewController: NSViewController {
 //        mainSplitView.addArrangedSubview(rightView)
         view.addSubview(rightView)
     
-
+        do {
+            try SQLiteManager.sharedInstance.createTables()
+        } catch {
+            print(error.localizedDescription)
+        }
         
     }
-
     
 }
     
